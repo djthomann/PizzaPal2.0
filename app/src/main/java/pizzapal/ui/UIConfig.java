@@ -22,4 +22,6 @@ public class UIConfig {
         public static final Background BOARD_BACKGROUND = new Background(
                         new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY));
 
+        public static final int CONTEXT_MENU_OFFSET_PIXEL = 5;
+
 }
