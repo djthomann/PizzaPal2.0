@@ -7,9 +7,14 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 
 public class UIConfig {
-    
-    public static final Background STORAGE_BACKGROUND = new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY));
 
-    public static final Background SUPPORT_BACKGROUND = new Background(new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY));
+    public static final Background STORAGE_BACKGROUND = new Background(
+            new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY));
+
+    public static final Background STORAGE_BACKGROUND_DARK = new Background(
+            new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
+
+    public static final Background SUPPORT_BACKGROUND = new Background(
+            new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY));
 
 }

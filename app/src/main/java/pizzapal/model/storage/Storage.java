@@ -1,7 +1,9 @@
-package pizzapal.model;
+package pizzapal.model.storage;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import pizzapal.model.Support;
 
 public class Storage {
 

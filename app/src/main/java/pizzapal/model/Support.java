@@ -1,7 +1,7 @@
 package pizzapal.model;
 
 public class Support {
-    
+
     private float width;
 
     private float height;
@@ -15,6 +15,11 @@ public class Support {
         this.height = height;
         this.positionX = positionX;
         this.positionY = positionY;
+    }
+
+    public void move(float posX, float posY) {
+        positionX = posX;
+        positionY = posY;
     }
 
     public float getWidth() {
