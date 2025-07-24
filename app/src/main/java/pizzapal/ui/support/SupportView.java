@@ -55,8 +55,6 @@ public class SupportView extends Pane {
         // contextMenu.setStyle("-fx-background-color: black; -fx-border-color: black;
         // -fx-border-width: 1;");
 
-        contextMenu.set
-
         MenuItem item1 = new MenuItem("Option 1");
         item1.setOnAction(e -> System.out.println("Option 1 geklickt"));
 
