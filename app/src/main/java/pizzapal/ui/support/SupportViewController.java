@@ -2,34 +2,37 @@ package pizzapal.ui.support;
 
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Pane;
 import pizzapal.Helper;
-import pizzapal.model.Support;
+import pizzapal.model.entities.Support;
 import pizzapal.model.storage.StorageController;
+import pizzapal.ui.ViewController;
 
-public class SupportController {
+public class SupportViewController implements ViewController {
 
-    private final Support model;
+    private final Support support;
 
     private final StorageController storageController;
 
     private final SupportView view;
 
-    private double dragOffsetX;
-    private double dragOffsetY;
-
-    public SupportController(StorageController storageController, Support support) {
+    public SupportViewController(StorageController storageController, Support support) {
 
         this.storageController = storageController;
-        this.model = support;
+        this.support = support;
 
-        float widthPx = Helper.convertMetersToPixel(model.getWidth());
-        float heightPx = Helper.convertMetersToPixel(model.getHeight());
-        float posX = Helper.convertMetersToPixel(model.getPositionX());
-        float posY = Helper.convertMetersToPixel(model.getPositionY());
+        float widthPx = Helper.convertMetersToPixel(support.getWidth());
+        float heightPx = Helper.convertMetersToPixel(support.getHeight());
+        float posX = Helper.convertMetersToPixel(support.getPositionX());
+        float posY = Helper.getPixelPositionYInStorage(support.getStorage(), support);
 
         view = new SupportView(widthPx, heightPx, posX, posY);
 
         initDragAndDrop();
+
+        support.addListener(model -> {
+            view.updateFromModel(model);
+        });
 
     }
 
@@ -45,8 +48,6 @@ public class SupportController {
 
             switch (button) {
                 case PRIMARY -> {
-                    dragOffsetX = e.getSceneX() - view.getLayoutX();
-                    dragOffsetY = e.getSceneY() - view.getLayoutY();
                     view.setCursor(Cursor.MOVE);
                 }
                 case SECONDARY -> {
@@ -83,17 +84,10 @@ public class SupportController {
 
             switch (button) {
                 case PRIMARY -> {
-                    double newX = e.getSceneX() - dragOffsetX;
-                    double newY = e.getSceneY() - dragOffsetY;
 
-                    if (storageController.moveSupport(model, (float) newX, (float) newY)) {
-                        view.move((float) newX, (float) newY);
-                    } else {
+                    if (!storageController.moveSupport(support, (float) e.getSceneX(), (float) e.getSceneY())) {
                         view.resetRectangle();
                     }
-
-                    dragOffsetX = 0;
-                    dragOffsetY = 0;
                 }
                 default -> {
                 }

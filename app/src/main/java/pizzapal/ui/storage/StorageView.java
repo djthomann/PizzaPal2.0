@@ -4,11 +4,13 @@ import java.util.List;
 
 import javafx.scene.layout.Pane;
 import pizzapal.Helper;
-import pizzapal.model.Support;
+import pizzapal.model.entities.Board;
+import pizzapal.model.entities.Support;
 import pizzapal.model.storage.Storage;
 import pizzapal.model.storage.StorageController;
 import pizzapal.ui.UIConfig;
-import pizzapal.ui.support.SupportController;
+import pizzapal.ui.board.BoardViewController;
+import pizzapal.ui.support.SupportViewController;
 
 public class StorageView extends Pane {
 
@@ -24,7 +26,13 @@ public class StorageView extends Pane {
         List<Support> supports = storage.getSupports();
 
         for (Support support : supports) {
-            this.getChildren().add(new SupportController(storageController, support).getView());
+            this.getChildren().add(new SupportViewController(storageController, support).getView());
+        }
+
+        List<Board> boards = storage.getBoards();
+
+        for (Board board : boards) {
+            this.getChildren().add(new BoardViewController(storageController, board).getView());
         }
 
     }

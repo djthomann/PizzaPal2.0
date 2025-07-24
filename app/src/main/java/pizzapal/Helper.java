@@ -1,9 +1,32 @@
 package pizzapal;
 
+import javafx.scene.image.Image;
+import pizzapal.model.entities.Support;
+import pizzapal.model.storage.Storage;
+
 public class Helper {
-    
+
     public static final int convertMetersToPixel(float meters) {
-        return (int)(meters * Config.PIXEL_PER_METER);
+        return (int) (meters * Config.PIXEL_PER_METER);
+    }
+
+    public static float getPixelPositionYInStorage(Storage storage, Support support) {
+        return convertMetersToPixel(storage.getHeight()) - convertMetersToPixel(support.getHeight());
+    }
+
+    public static Image loadImage(String resourcePath) {
+        try {
+            var url = Helper.class.getResource(resourcePath);
+            if (url == null) {
+                System.err.println("Resource nicht gefunden: " + resourcePath);
+                return null;
+            }
+            return new Image(url.toExternalForm());
+        } catch (Exception e) {
+            System.err.println("Fehler beim Laden des Bildes: " + resourcePath);
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

@@ -6,6 +6,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import pizzapal.Helper;
+import pizzapal.model.entities.Support;
 import pizzapal.ui.UIConfig;
 
 public class SupportView extends Pane {
@@ -35,6 +37,16 @@ public class SupportView extends Pane {
 
         this.getChildren().addAll(ghostRectangle, supportRectangle);
 
+    }
+
+    public void updateFromModel(Support support) {
+
+        resetRectangle();
+
+        System.out.println(support.toString());
+        System.out.println("Update from model");
+        this.setLayoutX(support.getPositionX());
+        this.setLayoutY(Helper.getPixelPositionYInStorage(support.getStorage(), support));
     }
 
     public void initContextMenu() {
@@ -90,7 +102,7 @@ public class SupportView extends Pane {
         supportRectangle.setLayoutY(0);
     }
 
-    public Rectangle getSupprtRectangle() {
+    public Rectangle getSupportRectangle() {
         return supportRectangle;
     }
 
