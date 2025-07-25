@@ -2,13 +2,13 @@ package pizzapal.model.storage.commands;
 
 import pizzapal.model.entities.Support;
 
-public class MoveCommand implements Command {
+public class MoveSupportCommand implements Command {
 
     private final Support support;
     private final double oldX, oldY;
     private final double newX, newY;
 
-    public MoveCommand(Support support, double newX, double newY) {
+    public MoveSupportCommand(Support support, double newX, double newY) {
         this.support = support;
         this.oldX = support.getPositionX();
         this.oldY = support.getPositionY();

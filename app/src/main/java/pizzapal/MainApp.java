@@ -26,10 +26,15 @@ public class MainApp extends Application {
         Support support1 = new Support(storage, 0.2f, 2f, 1f, 0f);
         Support support2 = new Support(storage, 0.2f, 2f, 2f, 0f);
 
+        Support support3 = new Support(storage, 0.2f, 2f, 4f, 0f);
+        Support support4 = new Support(storage, 0.2f, 2f, 5f, 0f);
+
         Board board1 = new Board(support1, support2, 0.3f, 0.2f);
 
         storage.addSupport(support1);
         storage.addSupport(support2);
+        storage.addSupport(support3);
+        storage.addSupport(support4);
 
         storage.addBoard(board1);
 

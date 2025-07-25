@@ -13,6 +13,14 @@ public class Board implements Observable<BoardChangeListener> {
 
     private Support supportRight;
 
+    SupportChangeListener leftListener = model -> {
+        reactToChangeLeft(model);
+    };
+
+    SupportChangeListener rightListener = model -> {
+        reactToChangeRight(model);
+    };
+
     // Relative to Support
     private float posY;
 
@@ -27,13 +35,9 @@ public class Board implements Observable<BoardChangeListener> {
         this.posY = posY;
         this.posX = supportLeft.getPositionX();
 
-        supportLeft.addListener(model -> {
-            reactToChangeLeft(model);
-        });
+        supportLeft.addListener(leftListener);
 
-        supportRight.addListener(model -> {
-            reactToChangeRight(model);
-        });
+        supportRight.addListener(rightListener);
 
     }
 
@@ -65,8 +69,18 @@ public class Board implements Observable<BoardChangeListener> {
 
     public void move(Support left, Support right, float posY) {
 
-        supportLeft = left;
-        supportRight = right;
+        if (supportLeft != left) {
+            supportLeft.removeListener(leftListener);
+            left.addListener(leftListener);
+            supportLeft = left;
+            System.out.println("Changed left");
+        }
+
+        if (supportRight != right) {
+            supportRight.removeListener(rightListener);
+            right.addListener(rightListener);
+            supportRight = right;
+        }
 
         setPosY(posY);
         setPosX(left.getPositionX() + Helper.convertMetersToPixel(left.getWidth()));

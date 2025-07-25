@@ -6,7 +6,8 @@ import java.util.Deque;
 import pizzapal.model.entities.Board;
 import pizzapal.model.entities.Support;
 import pizzapal.model.storage.commands.Command;
-import pizzapal.model.storage.commands.MoveCommand;
+import pizzapal.model.storage.commands.MoveBoardCommand;
+import pizzapal.model.storage.commands.MoveSupportCommand;
 
 public class StorageController {
 
@@ -44,7 +45,7 @@ public class StorageController {
 
     public boolean moveSupport(Support support, float posX, float posY) {
         if (logic.placeSupportPossible(support, posX, posY)) {
-            MoveCommand moveCommand = new MoveCommand(support, posX, posY);
+            MoveSupportCommand moveCommand = new MoveSupportCommand(support, posX, posY);
             moveCommand.execute();
             undoStack.push(moveCommand);
             return true;
@@ -55,7 +56,12 @@ public class StorageController {
 
     public boolean moveBoard(Board board, float posX, float posY) {
         if (logic.moveBoardPossible(board, posX, posY)) {
-            board.move(getSupportLeftOfPos(posX), getSupportRightToPos(posX), posY);
+            MoveBoardCommand moveCommand = new MoveBoardCommand(board, getSupportLeftOfPos(posX),
+                    getSupportRightToPos(posX), posY);
+            moveCommand.execute();
+            undoStack.push(moveCommand);
+            System.out.println("POSY: " + posY);
+            // board.move(getSupportLeftOfPos(posX), getSupportRightToPos(posX), posY);
             return true;
         } else {
             return false;
