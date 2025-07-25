@@ -5,8 +5,12 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 public class UIConfig {
+
+        public static final Font BOLD_FONT = Font.font("Arial", FontWeight.BOLD, 60);
 
         public static final Background STORAGE_BACKGROUND = new Background(
                         new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY));

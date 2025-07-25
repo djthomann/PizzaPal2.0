@@ -1,13 +1,11 @@
 package pizzapal.model.storage;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import pizzapal.model.entities.Support;
-import pizzapal.model.storage.Storage;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeAll;
 
 public class StorageTest {
 

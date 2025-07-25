@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import pizzapal.model.storage.StorageController;
+import pizzapal.ui.components.IconButton;
 
 public class ToolbarView extends HBox {
 
@@ -18,12 +19,12 @@ public class ToolbarView extends HBox {
         this.setPrefHeight(100f);
         this.setBackground(new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-        Button buttonRedo = new Button("Redo");
+        IconButton buttonRedo = new IconButton("/icons/redo.png");
         buttonRedo.setOnMouseClicked(e -> {
             storageController.redo();
         });
 
-        Button buttonUndo = new Button("Undo");
+        IconButton buttonUndo = new IconButton("/icons/undo.png");
         buttonUndo.setOnMouseClicked(e -> {
             storageController.undo();
         });

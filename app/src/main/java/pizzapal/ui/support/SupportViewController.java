@@ -1,11 +1,10 @@
 package pizzapal.ui.support;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Pane;
 import pizzapal.Helper;
 import pizzapal.model.entities.Support;
-import pizzapal.model.storage.StorageController;
 import pizzapal.model.storage.StorageController;
 import pizzapal.ui.ViewController;
 
@@ -86,7 +85,13 @@ public class SupportViewController implements ViewController {
             switch (button) {
                 case PRIMARY -> {
 
-                    if (!storageController.moveSupport(support, (float) e.getSceneX(), (float) e.getSceneY())) {
+                    Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
+                    float xInView = (float) localPoint.getX();
+                    float yInView = (float) localPoint.getY();
+
+                    System.out.println("POINT: " + localPoint.toString());
+
+                    if (!storageController.moveSupport(support, xInView, yInView)) {
                         view.resetRectangle();
                     }
                 }
