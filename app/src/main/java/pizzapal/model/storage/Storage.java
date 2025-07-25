@@ -26,6 +26,10 @@ public class Storage {
         boards = new ArrayList<>();
     }
 
+    public boolean isEmpty() {
+        return supports.isEmpty() && boards.isEmpty();
+    }
+
     public float getWidth() {
         return width;
     }

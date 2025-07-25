@@ -11,6 +11,7 @@ import pizzapal.model.entities.Board;
 import pizzapal.model.entities.Support;
 import pizzapal.model.storage.Storage;
 import pizzapal.model.storage.StorageController;
+import pizzapal.model.storage.StorageController;
 import pizzapal.ui.storage.StorageView;
 import pizzapal.ui.toolbar.ToolbarView;
 

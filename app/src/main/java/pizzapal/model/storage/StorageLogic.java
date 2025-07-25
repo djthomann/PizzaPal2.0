@@ -57,7 +57,7 @@ public class StorageLogic {
     }
 
     public boolean storageIsEmpty() {
-        return storage.getSupports().isEmpty();
+        return storage.isEmpty();
     }
 
 }
