@@ -1,7 +1,12 @@
 package pizzapal.model.storage;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 import pizzapal.model.entities.Board;
 import pizzapal.model.entities.Support;
+import pizzapal.model.storage.commands.Command;
+import pizzapal.model.storage.commands.MoveCommand;
 
 public class StorageController {
 
@@ -9,9 +14,28 @@ public class StorageController {
 
     private final StorageLogic logic;
 
+    private final Deque<Command> redoStack = new ArrayDeque<>();
+    private final Deque<Command> undoStack = new ArrayDeque<>();
+
     public StorageController(Storage storage) {
         this.storage = storage;
         logic = new StorageLogic(storage);
+    }
+
+    public void undo() {
+        if (!undoStack.isEmpty()) {
+            Command command = undoStack.pop();
+            command.undo();
+            redoStack.push(command);
+        }
+    }
+
+    public void redo() {
+        if (!redoStack.isEmpty()) {
+            Command command = redoStack.pop();
+            command.execute();
+            undoStack.push(command);
+        }
     }
 
     public Storage getStorage() {
@@ -20,7 +44,9 @@ public class StorageController {
 
     public boolean moveSupport(Support support, float posX, float posY) {
         if (logic.placeSupportPossible(support, posX, posY)) {
-            support.move(posX);
+            MoveCommand moveCommand = new MoveCommand(support, posX, posY);
+            moveCommand.execute();
+            undoStack.push(moveCommand);
             return true;
         } else {
             return false;

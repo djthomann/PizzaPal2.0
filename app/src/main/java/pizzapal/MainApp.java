@@ -37,12 +37,12 @@ public class MainApp extends Application {
 
         StorageView storageView = new StorageView(storageController);
 
-        ToolbarView toolbar = new ToolbarView();
+        ToolbarView toolbar = new ToolbarView(storageController);
 
         BorderPane pane = new BorderPane();
 
         pane.setCenter(storageView);
-        // pane.setLeft(toolbar);
+        pane.setTop(toolbar);
 
         Scene scene = new Scene(pane);
 

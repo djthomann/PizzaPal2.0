@@ -26,6 +26,25 @@ public class Board implements Observable<BoardChangeListener> {
         this.height = height;
         this.posY = posY;
         this.posX = supportLeft.getPositionX();
+
+        supportLeft.addListener(model -> {
+            reactToChangeLeft(model);
+        });
+
+        supportRight.addListener(model -> {
+            reactToChangeRight(model);
+        });
+
+    }
+
+    public void reactToChangeLeft(Support support) {
+        System.out.println("Change left: " + support.getPositionX());
+        setPosX(support.getPositionX() + Helper.convertMetersToPixel(support.getWidth()));
+        // setPosY(Helper.getPixelPositionYInStorage(support.getStorage(), support));
+    }
+
+    public void reactToChangeRight(Support support) {
+        notifyListeners();
     }
 
     @Override
@@ -48,8 +67,6 @@ public class Board implements Observable<BoardChangeListener> {
 
         supportLeft = left;
         supportRight = right;
-
-        System.out.println("STützen:" + left.toString() + "|" + right.toString());
 
         setPosY(posY);
         setPosX(left.getPositionX() + Helper.convertMetersToPixel(left.getWidth()));
