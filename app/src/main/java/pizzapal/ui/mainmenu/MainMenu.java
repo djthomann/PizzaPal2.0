@@ -3,9 +3,7 @@ package pizzapal.ui.mainmenu;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.geometry.Side;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -16,9 +14,8 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 import pizzapal.Helper;
+import pizzapal.SceneManager;
 import pizzapal.model.repository.StorageRepository;
 import pizzapal.ui.UIConfig;
 import pizzapal.ui.editor.EditorView;
@@ -27,7 +24,7 @@ public class MainMenu extends Pane {
 
     private StorageRepository repository = StorageRepository.getInstance();
 
-    public MainMenu(Stage stage) {
+    public MainMenu() {
 
         setPrefSize(1000, 700);
         setMinSize(1000, 700);
@@ -42,10 +39,7 @@ public class MainMenu extends Pane {
 
         Button newStorageButton = new Button("New Storage");
         newStorageButton.setOnAction(_ -> {
-            stage.setScene(new Scene(new EditorView(repository.createStorage())));
-            Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-            stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
-            stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
+            SceneManager.getInstance().showView(new EditorView(repository.createStorage()));
         });
 
         Button openStorageButton = new Button("Open Storage");

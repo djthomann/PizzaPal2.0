@@ -16,10 +16,9 @@ public class StorageRepository {
 
     public static StorageRepository getInstance() {
         if (instance == null) {
-            return new StorageRepository();
-        } else {
-            return instance;
+            instance = new StorageRepository();
         }
+        return instance;
     }
 
     public Storage createStorage() {
