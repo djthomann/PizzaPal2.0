@@ -1,6 +1,8 @@
 package pizzapal.model.repository;
 
+import javafx.scene.paint.Color;
 import pizzapal.model.entities.Board;
+import pizzapal.model.entities.Item;
 import pizzapal.model.entities.Support;
 import pizzapal.model.storage.Storage;
 
@@ -32,6 +34,10 @@ public class StorageRepository {
         Support support4 = new Support(storage, 0.2f, 2f, 5f, 0f);
 
         Board board1 = new Board(support1, support2, 0.3f, 0.2f);
+
+        Item item1 = new Item(board1, Color.YELLOW, 1, 0.2f, 0.2f, 0.3f);
+
+        board1.addItem(item1);
 
         storage.addSupport(support1);
         storage.addSupport(support2);

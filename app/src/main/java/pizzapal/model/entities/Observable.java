@@ -6,4 +6,7 @@ public interface Observable<L extends Listener> {
 
     public void removeListener(L l);
 
+    /* TODO */
+    // void notifyListeners();
+
 }

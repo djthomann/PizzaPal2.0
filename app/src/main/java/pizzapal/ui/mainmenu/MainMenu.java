@@ -27,11 +27,7 @@ public class MainMenu extends Pane {
 
     private StorageRepository repository = StorageRepository.getInstance();
 
-    private Stage stage;
-
     public MainMenu(Stage stage) {
-
-        this.stage = stage;
 
         setPrefSize(1000, 700);
         setMinSize(1000, 700);
@@ -45,7 +41,7 @@ public class MainMenu extends Pane {
         buttonBox.setSpacing(20);
 
         Button newStorageButton = new Button("New Storage");
-        newStorageButton.setOnAction(e -> {
+        newStorageButton.setOnAction(_ -> {
             stage.setScene(new Scene(new EditorView(repository.createStorage())));
             Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
             stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
@@ -55,7 +51,7 @@ public class MainMenu extends Pane {
         Button openStorageButton = new Button("Open Storage");
 
         Button exitApplicationButton = new Button("Exit");
-        exitApplicationButton.setOnAction(e -> {
+        exitApplicationButton.setOnAction(_ -> {
             Platform.exit();
         });
 

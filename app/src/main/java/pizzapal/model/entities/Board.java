@@ -13,6 +13,8 @@ public class Board implements Observable<BoardChangeListener> {
 
     private Support supportRight;
 
+    private List<Item> items = new ArrayList<>();
+
     SupportChangeListener leftListener = model -> {
         reactToChangeLeft(model);
     };
@@ -39,6 +41,10 @@ public class Board implements Observable<BoardChangeListener> {
 
         supportRight.addListener(rightListener);
 
+    }
+
+    public void addItem(Item item) {
+        items.add(item);
     }
 
     public void reactToChangeLeft(Support support) {
@@ -84,6 +90,14 @@ public class Board implements Observable<BoardChangeListener> {
 
         setPosY(posY);
         setPosX(left.getPositionX() + Helper.convertMetersToPixel(left.getWidth()));
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public float getHeight() {
