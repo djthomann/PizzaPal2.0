@@ -44,8 +44,6 @@ public class SupportView extends Pane {
 
         resetRectangle();
 
-        System.out.println(support.toString());
-        System.out.println("Update from model");
         this.setLayoutX(support.getPositionX());
         this.setLayoutY(Helper.getPixelPositionYInStorage(support.getStorage(), support));
     }

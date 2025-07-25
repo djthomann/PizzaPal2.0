@@ -3,9 +3,7 @@ package pizzapal.ui.board;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import pizzapal.Helper;
 import pizzapal.model.entities.Board;
-import pizzapal.ui.EntityView;
 import pizzapal.ui.UIConfig;
 
 public class BoardView extends Pane {
@@ -61,8 +59,6 @@ public class BoardView extends Pane {
         this.setLayoutY(board.getPosY());
 
         setWidth(board.getWidth());
-
-        System.out.println("Updated Board");
     }
 
     public void resetRectangle() {

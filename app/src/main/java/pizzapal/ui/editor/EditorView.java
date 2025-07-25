@@ -49,9 +49,10 @@ public class EditorView extends BorderPane {
         Button selectButton = new Button("Auswählen");
         Button drawButton = new Button("Zeichnen");
         Button eraseButton = new Button("Löschen");
+        Button supportButton = new Button("Support");
 
         toolBar.setOrientation(Orientation.VERTICAL);
-        toolBar.getItems().addAll(selectButton, drawButton, eraseButton);
+        toolBar.getItems().addAll(selectButton, drawButton, eraseButton, supportButton);
 
         setCenter(tabPane);
         setLeft(toolBar);

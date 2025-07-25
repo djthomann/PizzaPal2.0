@@ -49,6 +49,13 @@ public class Item implements Observable<ItemChangeListener> {
         }
     }
 
+    public void move(Board board) {
+        this.board.removeItem(this);
+        this.board = board;
+        board.addItem(this);
+        // TODO notify
+    }
+
     public void reactToBoardChange(Board board) {
         setPosX(board.getPosX() + Helper.convertMetersToPixel(offsetX));
         setPosY(board.getPosY());

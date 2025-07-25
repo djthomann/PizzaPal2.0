@@ -1,16 +1,16 @@
 package pizzapal.model.storage;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class StorageControllerTest {
 
-    private static Storage storage;
+    private Storage storage;
 
-    private static StorageController controller;
+    private StorageController controller;
 
-    @BeforeAll
-    public static void init() {
+    @BeforeEach
+    public void init() {
         storage = new Storage(6f, 3f);
 
         controller = new StorageController(storage);

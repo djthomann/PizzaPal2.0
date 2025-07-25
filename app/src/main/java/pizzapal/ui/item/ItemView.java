@@ -34,7 +34,6 @@ public class ItemView extends Pane {
         this.setLayoutX(item.getPosX());
         this.setLayoutY(item.getPosY() - Helper.convertMetersToPixel(item.getHeight()));
 
-        System.out.println("Updated Item");
     }
 
     public void resetRectangle() {

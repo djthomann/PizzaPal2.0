@@ -11,6 +11,10 @@ public class Support implements Observable<SupportChangeListener> {
 
     private final Storage storage;
 
+    private List<Board> boardsLeft;
+
+    private List<Board> boardsRight;
+
     private final float width;
 
     private final float height;
@@ -21,10 +25,36 @@ public class Support implements Observable<SupportChangeListener> {
 
     public Support(Storage storage, float width, float height, float positionX, float positionY) {
         this.storage = storage;
+        boardsLeft = new ArrayList<>();
+        boardsRight = new ArrayList<>();
         this.width = width;
         this.height = height;
         this.positionX = positionX;
         this.positionY = positionY;
+    }
+
+    public List<Board> getBoardsLeft() {
+        return boardsLeft;
+    }
+
+    public void setBoardsLeft(List<Board> boardsLeft) {
+        this.boardsLeft = boardsLeft;
+    }
+
+    public void addBoardLeft(Board board) {
+        boardsLeft.add(board);
+    }
+
+    public List<Board> getBoardsRight() {
+        return boardsRight;
+    }
+
+    public void setBoardsRight(List<Board> boardsRight) {
+        this.boardsRight = boardsRight;
+    }
+
+    public void addBoardRight(Board board) {
+        boardsRight.add(board);
     }
 
     public void move(float posX) {
