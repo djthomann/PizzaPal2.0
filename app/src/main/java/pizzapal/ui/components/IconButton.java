@@ -1,5 +1,6 @@
 package pizzapal.ui.components;
 
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,13 +20,18 @@ public class IconButton extends Button {
         image = Helper.loadImage(path);
         imageView = new ImageView(image);
 
-        imageView.setFitHeight(STANDARD_HEIGHT);
-        imageView.setFitWidth(STANDARD_HEIGHT);
+        imageView.setFitHeight(24);
+        imageView.setFitWidth(24);
 
         setPrefSize(STANDARD_HEIGHT, STANDARD_HEIGHT);
         setMinSize(STANDARD_HEIGHT, STANDARD_HEIGHT);
         setMaxSize(STANDARD_HEIGHT, STANDARD_HEIGHT);
         setGraphic(imageView);
+
+        setBackground(null);
+
+        setOnMouseEntered(_ -> setCursor(Cursor.HAND));
+        setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
     }
 
 }

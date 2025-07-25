@@ -3,6 +3,7 @@ package pizzapal.model.storage;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
+import pizzapal.NotificationManager;
 import pizzapal.model.entities.Board;
 import pizzapal.model.entities.Support;
 import pizzapal.model.storage.commands.Command;
@@ -50,6 +51,7 @@ public class StorageController {
             undoStack.push(moveCommand);
             return true;
         } else {
+            NotificationManager.getInstance().addNotification("Support can't be moved");
             return false;
         }
     }
