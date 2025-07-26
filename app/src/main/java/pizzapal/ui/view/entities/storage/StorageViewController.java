@@ -38,8 +38,8 @@ public class StorageViewController {
 
         Storage storage = storageController.getStorage();
 
-        int widthPx = Helper.convertMetersToPixel(storage.getWidth());
-        int heightPx = Helper.convertMetersToPixel(storage.getHeight());
+        float widthPx = Helper.convertMetersToPixel(storage.getWidth());
+        float heightPx = Helper.convertMetersToPixel(storage.getHeight());
 
         storageView = new StorageView(widthPx, heightPx);
 

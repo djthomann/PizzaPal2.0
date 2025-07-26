@@ -36,7 +36,7 @@ public class SupportView extends Pane {
         resetRectangle();
 
         this.setLayoutX(Helper.convertMetersToPixel(support.getPositionX()));
-        this.setLayoutY(Helper.getPixelPositionYInStorage(support.getStorage(), support));
+        this.setLayoutY(Helper.getPixelPositionYInStorage(support.getStorage(), support.getHeight()));
     }
 
     public void moveRectangle(float posX, float posY) {

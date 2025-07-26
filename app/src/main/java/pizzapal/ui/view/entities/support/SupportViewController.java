@@ -163,6 +163,7 @@ public class SupportViewController implements ViewController {
                     Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
                     float xInView = (float) localPoint.getX();
                     float yInView = (float) localPoint.getY();
+                    System.out.println(yInView);
 
                     if (!storageController.moveSupport(support, Helper.convertPixelToMeters(xInView),
                             Helper.convertPixelToMeters(yInView))) {

@@ -27,7 +27,6 @@ public class StorageServiceTest {
     @Test
     public void testGetSupportLeftOfPos() {
         Support support = new Support(storage, 0.2f, 1f, 1f, 0);
-        storage.addSupport(support);
 
         Support left = service.getSupportLeftOfPos(1.5f);
         assertEquals(support, left);
@@ -43,13 +42,11 @@ public class StorageServiceTest {
     @Test
     public void testGetSupportRightOfPos() {
         Support support1 = new Support(storage, 0.2f, 1f, 3f, 0);
-        storage.addSupport(support1);
 
         Support right = service.getSupportRightOfPos(1.5f);
         assertEquals(support1, right);
 
         Support support2 = new Support(storage, 0.2f, 1f, 4f, 0);
-        storage.addSupport(support2);
 
         right = service.getSupportRightOfPos(1.5f);
         assertEquals(support1, right);
@@ -61,9 +58,6 @@ public class StorageServiceTest {
 
         Support support1 = new Support(storage, 0.2f, 1f, 3f, 0);
         Support support2 = new Support(storage, 0.2f, 1f, 4f, 0);
-
-        storage.addSupport(support1);
-        storage.addSupport(support2);
 
         Board board1 = new Board(support1, support2, 02f, 0);
 

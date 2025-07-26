@@ -24,5 +24,6 @@ java {
 
 dependencies {
     testImplementation libs.junit.jupiter
+    testImplementation 'org.testfx:testfx-junit:4.0+'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

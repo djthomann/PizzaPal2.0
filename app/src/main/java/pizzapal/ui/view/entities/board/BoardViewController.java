@@ -27,7 +27,7 @@ public class BoardViewController implements ViewController {
         float heightPx = Helper.convertMetersToPixel(0.2f);
         float posX = Helper
                 .convertMetersToPixel(board.getSupportLeft().getPositionX() + board.getSupportLeft().getWidth());
-        float posY = Helper.convertMetersToPixel(board.getPosY());
+        float posY = Helper.getPixelPositionYInStorage(storageController.getStorage(), board.getPosY());
 
         this.view = new BoardView(widthPx, heightPx, posX, posY);
 
@@ -99,7 +99,8 @@ public class BoardViewController implements ViewController {
             switch (button) {
                 case PRIMARY -> {
 
-                    if (!storageController.moveBoard(board, (float) e.getSceneX(), (float) e.getSceneY())) {
+                    if (!storageController.moveBoard(board, Helper.convertPixelToMeters((float) e.getSceneX()),
+                            Helper.convertPixelToMeters((float) e.getSceneY()))) {
                         view.resetRectangle();
                     }
                 }

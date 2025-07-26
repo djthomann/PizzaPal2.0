@@ -143,14 +143,17 @@ public class StorageController {
     }
 
     public boolean moveBoard(Board board, float posX, float posY) {
+        System.out.println("POSY" + posY);
         if (logic.moveBoardPossible(board, posX, posY)) {
+            Support left = service.getSupportLeftOfPos(posX);
+            System.out.println("OffsetY" + (left.getHeight() - posY));
             MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),
                     service.getSupportRightOfPos(posX), posY);
             moveCommand.execute();
             undoStack.push(moveCommand);
-            // board.move(getSupportLeftOfPos(posX), getSupportRightToPos(posX), posY);
             return true;
         } else {
+            NotificationManager.getInstance().addNotification("Move Board not possible");
             return false;
         }
     }

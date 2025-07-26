@@ -26,22 +26,21 @@ public class StorageLogicTest {
 
     @Test
     public void testPositionOutsideStorage() {
-
-        assertFalse(logic.positionInStorage(-1, -1));
-
+        assertFalse(logic.positionInStorage(-1, 2));
+        assertFalse(logic.positionInStorage(1, -2));
+        assertFalse(logic.positionInStorage(7, 2));
+        assertFalse(logic.positionInStorage(4, 5));
     }
 
     @Test
     public void testPositionInsideStorage() {
-        assertTrue(logic.positionInStorage(6f, 3f));
         assertTrue(logic.positionInStorage(3f, 1.5f));
+        assertTrue(logic.positionInStorage(6f, 3f));
     }
 
     @Test
     public void testPositionInsideSupport() {
         Support support1 = new Support(storage, 0.2f, 2f, 2f, 0f);
-
-        storage.addSupport(support1);
 
         assertTrue(logic.positionInSupport(2.0f));
         assertTrue(logic.positionInSupport(2.1f));
@@ -58,12 +57,7 @@ public class StorageLogicTest {
 
         Board board = new Board(support1, support2, 0.2f, 0.5f);
 
-        support1.addBoardRight(board);
-        support2.addBoardLeft(board);
-
-        storage.addSupport(support1);
-        storage.addSupport(support2);
-
+        // TODO
     }
 
 }

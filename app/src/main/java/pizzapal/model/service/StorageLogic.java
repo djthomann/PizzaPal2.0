@@ -95,6 +95,7 @@ public class StorageLogic {
     public boolean moveBoardPossible(Board board, float posX, float posY) {
 
         if (!positionInStorage(posX, posY)) {
+            NotificationManager.getInstance().addNotification("Not In Storage");
             return false;
         }
 

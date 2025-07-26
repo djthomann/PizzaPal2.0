@@ -6,8 +6,8 @@ import pizzapal.model.domain.entities.Support;
 
 public class Helper {
 
-    public static final int convertMetersToPixel(float meters) {
-        return (int) (meters * Config.PIXEL_PER_METER);
+    public static final float convertMetersToPixel(float meters) {
+        return meters * Config.PIXEL_PER_METER;
     }
 
     public static final float convertPixelToMeters(float pixels) {
@@ -16,6 +16,10 @@ public class Helper {
 
     public static float getPixelPositionYInStorage(Storage storage, Support support) {
         return convertMetersToPixel(storage.getHeight()) - convertMetersToPixel(support.getHeight());
+    }
+
+    public static float getPixelPositionYInStorage(Storage storage, float posY) {
+        return convertMetersToPixel(storage.getHeight()) - convertMetersToPixel(posY);
     }
 
     public static Image loadImage(String resourcePath) {

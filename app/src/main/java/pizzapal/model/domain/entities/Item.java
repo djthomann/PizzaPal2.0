@@ -61,7 +61,7 @@ public class Item implements Observable<ItemChangeListener> {
 
     public void reactToBoardChange(Board board) {
         setPosX(board.getPosX() + Helper.convertMetersToPixel(offsetX));
-        setPosY(board.getPosY());
+        setPosY(board.getPosY() + width);
     }
 
     public Color getColor() {

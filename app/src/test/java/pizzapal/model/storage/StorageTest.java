@@ -1,5 +1,6 @@
 package pizzapal.model.storage;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +25,8 @@ public class StorageTest {
 
         Support support = new Support(storage, 0.2f, 1f, 1f, 0);
 
-        storage.addSupport(support);
         assertTrue(storage.getSupports().size() == 1);
+        assertEquals(support, storage.getSupports().get(0));
 
         storage.removeSupport(support);
         assertTrue(storage.isEmpty());

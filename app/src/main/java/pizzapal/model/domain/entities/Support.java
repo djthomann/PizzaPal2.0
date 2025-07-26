@@ -34,6 +34,7 @@ public class Support implements Observable<SupportChangeListener> {
         this.height = height;
         this.positionX = positionX;
         this.positionY = positionY;
+        storage.addSupport(this);
     }
 
     public void delete() {

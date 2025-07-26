@@ -9,7 +9,7 @@ public class StorageView extends Pane {
 
     private Rectangle ghostRectangle;
 
-    public StorageView(int width, int height) {
+    public StorageView(float width, float height) {
 
         this.setBackground(UIConfig.STORAGE_BACKGROUND);
 
