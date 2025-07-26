@@ -5,7 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import pizzapal.ui.mainmenu.MainMenu;
+import pizzapal.ui.view.app.mainmenu.MainMenu;
 
 public class SceneManager {
 

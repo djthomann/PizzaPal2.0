@@ -1,8 +1,8 @@
 package pizzapal;
 
 import javafx.scene.image.Image;
-import pizzapal.model.entities.Support;
-import pizzapal.model.storage.Storage;
+import pizzapal.model.domain.core.Storage;
+import pizzapal.model.domain.entities.Support;
 
 public class Helper {
 

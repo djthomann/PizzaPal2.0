@@ -3,6 +3,9 @@ package pizzapal.model.storage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import pizzapal.model.controller.StorageController;
+import pizzapal.model.domain.core.Storage;
+
 public class StorageControllerTest {
 
     private Storage storage;

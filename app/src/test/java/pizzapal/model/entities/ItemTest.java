@@ -7,8 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.scene.paint.Color;
-import pizzapal.model.storage.Storage;
-import pizzapal.model.storage.StorageController;
+import pizzapal.model.controller.StorageController;
+import pizzapal.model.domain.core.Storage;
+import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.Item;
+import pizzapal.model.domain.entities.Support;
 
 public class ItemTest {
 

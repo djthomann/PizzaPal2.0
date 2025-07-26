@@ -1,10 +1,10 @@
 package pizzapal.model.repository;
 
 import javafx.scene.paint.Color;
-import pizzapal.model.entities.Board;
-import pizzapal.model.entities.Item;
-import pizzapal.model.entities.Support;
-import pizzapal.model.storage.Storage;
+import pizzapal.model.domain.core.Storage;
+import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.Item;
+import pizzapal.model.domain.entities.Support;
 
 public class StorageRepository {
 

@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import pizzapal.model.entities.Support;
+import pizzapal.model.domain.core.Storage;
+import pizzapal.model.domain.entities.Support;
 
 public class StorageTest {
 

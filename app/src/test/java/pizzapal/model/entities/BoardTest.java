@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import pizzapal.model.storage.Storage;
-import pizzapal.model.storage.StorageController;
+import pizzapal.model.controller.StorageController;
+import pizzapal.model.domain.core.Storage;
+import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.Support;
 
 public class BoardTest {
 
