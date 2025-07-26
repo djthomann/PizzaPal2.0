@@ -16,7 +16,14 @@ public class Board implements Observable<BoardChangeListener> {
     private List<Item> items = new ArrayList<>();
 
     SupportChangeListener leftListener = (model, type) -> {
-        reactToChangeLeft(model);
+        switch (type) {
+            case MOVE -> {
+                reactToChangeLeft(model);
+            }
+            case DELETE -> {
+                delete();
+            }
+        }
     };
 
     SupportChangeListener rightListener = (model, type) -> {
@@ -41,6 +48,10 @@ public class Board implements Observable<BoardChangeListener> {
 
         supportRight.addListener(rightListener);
 
+    }
+
+    public void delete() {
+        notifyListeners(ChangeType.DELETE);
     }
 
     public void addItem(Item item) {
@@ -70,9 +81,15 @@ public class Board implements Observable<BoardChangeListener> {
         listeners.remove(l);
     }
 
+    private void notifyListeners(ChangeType type) {
+        for (BoardChangeListener l : listeners) {
+            l.onBoardChange(this, type);
+        }
+    }
+
     private void notifyListeners() {
         for (BoardChangeListener l : listeners) {
-            l.onBoardChange(this);
+            l.onBoardChange(this, ChangeType.MOVE);
         }
     }
 

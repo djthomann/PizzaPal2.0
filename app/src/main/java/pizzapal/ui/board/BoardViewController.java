@@ -1,6 +1,7 @@
 package pizzapal.ui.board;
 
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import pizzapal.Helper;
@@ -32,8 +33,18 @@ public class BoardViewController implements ViewController {
 
         initDragAndDrop();
 
-        board.addListener(model -> {
-            view.updateFromModel(model);
+        board.addListener((model, type) -> {
+            switch (type) {
+                case MOVE -> {
+                    view.updateFromModel(model);
+                }
+                case DELETE -> {
+                    Parent parent = view.getParent();
+                    if (parent instanceof Pane pane) {
+                        pane.getChildren().remove(view);
+                    }
+                }
+            }
         });
 
     }

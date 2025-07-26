@@ -26,7 +26,7 @@ public class Item implements Observable<ItemChangeListener> {
 
     private List<ItemChangeListener> listeners = new ArrayList<>();
 
-    private BoardChangeListener listener = model -> {
+    private BoardChangeListener listener = (model, type) -> {
         reactToBoardChange(model);
     };
 
