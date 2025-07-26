@@ -11,11 +11,16 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ToolBar;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.shape.Rectangle;
 import pizzapal.NotificationManager;
 import pizzapal.SceneManager;
 import pizzapal.model.repository.StorageRepository;
@@ -23,6 +28,7 @@ import pizzapal.model.storage.Storage;
 import pizzapal.model.storage.StorageController;
 import pizzapal.ui.components.NotificationDropdown;
 import pizzapal.ui.storage.StorageView;
+import pizzapal.ui.storage.StorageViewController;
 
 public class EditorView extends BorderPane {
 
@@ -38,7 +44,8 @@ public class EditorView extends BorderPane {
         storageController = new StorageController(storage);
 
         tabPane = new TabPane();
-        Tab tab1 = new Tab("Lager A", new StorageView(storageController));
+        StorageView storageView = new StorageViewController(storageController).getView();
+        Tab tab1 = new Tab("Lager A", storageView);
         tabPane.getTabs().add(tab1);
 
         initMenuBar();
@@ -49,10 +56,28 @@ public class EditorView extends BorderPane {
         Button selectButton = new Button("Auswählen");
         Button drawButton = new Button("Zeichnen");
         Button eraseButton = new Button("Löschen");
-        Button supportButton = new Button("Support");
+        Rectangle supportButton = new Rectangle(20, 100);
+        supportButton.setOnDragDetected(e -> {
+            Dragboard db = supportButton.startDragAndDrop(TransferMode.COPY);
+            db.setDragView(new WritableImage(1, 1));
+            ClipboardContent content = new ClipboardContent();
+            content.putString("SUPPORT"); // Marker für Typ
+            db.setContent(content);
+            e.consume();
+        });
+
+        Rectangle itemButton = new Rectangle(10, 10);
+        itemButton.setOnDragDetected(e -> {
+            Dragboard db = itemButton.startDragAndDrop(TransferMode.COPY);
+            db.setDragView(new WritableImage(1, 1));
+            ClipboardContent content = new ClipboardContent();
+            content.putString("ITEM"); // Marker für Typ
+            db.setContent(content);
+            e.consume();
+        });
 
         toolBar.setOrientation(Orientation.VERTICAL);
-        toolBar.getItems().addAll(selectButton, drawButton, eraseButton, supportButton);
+        toolBar.getItems().addAll(selectButton, drawButton, eraseButton, supportButton, itemButton);
 
         setCenter(tabPane);
         setLeft(toolBar);
@@ -142,7 +167,7 @@ public class EditorView extends BorderPane {
 
     public void addStorageTab() {
         Storage storage = StorageRepository.getInstance().createStorage();
-        Tab tab = new Tab("Lager 2", new StorageView(new StorageController(storage)));
+        Tab tab = new Tab("Lager 2", new StorageViewController(new StorageController(storage)).getView());
         tabPane.getTabs().add(tab);
         tabPane.getSelectionModel().select(tab);
     }

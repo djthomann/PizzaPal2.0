@@ -83,6 +83,12 @@ public class StorageController {
         }
     }
 
+    public boolean delete(Support support) {
+        support.delete();
+        storage.getSupports().remove(support);
+        return true;
+    }
+
     public boolean moveBoard(Board board, float posX, float posY) {
         if (logic.moveBoardPossible(board, posX, posY)) {
             MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),

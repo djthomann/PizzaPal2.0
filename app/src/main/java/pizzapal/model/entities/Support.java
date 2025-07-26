@@ -33,6 +33,10 @@ public class Support implements Observable<SupportChangeListener> {
         this.positionY = positionY;
     }
 
+    public void delete() {
+        notifyListeners(ChangeType.DELETE);
+    }
+
     public List<Board> getBoardsLeft() {
         return boardsLeft;
     }
@@ -69,9 +73,15 @@ public class Support implements Observable<SupportChangeListener> {
         listeners.remove(l);
     }
 
+    private void notifyListeners(ChangeType type) {
+        for (SupportChangeListener l : listeners) {
+            l.onSupportChange(this, type);
+        }
+    }
+
     private void notifyListeners() {
         for (SupportChangeListener l : listeners) {
-            l.onSupportChange(this);
+            l.onSupportChange(this, ChangeType.MOVE);
         }
     }
 

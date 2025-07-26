@@ -1,46 +1,40 @@
 package pizzapal.ui.storage;
 
-import java.util.List;
-
 import javafx.scene.layout.Pane;
-import pizzapal.Helper;
-import pizzapal.model.entities.Board;
-import pizzapal.model.entities.Item;
-import pizzapal.model.entities.Support;
-import pizzapal.model.storage.Storage;
-import pizzapal.model.storage.StorageController;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import pizzapal.ui.UIConfig;
-import pizzapal.ui.board.BoardViewController;
-import pizzapal.ui.item.ItemViewController;
-import pizzapal.ui.support.SupportViewController;
 
 public class StorageView extends Pane {
 
-    public StorageView(StorageController storageController) {
+    private Rectangle ghostRectangle;
 
-        Storage storage = storageController.getStorage();
-
-        this.setPrefSize(Helper.convertMetersToPixel(storage.getWidth()),
-                Helper.convertMetersToPixel(storage.getHeight()));
+    public StorageView(int width, int height) {
 
         this.setBackground(UIConfig.STORAGE_BACKGROUND);
 
-        List<Support> supports = storage.getSupports();
+        this.setPrefSize(width, height);
 
-        for (Support support : supports) {
-            this.getChildren().add(new SupportViewController(storageController, support).getView());
-        }
+        ghostRectangle = new Rectangle(20, 100);
+        ghostRectangle.setFill(Color.BLACK);
+        ghostRectangle.setOpacity(0.4);
+        ghostRectangle.setVisible(false);
 
-        List<Board> boards = storage.getBoards();
+        this.getChildren().add(ghostRectangle);
 
-        for (Board board : boards) {
-            this.getChildren().add(new BoardViewController(storageController, board).getView());
+    }
 
-            for (Item item : board.getItems()) {
-                this.getChildren().add(new ItemViewController(item).getView());
-            }
-        }
+    public void showGhostRectangle() {
+        ghostRectangle.setVisible(true);
+    }
 
+    public void hideGhostRectangle() {
+        ghostRectangle.setVisible(false);
+    }
+
+    public void moveGhostRectangle(float posX, float posY) {
+        ghostRectangle.setLayoutX(posX);
+        ghostRectangle.setLayoutY(posY);
     }
 
 }
