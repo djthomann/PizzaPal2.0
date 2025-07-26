@@ -4,8 +4,6 @@ import java.util.List;
 
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import pizzapal.Helper;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
@@ -14,7 +12,6 @@ import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.view.entities.board.BoardViewController;
 import pizzapal.ui.view.entities.item.ItemViewController;
-import pizzapal.ui.view.entities.support.SupportView;
 import pizzapal.ui.view.entities.support.SupportViewController;
 
 public class StorageViewController {
@@ -26,6 +23,19 @@ public class StorageViewController {
     public StorageViewController(StorageController storageController) {
 
         this.storageController = storageController;
+
+        storageController.addSupportCreationListener(support -> {
+            storageView.getChildren().add(new SupportViewController(storageController, support).getView());
+        });
+
+        storageController.addBoardCreationListener(board -> {
+            storageView.getChildren().add(new BoardViewController(storageController, board).getView());
+        });
+
+        storageController.addItemCreationListener(item -> {
+            storageView.getChildren().addAll(new ItemViewController(item).getView());
+        });
+
         Storage storage = storageController.getStorage();
 
         int widthPx = Helper.convertMetersToPixel(storage.getWidth());
@@ -66,18 +76,18 @@ public class StorageViewController {
         storageView.setOnDragDropped(e -> {
             Dragboard db = e.getDragboard();
             if (db.hasString() && db.getString().equals("SUPPORT")) {
-                SupportView supportView = new SupportViewController(storageController,
-                        new Support(storageController.getStorage(), 0.3f, 1f, 4f, 0)).getView();
-                storageView.getChildren().add(supportView);
+                storageController.addSupport(Helper.convertPixelToMeters((float) e.getX()),
+                        Helper.convertPixelToMeters((float) e.getY()));
                 storageView.hideGhostRectangle();
                 e.setDropCompleted(true);
             } else if (db.hasString() && db.getString().equals("ITEM")) {
-
-                Rectangle newItem = new Rectangle(20, 20);
-                newItem.setFill(Color.YELLOW);
-                newItem.setLayoutX(e.getX());
-                newItem.setLayoutY(e.getY());
-                storageView.getChildren().add(newItem);
+                storageController.addItem(Helper.convertPixelToMeters((float) e.getX()),
+                        Helper.convertPixelToMeters((float) e.getY()));
+                storageView.hideGhostRectangle();
+                e.setDropCompleted(true);
+            } else if (db.hasString() && db.getString().equals("BOARD")) {
+                storageController.addBoard(Helper.convertPixelToMeters((float) e.getX()),
+                        Helper.convertPixelToMeters((float) e.getY()));
                 storageView.hideGhostRectangle();
                 e.setDropCompleted(true);
             } else {

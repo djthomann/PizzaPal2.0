@@ -1,6 +1,7 @@
 package pizzapal.model.service;
 
 import pizzapal.model.domain.core.Storage;
+import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
 
 public class StorageService {
@@ -37,6 +38,21 @@ public class StorageService {
         }
 
         return right;
+    }
+
+    public Board getBoardAt(float posX) {
+        Support left = getSupportLeftOfPos(posX);
+        Support right = getSupportRightOfPos(posX);
+
+        if (left == null) {
+            return null;
+        }
+
+        if (right == null) {
+            return null;
+        }
+
+        return left.getBoardsRight().get(0);
     }
 
 }

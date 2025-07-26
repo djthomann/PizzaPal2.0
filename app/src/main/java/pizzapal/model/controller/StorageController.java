@@ -1,9 +1,11 @@
 package pizzapal.model.controller;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import javafx.scene.paint.Color;
 import pizzapal.NotificationManager;
 import pizzapal.model.commands.Command;
 import pizzapal.model.commands.MoveBoardCommand;
@@ -26,10 +28,56 @@ public class StorageController {
     private final Deque<Command> redoStack = new ArrayDeque<>();
     private final Deque<Command> undoStack = new ArrayDeque<>();
 
+    private List<SupportCreationListener> supportCreationListeners = new ArrayList<>();
+    private List<BoardCreationListener> boardCreationListeners = new ArrayList<>();
+    private List<ItemCreationListener> itemCreationListeners = new ArrayList<>();
+
     public StorageController(Storage storage) {
         this.storage = storage;
         logic = new StorageLogic(storage);
         service = new StorageService(storage);
+    }
+
+    public void addSupportCreationListener(SupportCreationListener l) {
+        supportCreationListeners.add(l);
+    }
+
+    public void removeSupportCreationListener(SupportCreationListener l) {
+        supportCreationListeners.remove(l);
+    }
+
+    public void notifySupportCreationListeners(Support support) {
+        for (SupportCreationListener l : supportCreationListeners) {
+            l.onSupportCreated(support);
+        }
+    }
+
+    public void addBoardCreationListener(BoardCreationListener l) {
+        boardCreationListeners.add(l);
+    }
+
+    public void removeBoardCreationListener(BoardCreationListener l) {
+        boardCreationListeners.remove(l);
+    }
+
+    public void notifyBoardCreationListeners(Board board) {
+        for (BoardCreationListener l : boardCreationListeners) {
+            l.onBoardCreate(board);
+        }
+    }
+
+    public void addItemCreationListener(ItemCreationListener l) {
+        itemCreationListeners.add(l);
+    }
+
+    public void removeItemCreationListener(ItemCreationListener l) {
+        itemCreationListeners.remove(l);
+    }
+
+    public void notifyItemCreationListeners(Item item) {
+        for (ItemCreationListener l : itemCreationListeners) {
+            l.onItemCreate(item);
+        }
     }
 
     public void undo() {
@@ -50,10 +98,6 @@ public class StorageController {
 
     public Storage getStorage() {
         return storage;
-    }
-
-    public boolean addSupport() {
-        return false;
     }
 
     public boolean moveItem(Item item, float posX, float posY) {
@@ -86,6 +130,12 @@ public class StorageController {
         }
     }
 
+    public void addSupport(float posX, float posY) {
+        Support support = new Support(storage, 0.3f, 2f, posX, posY);
+        storage.addSupport(support);
+        notifySupportCreationListeners(support);
+    }
+
     public boolean delete(Support support) {
         support.delete();
         storage.getSupports().remove(support);
@@ -103,6 +153,25 @@ public class StorageController {
         } else {
             return false;
         }
+    }
+
+    public void addBoard(float posX, float posY) {
+        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), posX, 0);
+        storage.addBoard(board);
+        notifyBoardCreationListeners(board);
+    }
+
+    public void addItem(float posX, float posY) {
+
+        Board board = service.getBoardAt(posX);
+
+        if (board == null) {
+            NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found.");
+        } else {
+            Item item = new Item(board, Color.DARKBLUE, 0.2f, 0.2f, 0.2f, 0);
+            notifyItemCreationListeners(item);
+        }
+
     }
 
 }

@@ -65,7 +65,16 @@ public class NotificationDropdown {
         bellButton = new IconButton("/icons/bell.png");
         bellButton.setFocusTraversable(false);
         bellButton.setOnAction(_ -> toggle());
+        hide();
 
+    }
+
+    public void hide() {
+        bellButton.setVisible(false);
+    }
+
+    public void show() {
+        bellButton.setVisible(true);
     }
 
     public Button getButton() {

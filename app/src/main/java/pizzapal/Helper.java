@@ -10,6 +10,10 @@ public class Helper {
         return (int) (meters * Config.PIXEL_PER_METER);
     }
 
+    public static final float convertPixelToMeters(float pixels) {
+        return (float) (pixels / Config.PIXEL_PER_METER);
+    }
+
     public static float getPixelPositionYInStorage(Storage storage, Support support) {
         return convertMetersToPixel(storage.getHeight()) - convertMetersToPixel(support.getHeight());
     }

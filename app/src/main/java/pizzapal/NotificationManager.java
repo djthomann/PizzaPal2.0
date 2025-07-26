@@ -12,9 +12,6 @@ public class NotificationManager {
     private final List<NotificationListener> listeners = new ArrayList<>();
 
     private NotificationManager() {
-        notifications.add("Test1");
-        notifications.add("Test2");
-        notifications.add("Test3");
     }
 
     public void addListener(NotificationListener l) {

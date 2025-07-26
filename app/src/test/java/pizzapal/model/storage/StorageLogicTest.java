@@ -32,6 +32,12 @@ public class StorageLogicTest {
     }
 
     @Test
+    public void testPositionInsideStorage() {
+        assertTrue(logic.positionInStorage(6f, 3f));
+        assertTrue(logic.positionInStorage(3f, 1.5f));
+    }
+
+    @Test
     public void testPositionInsideSupport() {
         Support support1 = new Support(storage, 0.2f, 2f, 2f, 0f);
 

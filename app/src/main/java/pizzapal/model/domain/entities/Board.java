@@ -3,7 +3,6 @@ package pizzapal.model.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import pizzapal.Helper;
 import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
@@ -39,18 +38,23 @@ public class Board implements Observable<BoardChangeListener> {
 
     private float posX;
 
+    private float offsetY;
+
     private final float height;
 
-    public Board(Support supportLeft, Support supportRight, float height, float posY) {
+    public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
         this.supportLeft = supportLeft;
         this.supportRight = supportRight;
         this.height = height;
-        this.posY = posY;
+        this.posY = supportLeft.getPositionY() + offsetY;
+        this.offsetY = offsetY;
         this.posX = supportLeft.getPositionX();
 
         supportLeft.addListener(leftListener);
+        supportLeft.addBoardRight(this);
 
         supportRight.addListener(rightListener);
+        supportRight.addBoardLeft(this);
 
     }
 
@@ -67,7 +71,8 @@ public class Board implements Observable<BoardChangeListener> {
     }
 
     public void reactToChangeLeft(Support support) {
-        setPosX(support.getPositionX() + Helper.convertMetersToPixel(support.getWidth()));
+        setPosX(support.getPositionX() + support.getWidth());
+        setPosY(supportLeft.getHeight());
         // setPosY(Helper.getPixelPositionYInStorage(support.getStorage(), support));
     }
 
@@ -116,7 +121,7 @@ public class Board implements Observable<BoardChangeListener> {
         }
 
         setPosY(posY);
-        setPosX(left.getPositionX() + Helper.convertMetersToPixel(left.getWidth()));
+        setPosX(left.getPositionX() + left.getWidth());
     }
 
     public List<Item> getItems() {
@@ -169,6 +174,14 @@ public class Board implements Observable<BoardChangeListener> {
     private void setPosX(float posX) {
         this.posX = posX;
         notifyListeners();
+    }
+
+    public float getOffsetY() {
+        return offsetY;
+    }
+
+    public void setOffsetY(float offsetY) {
+        this.offsetY = offsetY;
     }
 
 }

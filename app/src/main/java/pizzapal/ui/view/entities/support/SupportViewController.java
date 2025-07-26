@@ -164,7 +164,8 @@ public class SupportViewController implements ViewController {
                     float xInView = (float) localPoint.getX();
                     float yInView = (float) localPoint.getY();
 
-                    if (!storageController.moveSupport(support, xInView, yInView)) {
+                    if (!storageController.moveSupport(support, Helper.convertPixelToMeters(xInView),
+                            Helper.convertPixelToMeters(yInView))) {
                         view.resetRectangle();
                     }
                 }

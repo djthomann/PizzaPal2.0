@@ -2,7 +2,7 @@ package pizzapal.model.service;
 
 import java.util.List;
 
-import pizzapal.Helper;
+import pizzapal.NotificationManager;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
@@ -17,12 +17,12 @@ public class StorageLogic {
 
     public boolean positionInStorage(float posX, float posY) {
 
-        float storageWidth = Helper.convertMetersToPixel(storage.getWidth());
-        float storageHeight = Helper.convertMetersToPixel(storage.getHeight());
+        float storageWidth = storage.getWidth();
+        float storageHeight = storage.getHeight();
 
         // System.out.println("Nicht im Lager");
 
-        return posX >= 0 && posY >= 0 && posX < storageWidth && posY < storageHeight;
+        return posX >= 0 && posY >= 0 && posX <= storageWidth && posY <= storageHeight;
     }
 
     public boolean positionInSupport(float posX) {
@@ -37,21 +37,35 @@ public class StorageLogic {
 
     public boolean placeSupportPossible(Support support, float posX, float posY) {
 
-        if (support.getPositionX() == posX)
+        if (support.getPositionX() == posX) {
+            NotificationManager.getInstance().addNotification("Is not a movement");
             return true;
+        }
 
         if (!positionInStorage(posX, posY)) {
+            NotificationManager.getInstance().addNotification("Not inside Storage");
             return false;
         }
 
         boolean movingRight = support.getPositionX() < posX;
         if (movingThroughSupport(movingRight, support, posX)) {
+            NotificationManager.getInstance().addNotification("Moving through other support");
             return false;
         }
 
+        // Check for collisions
         for (Support s : storage.getSupports()) {
-            if (s.getPositionX() < posX && s.getPositionX() + Helper.convertMetersToPixel(s.getWidth()) > posX) {
-                return false;
+            if (s.getPositionX() < posX && s.getPositionX() + s.getWidth() > posX) {
+                // Collision
+                NotificationManager.getInstance().addNotification("Collision happened");
+                if (s.equals(support)) {
+                    NotificationManager.getInstance().addNotification("Is same support");
+                    return true;
+                } else {
+                    NotificationManager.getInstance().addNotification("Different support");
+                    return false;
+                }
+
             }
         }
 

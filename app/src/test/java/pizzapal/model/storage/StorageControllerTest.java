@@ -20,7 +20,7 @@ public class StorageControllerTest {
     }
 
     @Test
-    public void testSomething() {
+    public void testGetBoardAt() {
 
     }
 

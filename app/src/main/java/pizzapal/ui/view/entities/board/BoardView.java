@@ -3,6 +3,7 @@ package pizzapal.ui.view.entities.board;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import pizzapal.Helper;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.ui.UIConfig;
 
@@ -31,6 +32,7 @@ public class BoardView extends Pane {
     }
 
     public void moveRectangle(float posX, float posY) {
+        System.out.println(posX);
         boardRectangle.setLayoutX(posX);
         boardRectangle.setLayoutY(posY);
     }
@@ -55,10 +57,14 @@ public class BoardView extends Pane {
     public void updateFromModel(Board board) {
         resetRectangle();
 
-        this.setLayoutX(board.getPosX());
-        this.setLayoutY(board.getPosY());
+        this.setLayoutX(Helper.convertMetersToPixel(board.getPosX()));
+        this.setLayoutY(Helper.getPixelPositionYInStorage(board.getSupportLeft().getStorage(), board.getSupportLeft()));
 
-        setWidth(board.getWidth());
+        float newWidth = Helper.convertMetersToPixel(board.getWidth());
+
+        setWidth(newWidth);
+        boardRectangle.setWidth(newWidth);
+        ghostRectangle.setWidth(newWidth);
     }
 
     public void resetRectangle() {
