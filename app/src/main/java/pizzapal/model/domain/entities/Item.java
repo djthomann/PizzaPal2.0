@@ -9,19 +9,11 @@ import pizzapal.model.observability.ItemChangeListener;
 import pizzapal.model.observability.Observable;
 import pizzapal.utils.Helper;
 
-public class Item implements Observable<ItemChangeListener> {
+public class Item extends Entity implements Observable<ItemChangeListener> {
 
     private Color color;
 
     private final float weight;
-
-    private final float width;
-
-    private final float height;
-
-    private float posX;
-
-    private float posY;
 
     private final float offsetX;
 
@@ -34,13 +26,10 @@ public class Item implements Observable<ItemChangeListener> {
     };
 
     public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
+        super(width, height, board.getPosX() + offsetX, board.getPosY());
         this.board = board;
         this.color = color;
         this.weight = weight;
-        this.width = width;
-        this.height = height;
-        this.posX = board.getPosX() + offsetX;
-        posY = board.getPosY();
         this.offsetX = offsetX;
 
         board.addListener(listener);

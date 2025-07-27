@@ -11,8 +11,11 @@ public class StorageLogic {
 
     private Storage storage;
 
-    public StorageLogic(Storage storage) {
+    private StorageService service;
+
+    public StorageLogic(Storage storage, StorageService service) {
         this.storage = storage;
+        this.service = service;
     }
 
     public boolean positionInStorage(float posX, float posY) {
@@ -27,7 +30,7 @@ public class StorageLogic {
 
     public boolean positionInSupport(float posX) {
         for (Support s : storage.getSupports()) {
-            if (s.getPositionX() <= posX && s.getPositionX() + s.getWidth() >= posX) {
+            if (s.getPosX() <= posX && s.getPosX() + s.getWidth() >= posX) {
                 return true;
             }
         }
@@ -37,7 +40,7 @@ public class StorageLogic {
 
     public boolean placeSupportPossible(Support support, float posX, float posY) {
 
-        if (support.getPositionX() == posX) {
+        if (support.getPosX() == posX) {
             NotificationManager.getInstance().addNotification("Is not a movement");
             return true;
         }
@@ -47,15 +50,21 @@ public class StorageLogic {
             return false;
         }
 
-        boolean movingRight = support.getPositionX() < posX;
+        boolean movingRight = support.getPosX() < posX;
         if (movingThroughSupport(movingRight, support, posX)) {
             NotificationManager.getInstance().addNotification("Moving through other support");
             return false;
         }
 
+        float leftSide = posX;
+        float rightSide = posX + support.getWidth();
         // Check for collisions
         for (Support s : storage.getSupports()) {
-            if (s.getPositionX() < posX && s.getPositionX() + s.getWidth() > posX) {
+
+            boolean leftSideInside = s.getPosX() < leftSide && s.getPosX() + s.getWidth() > leftSide;
+            boolean rightSideInside = s.getPosX() < rightSide && s.getPosX() + s.getWidth() > rightSide;
+
+            if (leftSideInside || rightSideInside) {
                 // Collision
                 NotificationManager.getInstance().addNotification("Collision happened");
                 if (s.equals(support)) {
@@ -85,10 +94,21 @@ public class StorageLogic {
                 // Shouldn't be possible
                 return false;
             } else {
-                return right.getPositionX() < posX;
+                return right.getPosX() < posX;
             }
         } else {
-            return false;
+
+            List<Board> boards = support.getBoardsLeft();
+            if (boards.isEmpty()) {
+                return false;
+            }
+            Support left = boards.get(0).getSupportLeft();
+            if (left == null) {
+                // Shouldn't be possible
+                return false;
+            } else {
+                return left.getPosX() + left.getWidth() < posX;
+            }
         }
     }
 
@@ -100,6 +120,10 @@ public class StorageLogic {
         }
 
         if (storageIsEmpty()) {
+            return false;
+        }
+
+        if (!service.isPositionBetweenTwoSupports(posX)) {
             return false;
         }
 

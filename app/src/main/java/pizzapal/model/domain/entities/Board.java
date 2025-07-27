@@ -48,7 +48,7 @@ public class Board implements Observable<BoardChangeListener> {
         this.height = height;
         this.posY = supportLeft.getHeight() - offsetY;
         this.offsetY = offsetY;
-        this.posX = supportLeft.getPositionX();
+        this.posX = supportLeft.getPosX();
 
         supportLeft.addListener(leftListener);
         supportLeft.addBoardRight(this);
@@ -71,7 +71,7 @@ public class Board implements Observable<BoardChangeListener> {
     }
 
     public void reactToChangeLeft(Support support) {
-        setPosX(support.getPositionX() + support.getWidth());
+        setPosX(support.getPosX() + support.getWidth());
         setPosY(supportLeft.getHeight() - offsetY);
         System.out.println("BOARD AT." + getPosY());
         System.out.println("OFFSET" + offsetY);
@@ -124,7 +124,7 @@ public class Board implements Observable<BoardChangeListener> {
 
         this.offsetY = offsetY;
         setPosY(supportLeft.getHeight() - offsetY);
-        setPosX(left.getPositionX() + left.getWidth());
+        setPosX(left.getPosX() + left.getWidth());
     }
 
     public List<Item> getItems() {
@@ -140,7 +140,7 @@ public class Board implements Observable<BoardChangeListener> {
     }
 
     public float getWidth() {
-        float width = supportRight.getPositionX() - supportLeft.getPositionX()
+        float width = supportRight.getPosX() - supportLeft.getPosX()
                 - supportLeft.getWidth();
         System.out.println("WIDTH " + width);
         return width;

@@ -10,8 +10,8 @@ public class MoveSupportCommand implements Command {
 
     public MoveSupportCommand(Support support, double newX, double newY) {
         this.support = support;
-        this.oldX = support.getPositionX();
-        this.oldY = support.getPositionY();
+        this.oldX = support.getPosX();
+        this.oldY = support.getPosY();
         this.newX = newX;
         this.newY = newY;
     }

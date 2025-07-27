@@ -27,7 +27,7 @@ public class BoardViewController implements ViewController {
         float widthPx = Helper.convertMetersToPixel(board.getWidth());
         float heightPx = Helper.convertMetersToPixel(0.2f);
         float posX = Helper
-                .convertMetersToPixel(board.getSupportLeft().getPositionX() + board.getSupportLeft().getWidth());
+                .convertMetersToPixel(board.getSupportLeft().getPosX() + board.getSupportLeft().getWidth());
         float posY = Helper.getPixelPositionYInStorage(storageController.getStorage(), board.getPosY());
 
         this.view = new BoardView(widthPx, heightPx, posX, posY);

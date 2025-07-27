@@ -32,7 +32,7 @@ public class SupportViewController implements ViewController {
 
         float widthPx = Helper.convertMetersToPixel(support.getWidth());
         float heightPx = Helper.convertMetersToPixel(support.getHeight());
-        float posX = Helper.convertMetersToPixel(support.getPositionX());
+        float posX = Helper.convertMetersToPixel(support.getPosX());
         float posY = Helper.getPixelPositionYInStorage(support.getStorage(), support);
 
         view = new SupportView(widthPx, heightPx, posX, posY);

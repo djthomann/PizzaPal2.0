@@ -27,7 +27,7 @@ public class StorageControllerTest {
     public void testMoveSupport() {
         Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
 
-        assertEquals(1f, support1.getPositionX());
+        assertEquals(1f, support1.getPosX());
 
     }
 

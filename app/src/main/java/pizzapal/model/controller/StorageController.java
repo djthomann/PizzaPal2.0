@@ -34,8 +34,8 @@ public class StorageController {
 
     public StorageController(Storage storage) {
         this.storage = storage;
-        logic = new StorageLogic(storage);
         service = new StorageService(storage);
+        logic = new StorageLogic(storage, service);
     }
 
     public void addSupportCreationListener(SupportCreationListener l) {
@@ -146,6 +146,10 @@ public class StorageController {
         if (logic.moveBoardPossible(board, posX, posY)) {
             Support left = service.getSupportLeftOfPos(posX);
             float offsetY = left.getHeight() - posY;
+
+            if (offsetY < 0) {
+                offsetY = 0;
+            }
 
             MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),
                     service.getSupportRightOfPos(posX), offsetY);

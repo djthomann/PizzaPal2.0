@@ -8,7 +8,7 @@ import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
 
-public class Support implements Observable<SupportChangeListener> {
+public class Support extends Entity implements Observable<SupportChangeListener> {
 
     private final List<SupportChangeListener> listeners = new ArrayList<>();
 
@@ -18,22 +18,11 @@ public class Support implements Observable<SupportChangeListener> {
 
     private List<Board> boardsRight;
 
-    private final float width;
-
-    private final float height;
-
-    private float positionX;
-
-    private float positionY;
-
-    public Support(Storage storage, float width, float height, float positionX, float positionY) {
+    public Support(Storage storage, float width, float height, float posX, float posY) {
+        super(width, height, posX, posY);
         this.storage = storage;
         boardsLeft = new ArrayList<>();
         boardsRight = new ArrayList<>();
-        this.width = width;
-        this.height = height;
-        this.positionX = positionX;
-        this.positionY = positionY;
         storage.addSupport(this);
     }
 
@@ -66,7 +55,7 @@ public class Support implements Observable<SupportChangeListener> {
     }
 
     public void move(float posX) {
-        setPositionX(posX);
+        setPosX(posX);
     }
 
     public void addListener(SupportChangeListener l) {
@@ -91,40 +80,24 @@ public class Support implements Observable<SupportChangeListener> {
 
     // GETTERS AND SETTERS
 
-    public float getWidth() {
-        return width;
-    }
-
     public Storage getStorage() {
         return storage;
     }
 
-    public float getHeight() {
-        return height;
-    }
-
-    public float getPositionX() {
-        return positionX;
-    }
-
-    public void setPositionX(float positionX) {
-        this.positionX = positionX;
+    public void setPosX(float positionX) {
+        super.setPosX(positionX);
         notifyListeners();
     }
 
-    public float getPositionY() {
-        return positionY;
-    }
-
-    public void setPositionY(float positionY) {
-        this.positionY = positionY;
+    public void setPosY(float positionY) {
+        super.setPosY(positionY);
         notifyListeners();
     }
 
     @Override
     public String toString() {
-        return "Support [width=" + width + ", height=" + height + ", positionX=" + positionX + ", positionY="
-                + positionY + "]";
+        return "Support [width=" + width + ", height=" + height + ", positionX=" + posX + ", positionY="
+                + posY + "]";
     }
 
 }
