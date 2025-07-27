@@ -1,4 +1,4 @@
-package pizzapal;
+package pizzapal.utils;
 
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;

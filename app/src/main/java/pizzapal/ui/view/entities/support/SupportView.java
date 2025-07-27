@@ -3,9 +3,9 @@ package pizzapal.ui.view.entities.support;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import pizzapal.Helper;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.UIConfig;
+import pizzapal.utils.Helper;
 
 public class SupportView extends Pane {
 

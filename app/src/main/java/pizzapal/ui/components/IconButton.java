@@ -4,7 +4,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import pizzapal.Helper;
+import pizzapal.utils.Helper;
 
 public class IconButton extends Button {
 

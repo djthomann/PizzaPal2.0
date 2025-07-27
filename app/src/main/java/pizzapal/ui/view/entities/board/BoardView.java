@@ -3,8 +3,8 @@ package pizzapal.ui.view.entities.board;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import pizzapal.Helper;
 import pizzapal.model.domain.entities.Board;
+import pizzapal.utils.Helper;
 
 public class BoardView extends Pane {
 
@@ -14,13 +14,14 @@ public class BoardView extends Pane {
 
     public BoardView(float width, float height, float posX, float posY) {
 
-        setPrefHeight(height);
-
         boardRectangle = new Rectangle(200, height);
         boardRectangle.setFill(Color.GREEN);
 
         ghostRectangle = new Rectangle(200, height);
         ghostRectangle.setFill(Color.DARKGRAY);
+
+        setWidth(width);
+        setPrefHeight(height);
 
         setLayoutX(posX);
         setLayoutY(posY);

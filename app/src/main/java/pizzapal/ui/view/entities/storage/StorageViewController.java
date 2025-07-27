@@ -4,7 +4,6 @@ import java.util.List;
 
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import pizzapal.Helper;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
@@ -13,6 +12,7 @@ import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.view.entities.board.BoardViewController;
 import pizzapal.ui.view.entities.item.ItemViewController;
 import pizzapal.ui.view.entities.support.SupportViewController;
+import pizzapal.utils.Helper;
 
 public class StorageViewController {
 

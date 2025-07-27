@@ -72,8 +72,9 @@ public class Board implements Observable<BoardChangeListener> {
 
     public void reactToChangeLeft(Support support) {
         setPosX(support.getPositionX() + support.getWidth());
-        System.out.println(offsetY);
-        setPosY(supportLeft.getHeight() + offsetY);
+        setPosY(supportLeft.getHeight() - offsetY);
+        System.out.println("BOARD AT." + getPosY());
+        System.out.println("OFFSET" + offsetY);
         // setPosY(Helper.getPixelPositionYInStorage(support.getStorage(), support));
     }
 
@@ -122,7 +123,7 @@ public class Board implements Observable<BoardChangeListener> {
         }
 
         this.offsetY = offsetY;
-        setPosY(supportLeft.getPositionY() + offsetY);
+        setPosY(supportLeft.getHeight() - offsetY);
         setPosX(left.getPositionX() + left.getWidth());
     }
 
@@ -141,6 +142,7 @@ public class Board implements Observable<BoardChangeListener> {
     public float getWidth() {
         float width = supportRight.getPositionX() - supportLeft.getPositionX()
                 - supportLeft.getWidth();
+        System.out.println("WIDTH " + width);
         return width;
     }
 

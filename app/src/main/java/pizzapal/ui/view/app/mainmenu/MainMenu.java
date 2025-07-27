@@ -14,11 +14,11 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import pizzapal.Helper;
-import pizzapal.SceneManager;
 import pizzapal.model.repository.StorageRepository;
 import pizzapal.ui.UIConfig;
 import pizzapal.ui.view.app.editor.EditorView;
+import pizzapal.utils.Helper;
+import pizzapal.utils.SceneManager;
 
 public class MainMenu extends Pane {
 

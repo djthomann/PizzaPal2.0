@@ -2,10 +2,10 @@ package pizzapal.model.service;
 
 import java.util.List;
 
-import pizzapal.NotificationManager;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
+import pizzapal.utils.NotificationManager;
 
 public class StorageLogic {
 

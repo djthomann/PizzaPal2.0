@@ -1,4 +1,4 @@
-package pizzapal;
+package pizzapal.utils;
 
 public class Config {
 

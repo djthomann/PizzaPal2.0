@@ -1,4 +1,4 @@
-package pizzapal;
+package pizzapal.utils;
 
 import java.util.ArrayList;
 import java.util.List;

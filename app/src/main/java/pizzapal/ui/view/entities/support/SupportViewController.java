@@ -9,11 +9,11 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import pizzapal.Helper;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.UIConfig;
 import pizzapal.ui.view.entities.ViewController;
+import pizzapal.utils.Helper;
 
 public class SupportViewController implements ViewController {
 
@@ -163,7 +163,6 @@ public class SupportViewController implements ViewController {
                     Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
                     float xInView = (float) localPoint.getX();
                     float yInView = (float) localPoint.getY();
-                    System.out.println(yInView);
 
                     if (!storageController.moveSupport(support, Helper.convertPixelToMeters(xInView),
                             Helper.convertPixelToMeters(yInView))) {
@@ -181,6 +180,10 @@ public class SupportViewController implements ViewController {
         view.setOnMouseExited(_ -> {
             // view.setCursor(Cursor.DEFAULT);
         });
+    }
+
+    public ContextMenu getContextMenu() {
+        return contextMenu;
     }
 
 }

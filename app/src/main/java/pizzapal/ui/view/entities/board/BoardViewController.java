@@ -1,13 +1,14 @@
 package pizzapal.ui.view.entities.board;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import pizzapal.Helper;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.ui.view.entities.ViewController;
+import pizzapal.utils.Helper;
 
 public class BoardViewController implements ViewController {
 
@@ -99,8 +100,13 @@ public class BoardViewController implements ViewController {
             switch (button) {
                 case PRIMARY -> {
 
-                    if (!storageController.moveBoard(board, Helper.convertPixelToMeters((float) e.getSceneX()),
-                            Helper.convertPixelToMeters((float) e.getSceneY()))) {
+                    Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
+                    float xInView = (float) localPoint.getX();
+                    float yInView = (float) localPoint.getY();
+
+                    if (!storageController.moveBoard(board, Helper.convertPixelToMeters(xInView),
+                            Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
+                                    yInView))) {
                         view.resetRectangle();
                     }
                 }

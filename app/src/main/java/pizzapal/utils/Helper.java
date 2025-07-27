@@ -1,4 +1,4 @@
-package pizzapal;
+package pizzapal.utils;
 
 import javafx.scene.image.Image;
 import pizzapal.model.domain.core.Storage;
@@ -20,6 +20,11 @@ public class Helper {
 
     public static float getPixelPositionYInStorage(Storage storage, float posY) {
         return convertMetersToPixel(storage.getHeight()) - convertMetersToPixel(posY);
+    }
+
+    public static float convertPixelPositionToHeightInStorage(Storage storage, float posY) {
+        float h = convertPixelToMeters(posY);
+        return storage.getHeight() - h;
     }
 
     public static Image loadImage(String resourcePath) {

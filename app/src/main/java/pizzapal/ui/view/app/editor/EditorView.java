@@ -24,14 +24,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Rectangle;
-import pizzapal.NotificationManager;
-import pizzapal.SceneManager;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.repository.StorageRepository;
 import pizzapal.ui.components.NotificationDropdown;
 import pizzapal.ui.view.entities.storage.StorageView;
 import pizzapal.ui.view.entities.storage.StorageViewController;
+import pizzapal.utils.NotificationManager;
+import pizzapal.utils.SceneManager;
 
 public class EditorView extends BorderPane {
 

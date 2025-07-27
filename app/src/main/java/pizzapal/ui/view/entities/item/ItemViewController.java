@@ -1,9 +1,9 @@
 package pizzapal.ui.view.entities.item;
 
 import javafx.scene.layout.Pane;
-import pizzapal.Helper;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.ui.view.entities.ViewController;
+import pizzapal.utils.Helper;
 
 public class ItemViewController implements ViewController {
 

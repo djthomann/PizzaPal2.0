@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
-import pizzapal.NotificationManager;
+import pizzapal.utils.NotificationManager;
 
 public class NotificationDropdown {
 

@@ -3,8 +3,8 @@ package pizzapal.ui.view.entities.item;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import pizzapal.Helper;
 import pizzapal.model.domain.entities.Item;
+import pizzapal.utils.Helper;
 
 public class ItemView extends Pane {
 

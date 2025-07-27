@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.scene.paint.Color;
-import pizzapal.Helper;
 import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ItemChangeListener;
 import pizzapal.model.observability.Observable;
+import pizzapal.utils.Helper;
 
 public class Item implements Observable<ItemChangeListener> {
 

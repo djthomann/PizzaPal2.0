@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.List;
 
 import javafx.scene.paint.Color;
-import pizzapal.NotificationManager;
 import pizzapal.model.commands.Command;
 import pizzapal.model.commands.MoveBoardCommand;
 import pizzapal.model.commands.MoveSupportCommand;
@@ -16,6 +15,7 @@ import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
+import pizzapal.utils.NotificationManager;
 
 public class StorageController {
 
@@ -143,12 +143,12 @@ public class StorageController {
     }
 
     public boolean moveBoard(Board board, float posX, float posY) {
-        System.out.println("POSY" + posY);
         if (logic.moveBoardPossible(board, posX, posY)) {
             Support left = service.getSupportLeftOfPos(posX);
-            System.out.println("OffsetY" + (left.getHeight() - posY));
+            float offsetY = left.getHeight() - posY;
+
             MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),
-                    service.getSupportRightOfPos(posX), posY);
+                    service.getSupportRightOfPos(posX), offsetY);
             moveCommand.execute();
             undoStack.push(moveCommand);
             return true;

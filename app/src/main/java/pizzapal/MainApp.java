@@ -3,6 +3,9 @@ package pizzapal;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import pizzapal.utils.Config;
+import pizzapal.utils.Helper;
+import pizzapal.utils.SceneManager;
 
 public class MainApp extends Application {
 
