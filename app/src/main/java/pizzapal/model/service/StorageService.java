@@ -1,5 +1,7 @@
 package pizzapal.model.service;
 
+import java.util.List;
+
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
@@ -60,6 +62,24 @@ public class StorageService {
         }
 
         return left.getBoardsRight().get(0);
+    }
+
+    public Board getBoardBelow(List<Board> boards, float posY) {
+        Board board = null;
+
+        for (Board b : boards) {
+            if (b.getPosY() < posY) {
+                if (board == null) {
+                    board = b;
+                }
+
+                if (board.getPosY() < b.getPosY()) {
+                    board = b;
+                }
+            }
+        }
+
+        return board;
     }
 
 }

@@ -100,14 +100,16 @@ public class StorageLogic {
 
             List<Board> boards = support.getBoardsLeft();
             if (boards.isEmpty()) {
+                System.out.println("IS EMPTY");
                 return false;
             }
             Support left = boards.get(0).getSupportLeft();
             if (left == null) {
+                System.out.println("Not possible");
                 // Shouldn't be possible
                 return false;
             } else {
-                return left.getPosX() + left.getWidth() < posX;
+                return left.getPosX() + left.getWidth() > posX;
             }
         }
     }

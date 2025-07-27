@@ -10,6 +10,9 @@ public abstract class EntityViewController<E extends Entity> {
 
     protected EntityView<E> view;
 
+    private Double offsetX;
+    private Double offsetY;
+
     protected EntityViewController(EntityView<E> view) {
         this.view = view;
         initDragAndDrop();
@@ -23,6 +26,8 @@ public abstract class EntityViewController<E extends Entity> {
 
             switch (button) {
                 case PRIMARY -> {
+                    offsetX = e.getX();
+                    offsetY = e.getY();
                     view.setCursor(Cursor.MOVE);
                 }
                 case SECONDARY -> {
@@ -41,7 +46,7 @@ public abstract class EntityViewController<E extends Entity> {
             switch (button) {
                 case PRIMARY -> {
                     view.setCursor(Cursor.MOVE);
-                    view.moveRectangle((float) e.getX(), (float) e.getY());
+                    view.moveRectangle((float) (e.getX() - offsetX), (float) (e.getY() - offsetY));
                 }
                 default -> {
                 }
@@ -56,19 +61,14 @@ public abstract class EntityViewController<E extends Entity> {
             switch (button) {
                 case PRIMARY -> {
 
+                    offsetX = 0D;
+                    offsetY = 0D;
+
                     Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
                     float xInView = (float) localPoint.getX();
                     float yInView = (float) localPoint.getY();
 
                     onMouseReleased(xInView, yInView);
-
-                    /*
-                     * if (!storageController.moveBoard(board, Helper.convertPixelToMeters(xInView),
-                     * Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
-                     * yInView))) {
-                     * view.resetRectangle();
-                     * }
-                     */
                 }
                 default -> {
                 }

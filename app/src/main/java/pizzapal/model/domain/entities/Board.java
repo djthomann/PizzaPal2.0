@@ -38,7 +38,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
 
     public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
         super(supportRight.getPosX() - supportLeft.getPosX()
-                - supportLeft.getWidth(), height, supportLeft.getPosX(), supportLeft.getHeight() - offsetY);
+                + supportLeft.getWidth(), height, supportLeft.getPosX(), supportLeft.getHeight() - offsetY);
         this.supportLeft = supportLeft;
         this.supportRight = supportRight;
         this.height = height;
@@ -69,8 +69,6 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     public void reactToChangeLeft(Support support) {
         setPosX(support.getPosX() + support.getWidth());
         setPosY(supportLeft.getHeight() - offsetY);
-        System.out.println("BOARD AT." + getPosY());
-        System.out.println("OFFSET" + offsetY);
         // setPosY(Helper.getPixelPositionYInStorage(support.getStorage(), support));
     }
 
@@ -134,7 +132,6 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     public float getWidth() {
         float width = supportRight.getPosX() - supportLeft.getPosX()
                 - supportLeft.getWidth();
-        System.out.println("WIDTH " + width);
         return width;
     }
 

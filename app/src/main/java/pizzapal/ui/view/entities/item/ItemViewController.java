@@ -1,5 +1,6 @@
 package pizzapal.ui.view.entities.item;
 
+import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.ui.view.entities.EntityViewController;
 import pizzapal.utils.Helper;
@@ -8,12 +9,15 @@ public class ItemViewController extends EntityViewController<Item> {
 
     private Item item;
 
-    public ItemViewController(Item item) {
+    private StorageController storageController;
+
+    public ItemViewController(StorageController storageController, Item item) {
 
         super(new ItemView(item.getColor(), Helper.convertMetersToPixel(item.getWidth()),
                 Helper.convertMetersToPixel(item.getHeight()), Helper.convertMetersToPixel(item.getPosX()),
-                Helper.convertMetersToPixel(item.getPosY())));
+                Helper.getPixelPositionYInStorage(storageController.getStorage(), item.getPosY() + item.getHeight())));
         this.item = item;
+        this.storageController = storageController;
 
         item.addListener(model -> {
             view.updateFromModel(model);
@@ -23,8 +27,11 @@ public class ItemViewController extends EntityViewController<Item> {
 
     @Override
     protected void onMouseReleased(float xInView, float yInView) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onMouseReleased'");
+        if (!storageController.moveItem(item, Helper.convertPixelToMeters(xInView),
+                Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
+                        yInView))) {
+            view.resetRectangle();
+        }
     }
 
 }

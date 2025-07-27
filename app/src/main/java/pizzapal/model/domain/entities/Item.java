@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ItemChangeListener;
 import pizzapal.model.observability.Observable;
-import pizzapal.utils.Helper;
 
 public class Item extends Entity implements Observable<ItemChangeListener> {
 
@@ -15,7 +14,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     private final float weight;
 
-    private final float offsetX;
+    private float offsetX;
 
     private Board board;
 
@@ -41,16 +40,21 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         }
     }
 
-    public void move(Board board) {
+    public void move(Board board, float offsetX) {
         this.board.removeItem(this);
+        board.removeListener(listener);
         this.board = board;
         board.addItem(this);
-        // TODO notify
+        board.addListener(listener);
+        this.offsetX = offsetX;
+        setPosX(board.getPosX() + offsetX);
+        System.out.println("POSX" + getPosX());
+        setPosY(board.getPosY() + height);
     }
 
     public void reactToBoardChange(Board board) {
-        setPosX(board.getPosX() + Helper.convertMetersToPixel(offsetX));
-        setPosY(board.getPosY() + width);
+        setPosX(board.getPosX() + offsetX);
+        setPosY(board.getPosY() + height);
     }
 
     public Color getColor() {

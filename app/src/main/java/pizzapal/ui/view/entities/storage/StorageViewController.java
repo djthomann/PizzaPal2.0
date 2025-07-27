@@ -33,7 +33,7 @@ public class StorageViewController {
         });
 
         storageController.addItemCreationListener(item -> {
-            storageView.getChildren().addAll(new ItemViewController(item).getView());
+            storageView.getChildren().addAll(new ItemViewController(storageController, item).getView());
         });
 
         Storage storage = storageController.getStorage();
@@ -55,7 +55,7 @@ public class StorageViewController {
             storageView.getChildren().add(new BoardViewController(storageController, board).getView());
 
             for (Item item : board.getItems()) {
-                storageView.getChildren().add(new ItemViewController(item).getView());
+                storageView.getChildren().add(new ItemViewController(storageController, item).getView());
             }
         }
 
