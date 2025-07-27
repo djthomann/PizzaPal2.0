@@ -1,12 +1,12 @@
 package pizzapal.ui.view.entities.item;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import pizzapal.model.domain.entities.Item;
+import pizzapal.ui.view.entities.EntityView;
 import pizzapal.utils.Helper;
 
-public class ItemView extends Pane {
+public class ItemView extends EntityView<Item> {
 
     private final Rectangle itemRectangle;
 
@@ -37,9 +37,25 @@ public class ItemView extends Pane {
 
     }
 
+    public void move(float posX, float posY) {
+        itemRectangle.setLayoutX(0);
+        itemRectangle.setLayoutY(0);
+
+        ghostRectangle.setLayoutX(0);
+        ghostRectangle.setLayoutY(0);
+
+        setLayoutX(posX);
+        setLayoutY(posY);
+    }
+
     public void resetRectangle() {
         itemRectangle.setLayoutX(0);
         itemRectangle.setLayoutY(0);
+    }
+
+    public void moveRectangle(float posX, float posY) {
+        itemRectangle.setLayoutX(posX);
+        itemRectangle.setLayoutY(posY);
     }
 
 }

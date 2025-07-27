@@ -1,13 +1,16 @@
 package pizzapal.ui.view.entities;
 
-public interface EntityView {
+import javafx.scene.layout.Pane;
+import pizzapal.model.domain.entities.Entity;
 
-    public void move(float posX, float posY);
+public abstract class EntityView<E extends Entity> extends Pane {
 
-    public void updateFromModel();
+    public abstract void move(float posX, float posY);
 
-    public void moveRectangle(float posX, float posY);
+    public abstract void updateFromModel(E e);
 
-    public void resetRectangle();
+    public abstract void moveRectangle(float posX, float posY);
+
+    public abstract void resetRectangle();
 
 }

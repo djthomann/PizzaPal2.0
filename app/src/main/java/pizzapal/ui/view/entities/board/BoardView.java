@@ -1,12 +1,12 @@
 package pizzapal.ui.view.entities.board;
 
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import pizzapal.model.domain.entities.Board;
+import pizzapal.ui.view.entities.EntityView;
 import pizzapal.utils.Helper;
 
-public class BoardView extends Pane {
+public class BoardView extends EntityView<Board> {
 
     private final Rectangle boardRectangle;
 

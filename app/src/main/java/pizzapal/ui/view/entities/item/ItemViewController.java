@@ -1,26 +1,19 @@
 package pizzapal.ui.view.entities.item;
 
-import javafx.scene.layout.Pane;
 import pizzapal.model.domain.entities.Item;
-import pizzapal.ui.view.entities.ViewController;
+import pizzapal.ui.view.entities.EntityViewController;
 import pizzapal.utils.Helper;
 
-public class ItemViewController implements ViewController {
+public class ItemViewController extends EntityViewController<Item> {
 
     private Item item;
 
-    private ItemView view;
-
     public ItemViewController(Item item) {
 
+        super(new ItemView(item.getColor(), Helper.convertMetersToPixel(item.getWidth()),
+                Helper.convertMetersToPixel(item.getHeight()), Helper.convertMetersToPixel(item.getPosX()),
+                Helper.convertMetersToPixel(item.getPosY())));
         this.item = item;
-
-        float widthPx = Helper.convertMetersToPixel(item.getWidth());
-        float heightPx = Helper.convertMetersToPixel(item.getHeight());
-        float posX = Helper.convertMetersToPixel(item.getPosX());
-        float posY = Helper.convertMetersToPixel(item.getPosY());
-
-        view = new ItemView(item.getColor(), widthPx, heightPx, posX, posY);
 
         item.addListener(model -> {
             view.updateFromModel(model);
@@ -29,14 +22,9 @@ public class ItemViewController implements ViewController {
     }
 
     @Override
-    public void initDragAndDrop() {
+    protected void onMouseReleased(float xInView, float yInView) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initDragAndDrop'");
-    }
-
-    @Override
-    public Pane getView() {
-        return view;
+        throw new UnsupportedOperationException("Unimplemented method 'onMouseReleased'");
     }
 
 }

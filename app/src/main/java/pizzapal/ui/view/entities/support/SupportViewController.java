@@ -1,46 +1,34 @@
 package pizzapal.ui.view.entities.support;
 
 import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.UIConfig;
-import pizzapal.ui.view.entities.ViewController;
+import pizzapal.ui.view.entities.EntityViewController;
 import pizzapal.utils.Helper;
 
-public class SupportViewController implements ViewController {
+public class SupportViewController extends EntityViewController<Support> {
 
     private final Support support;
 
     private final StorageController storageController;
 
-    private final SupportView view;
-
     private final ContextMenu contextMenu;
 
     public SupportViewController(StorageController storageController, Support support) {
-
+        super(new SupportView(Helper.convertMetersToPixel(support.getWidth()),
+                Helper.convertMetersToPixel(support.getHeight()), Helper.convertMetersToPixel(support.getPosX()),
+                Helper.getPixelPositionYInStorage(support.getStorage(), support)));
         this.storageController = storageController;
         this.support = support;
 
-        float widthPx = Helper.convertMetersToPixel(support.getWidth());
-        float heightPx = Helper.convertMetersToPixel(support.getHeight());
-        float posX = Helper.convertMetersToPixel(support.getPosX());
-        float posY = Helper.getPixelPositionYInStorage(support.getStorage(), support);
-
-        view = new SupportView(widthPx, heightPx, posX, posY);
-
         contextMenu = new ContextMenu();
         initContextMenu();
-
-        initDragAndDrop();
 
         support.addListener((model, type) -> {
 
@@ -110,80 +98,16 @@ public class SupportViewController implements ViewController {
         }
     }
 
-    public SupportView getView() {
-        return view;
-    }
-
-    public void initDragAndDrop() {
-
-        view.setOnMousePressed(e -> {
-
-            MouseButton button = e.getButton();
-
-            switch (button) {
-                case PRIMARY -> {
-                    view.setCursor(Cursor.MOVE);
-                }
-                case SECONDARY -> {
-                    toggleContextMenu();
-                }
-                default -> {
-                }
-            }
-
-        });
-
-        view.setOnMouseEntered(_ -> {
-            // view.setCursor(Cursor.HAND);
-        });
-
-        view.setOnMouseDragged(e -> {
-
-            MouseButton button = e.getButton();
-
-            switch (button) {
-                case PRIMARY -> {
-                    view.setCursor(Cursor.MOVE);
-                    hideContextMenu();
-                    view.moveRectangle((float) e.getX(), (float) e.getY());
-                }
-                default -> {
-                }
-            }
-
-        });
-
-        view.setOnMouseReleased(e -> {
-
-            MouseButton button = e.getButton();
-
-            switch (button) {
-                case PRIMARY -> {
-
-                    Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
-                    float xInView = (float) localPoint.getX();
-                    float yInView = (float) localPoint.getY();
-
-                    if (!storageController.moveSupport(support, Helper.convertPixelToMeters(xInView),
-                            Helper.convertPixelToMeters(yInView))) {
-                        view.resetRectangle();
-                    }
-                }
-                default -> {
-                }
-            }
-
-            view.setCursor(Cursor.HAND);
-
-        });
-
-        view.setOnMouseExited(_ -> {
-            // view.setCursor(Cursor.DEFAULT);
-        });
-    }
-
     public ContextMenu getContextMenu() {
         return contextMenu;
+    }
+
+    @Override
+    protected void onMouseReleased(float xInView, float yInView) {
+        if (!storageController.moveSupport(support, Helper.convertPixelToMeters(xInView),
+                Helper.convertPixelToMeters(yInView))) {
+            view.resetRectangle();
+        }
     }
 
 }

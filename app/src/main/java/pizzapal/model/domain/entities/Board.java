@@ -8,7 +8,7 @@ import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
 
-public class Board implements Observable<BoardChangeListener> {
+public class Board extends Entity implements Observable<BoardChangeListener> {
 
     private final List<BoardChangeListener> listeners = new ArrayList<>();
 
@@ -34,15 +34,11 @@ public class Board implements Observable<BoardChangeListener> {
     };
 
     // Relative to Support
-    private float posY;
-
-    private float posX;
-
     private float offsetY;
 
-    private final float height;
-
     public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
+        super(supportRight.getPosX() - supportLeft.getPosX()
+                - supportLeft.getWidth(), height, supportLeft.getPosX(), supportLeft.getHeight() - offsetY);
         this.supportLeft = supportLeft;
         this.supportRight = supportRight;
         this.height = height;
@@ -135,10 +131,6 @@ public class Board implements Observable<BoardChangeListener> {
         this.items = items;
     }
 
-    public float getHeight() {
-        return height;
-    }
-
     public float getWidth() {
         float width = supportRight.getPosX() - supportLeft.getPosX()
                 - supportLeft.getWidth();
@@ -162,21 +154,13 @@ public class Board implements Observable<BoardChangeListener> {
         this.supportRight = supportRight;
     }
 
-    public float getPosY() {
-        return posY;
-    }
-
     public void setPosY(float posY) {
-        this.posY = posY;
+        super.setPosY(posY);
         notifyListeners();
     }
 
-    public float getPosX() {
-        return posX;
-    }
-
-    private void setPosX(float posX) {
-        this.posX = posX;
+    public void setPosX(float posX) {
+        super.setPosX(posX);
         notifyListeners();
     }
 
