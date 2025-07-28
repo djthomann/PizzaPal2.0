@@ -38,6 +38,7 @@ public class NotificationManager {
     public void addNotification(String text) {
         notifications.add(text);
         notifyListeners();
+        SoundPlayer.playNotificationSounds();
     }
 
     public void removeNotification(String text) {
