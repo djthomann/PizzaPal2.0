@@ -1,45 +1,48 @@
 package pizzapal.ui.view.app.editor;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javafx.geometry.Orientation;
 import javafx.scene.control.Separator;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import pizzapal.model.controller.StorageController;
-import pizzapal.model.domain.core.Storage;
 import pizzapal.utils.SceneManager;
 
 public class EditorView extends BorderPane {
-
-    private Map<Tab, StorageController> controllerMap;
 
     private MenuBarView menuBar;
     private Separator separator;
     private ToolBarView toolBar;
     private TabPane tabPane;
 
-    private VBox vBox;
+    private VBox topContainer;
 
-    public EditorView(Storage storage) {
-
-        controllerMap = new HashMap<>();
+    public EditorView() {
 
         tabPane = new TabPane();
 
-        menuBar = new MenuBarView(controllerMap, tabPane);
-        toolBar = new ToolBarView();
+        menuBar = new MenuBarView();
 
         separator = new Separator();
         separator.setOrientation(Orientation.HORIZONTAL);
 
-        vBox = new VBox(menuBar, separator, toolBar);
-        setCenter(tabPane);
-        setTop(vBox);
+        topContainer = new VBox(menuBar, separator);
 
+        setCenter(tabPane);
+        setTop(topContainer);
+
+    }
+
+    public void addTabPane(TabPane pane) {
+        setCenter(pane);
+    }
+
+    public void addToolBar(ToolBarView toolBar) {
+        this.toolBar = toolBar;
+        if (!topContainer.getChildren().contains(toolBar)) {
+            topContainer.getChildren().add(2, toolBar);
+        } else {
+            topContainer.getChildren().set(2, toolBar);
+        }
     }
 
     public MenuBarView getMenuBar() {
@@ -51,16 +54,16 @@ public class EditorView extends BorderPane {
     }
 
     public boolean isToolBarVisible() {
-        return vBox.getChildren().contains(toolBar);
+        return topContainer.getChildren().contains(toolBar);
     }
 
     public void hideToolBar() {
-        vBox.getChildren().removeAll(separator, toolBar);
+        topContainer.getChildren().removeAll(separator, toolBar);
         SceneManager.getInstance().sizeStage();
     }
 
     public void showToolBar() {
-        vBox.getChildren().addAll(separator, toolBar);
+        topContainer.getChildren().addAll(separator, toolBar);
         SceneManager.getInstance().sizeStage();
     }
 

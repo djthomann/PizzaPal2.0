@@ -112,8 +112,8 @@ public class StorageController {
         }
     }
 
-    public void addSupport(float posX, float posY) {
-        Support support = new Support(storage, 0.3f, 2f, posX, posY);
+    public void addSupport(float width, float height, float posX, float posY) {
+        Support support = new Support(storage, width, height, posX, posY);
         storage.addSupport(support);
         notifySupportCreationListeners(support);
     }
@@ -144,8 +144,8 @@ public class StorageController {
         }
     }
 
-    public void addBoard(float posX, float posY) {
-        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), posX, 0);
+    public void addBoard(float height, float posX, float posY) {
+        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), height, 0);
         storage.addBoard(board);
         notifyBoardCreationListeners(board);
     }
@@ -174,14 +174,14 @@ public class StorageController {
         return true;
     }
 
-    public void addItem(float posX, float posY) {
+    public void addItem(float width, float height, float posX, float posY) {
 
         Board board = service.getBoardAt(posX);
 
         if (board == null) {
             NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found.");
         } else {
-            Item item = new Item(board, Color.DARKBLUE, 0.2f, 0.2f, 0.2f, 0);
+            Item item = new Item(board, Color.DARKBLUE, 0.2f, height, width, 0);
             notifyItemCreationListeners(item);
         }
 

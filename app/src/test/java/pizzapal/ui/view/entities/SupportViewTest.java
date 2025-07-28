@@ -42,7 +42,7 @@ public class SupportViewTest extends ApplicationTest {
 
         this.controller = new SupportViewController(controller, support);
 
-        view = this.controller.getView();
+        view = (SupportView) this.controller.getView();
 
         container = new Pane();
         container.setPrefSize(Helper.convertMetersToPixel(6f), Helper.convertMetersToPixel(3f));

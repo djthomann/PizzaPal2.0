@@ -2,8 +2,6 @@ package pizzapal.ui.view.entities.storage;
 
 import java.util.List;
 
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
@@ -13,6 +11,8 @@ import pizzapal.ui.view.entities.board.BoardViewController;
 import pizzapal.ui.view.entities.item.ItemViewController;
 import pizzapal.ui.view.entities.support.SupportViewController;
 import pizzapal.utils.Helper;
+import pizzapal.utils.ToolState;
+import pizzapal.utils.ToolState.Tool;
 
 public class StorageViewController {
 
@@ -20,9 +20,12 @@ public class StorageViewController {
 
     private StorageController storageController;
 
-    public StorageViewController(StorageController storageController) {
+    private ToolState toolState;
+
+    public StorageViewController(StorageController storageController, ToolState toolState) {
 
         this.storageController = storageController;
+        this.toolState = toolState;
 
         storageController.addSupportCreationListener(support -> {
             storageView.getChildren().add(new SupportViewController(storageController, support).getView());
@@ -59,41 +62,69 @@ public class StorageViewController {
             }
         }
 
-        initDragAndDrop();
+        init();
     }
 
-    public void initDragAndDrop() {
+    public void init() {
 
-        storageView.setOnDragOver(e -> {
-            if (e.getGestureSource() != storageView && e.getDragboard().hasString()) {
-                e.acceptTransferModes(TransferMode.COPY);
-                storageView.showGhostRectangle();
-                storageView.moveGhostRectangle((float) e.getX(), (float) e.getY());
-            }
-            e.consume();
+        storageView.setOnMouseExited(e -> {
+            storageView.hideGhostRectangle();
         });
 
-        storageView.setOnDragDropped(e -> {
-            Dragboard db = e.getDragboard();
-            if (db.hasString() && db.getString().equals("SUPPORT")) {
-                storageController.addSupport(Helper.convertPixelToMeters((float) e.getX()),
-                        Helper.convertPixelToMeters((float) e.getY()));
-                storageView.hideGhostRectangle();
-                e.setDropCompleted(true);
-            } else if (db.hasString() && db.getString().equals("ITEM")) {
-                storageController.addItem(Helper.convertPixelToMeters((float) e.getX()),
-                        Helper.convertPixelToMeters((float) e.getY()));
-                storageView.hideGhostRectangle();
-                e.setDropCompleted(true);
-            } else if (db.hasString() && db.getString().equals("BOARD")) {
-                storageController.addBoard(Helper.convertPixelToMeters((float) e.getX()),
-                        Helper.convertPixelToMeters((float) e.getY()));
-                storageView.hideGhostRectangle();
-                e.setDropCompleted(true);
-            } else {
-                e.setDropCompleted(false);
+        storageView.setOnMouseClicked(e -> {
+
+            Tool selectedTool = toolState.getCurrentTool();
+
+            float posX = Helper.convertPixelToMeters((float) e.getX());
+            float posY = Helper.convertPixelToMeters((float) e.getY());
+
+            switch (selectedTool) {
+                case SELECT -> {
+                    // Do nothing
+                }
+                case BOARD -> {
+                    storageController.addBoard(toolState.getBoardHeight(), posX, posY);
+                    storageView.hideGhostRectangle();
+                }
+                case SUPPORT -> {
+                    storageController.addSupport(toolState.getSupportWidth(), toolState.getSupportHeight(), posX, posY);
+                    storageView.hideGhostRectangle();
+                }
+                case ITEM -> {
+                    storageController.addItem(toolState.getItemWidth(), toolState.getItemHeight(), posX, posY);
+                    storageView.hideGhostRectangle();
+                }
             }
-            e.consume();
+        });
+
+        storageView.setOnMouseMoved(e -> {
+
+            Tool selectedTool = toolState.getCurrentTool();
+
+            switch (selectedTool) {
+                case SELECT -> {
+                    // Do nothing
+                }
+                case BOARD -> {
+                    storageView.setGhostRectangleSize(Helper.convertMetersToPixel(0.5f),
+                            Helper.convertMetersToPixel(toolState.getBoardHeight()));
+                    storageView.showGhostRectangle();
+                    storageView.moveGhostRectangle((float) e.getX(), (float) e.getY());
+                }
+                case SUPPORT -> {
+                    storageView.setGhostRectangleSize(Helper.convertMetersToPixel(toolState.getSupportWidth()),
+                            Helper.convertMetersToPixel(toolState.getSupportHeight()));
+                    storageView.showGhostRectangle();
+                    storageView.moveGhostRectangle((float) e.getX(), (float) e.getY());
+                }
+                case ITEM -> {
+                    storageView.setGhostRectangleSize(Helper.convertMetersToPixel(toolState.getItemWidth()),
+                            Helper.convertMetersToPixel(toolState.getItemHeight()));
+                    storageView.showGhostRectangle();
+                    storageView.moveGhostRectangle((float) e.getX(), (float) e.getY());
+                }
+            }
+
         });
 
     }

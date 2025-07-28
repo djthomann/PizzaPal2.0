@@ -32,7 +32,6 @@ public class ItemView extends EntityView<Item> {
         resetRectangle();
 
         this.setLayoutX(Helper.convertMetersToPixel(item.getPosX()));
-        System.out.println("LAYOUTX" + this.getLayoutX());
         this.setLayoutY(
                 Helper.getPixelPositionYInStorage(item.getBoard().getSupportLeft().getStorage(), item.getPosY()));
 

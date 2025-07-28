@@ -12,6 +12,7 @@ import pizzapal.model.repository.StorageRepository;
 import pizzapal.ui.view.entities.storage.StorageView;
 import pizzapal.ui.view.entities.storage.StorageViewController;
 import pizzapal.utils.SceneManager;
+import pizzapal.utils.ToolState;
 
 public class EditorViewController {
 
@@ -19,24 +20,26 @@ public class EditorViewController {
 
     private Map<Tab, StorageController> controllerMap;
 
+    private ToolState toolState;
+
     public EditorViewController(Storage storage) {
 
-        view = new EditorView(storage);
+        view = new EditorView();
         controllerMap = new HashMap<>();
 
         StorageController storageController = new StorageController(storage);
+        toolState = new ToolState();
 
-        StorageView storageView = new StorageViewController(storageController).getView();
+        StorageView storageView = new StorageViewController(storageController, toolState).getView();
         Tab tab1 = new Tab("Storage 1", storageView);
+
+        ToolBarView toolBarView = new ToolBarViewController(toolState).getView();
 
         addStorageTab(tab1, storageController);
 
         initMenuBar(view.getMenuBar());
-        initToolBar(view.getToolBar());
 
-    }
-
-    public void initToolBar(ToolBarView toolBar) {
+        view.addToolBar(toolBarView);
 
     }
 
@@ -83,13 +86,12 @@ public class EditorViewController {
         });
         view.getTabPane().getTabs().add(tab);
         view.getTabPane().getSelectionModel().select(tab);
-        System.out.println(controllerMap.toString());
     }
 
     public void addStorageTab() {
         Storage storage = StorageRepository.getInstance().createStorage();
         StorageController newStorageController = new StorageController(storage);
-        Tab tab = new Tab("New Storage", new StorageViewController(newStorageController).getView());
+        Tab tab = new Tab("New Storage", new StorageViewController(newStorageController, toolState).getView());
         addStorageTab(tab, newStorageController);
     }
 

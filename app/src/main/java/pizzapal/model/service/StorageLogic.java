@@ -100,7 +100,6 @@ public class StorageLogic {
 
             List<Board> boards = support.getBoardsLeft();
             if (boards.isEmpty()) {
-                System.out.println("IS EMPTY");
                 return false;
             }
             Support left = boards.get(0).getSupportLeft();

@@ -48,7 +48,6 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         board.addListener(listener);
         this.offsetX = offsetX;
         setPosX(board.getPosX() + offsetX);
-        System.out.println("POSX" + getPosX());
         setPosY(board.getPosY() + height);
     }
 

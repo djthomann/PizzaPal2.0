@@ -26,6 +26,12 @@ public class StorageView extends Pane {
 
     }
 
+    public void setGhostRectangleSize(float width, float height) {
+
+        ghostRectangle.setWidth(width);
+        ghostRectangle.setHeight(height);
+    }
+
     public void showGhostRectangle() {
         ghostRectangle.setVisible(true);
     }

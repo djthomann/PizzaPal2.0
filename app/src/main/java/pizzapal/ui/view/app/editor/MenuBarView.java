@@ -1,18 +1,13 @@
 package pizzapal.ui.view.app.editor;
 
-import java.util.Map;
-
 import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import pizzapal.model.controller.StorageController;
 import pizzapal.ui.components.NotificationDropdown;
 import pizzapal.utils.NotificationManager;
 
@@ -26,7 +21,7 @@ public class MenuBarView extends HBox {
 
     private MenuItem toggleToolbarItem;
 
-    public MenuBarView(Map<Tab, StorageController> controllerMap, TabPane tabPane) {
+    public MenuBarView() {
 
         MenuBar menuBar = new MenuBar();
         menuBar.setBackground(null);
