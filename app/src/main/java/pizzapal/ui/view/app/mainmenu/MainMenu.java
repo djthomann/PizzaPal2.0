@@ -7,6 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -28,14 +30,13 @@ public class MainMenu extends StackPane {
         setMaxSize(1000, 700);
 
         Label labelTitle = new Label("Pizza Pal 2.0");
-        labelTitle.setFont(UIConfig.LARGE_BOLD_FONT);
+        labelTitle.setFont(UIConfig.EXTRA_LARGE_BOLD_FONT);
 
         Label labelDescription = new Label("Your interactive storage solution!");
         labelDescription.setFont(UIConfig.NORMAL_MEDIUM_FONT);
 
         VBox buttonBox = new VBox();
         buttonBox.setAlignment(Pos.CENTER_LEFT);
-        buttonBox.setSpacing(20);
 
         TextButton newStorageButton = new TextButton("New Storage");
         newStorageButton.setOnAction(_ -> {
@@ -52,19 +53,22 @@ public class MainMenu extends StackPane {
         });
 
         buttonBox.getChildren().addAll(newStorageButton, openStorageButton, openSettingsButton, exitApplicationButton);
+        buttonBox.setSpacing(20);
 
         VBox vBox = new VBox();
-        vBox.setAlignment(Pos.BASELINE_LEFT);
-        vBox.setPadding(new Insets(20));
-        vBox.getChildren().addAll(labelTitle, labelDescription, buttonBox);
+        vBox.setAlignment(Pos.BOTTOM_LEFT);
+        vBox.setPadding(new Insets(60));
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+        vBox.getChildren().addAll(labelTitle, labelDescription, spacer, buttonBox);
 
-        Image image = Helper.loadImage("/icons/menu-icon.png");
+        Image image = Helper.loadImage("/icons/pizza.png");
         ImageView imageView = new ImageView(image);
 
         imageView.setTranslateX(500);
-        imageView.setTranslateY(200);
+        imageView.setTranslateY(350);
 
-        imageView.setFitWidth(700);
+        imageView.setFitWidth(1000);
         imageView.setPreserveRatio(true);
 
         RotateTransition rotate = new RotateTransition(Duration.seconds(45), imageView);

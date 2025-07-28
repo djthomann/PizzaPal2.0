@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
+import pizzapal.utils.SceneManager;
 
 public class EditorView extends BorderPane {
 
@@ -55,10 +56,12 @@ public class EditorView extends BorderPane {
 
     public void hideToolBar() {
         vBox.getChildren().removeAll(separator, toolBar);
+        SceneManager.getInstance().sizeStage();
     }
 
     public void showToolBar() {
         vBox.getChildren().addAll(separator, toolBar);
+        SceneManager.getInstance().sizeStage();
     }
 
     public TabPane getTabPane() {

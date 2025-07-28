@@ -14,6 +14,8 @@ public class StorageView extends Pane {
         this.setBackground(UIConfig.STORAGE_BACKGROUND);
 
         this.setPrefSize(width, height);
+        this.setMinSize(width, height);
+        this.setMaxSize(width, height);
 
         ghostRectangle = new Rectangle(20, 100);
         ghostRectangle.setFill(Color.BLACK);

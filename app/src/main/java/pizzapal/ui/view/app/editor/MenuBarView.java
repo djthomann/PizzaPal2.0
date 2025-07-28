@@ -35,8 +35,9 @@ public class MenuBarView extends HBox {
         Menu fileMenu = new Menu("File");
         newItem = new MenuItem("New");
         MenuItem openItem = new MenuItem("Open");
+        MenuItem saveItem = new MenuItem("Save");
         closeItem = new MenuItem("Close");
-        fileMenu.getItems().addAll(newItem, openItem, new SeparatorMenuItem(), closeItem);
+        fileMenu.getItems().addAll(newItem, openItem, saveItem, new SeparatorMenuItem(), closeItem);
 
         // EDIT MENU
         Menu editMenu = new Menu("Edit");
