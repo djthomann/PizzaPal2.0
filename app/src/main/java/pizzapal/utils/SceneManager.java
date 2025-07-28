@@ -23,6 +23,11 @@ public class SceneManager {
         return instance;
     }
 
+    public void sizeStage() {
+        stage.sizeToScene();
+        centerStage();
+    }
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
