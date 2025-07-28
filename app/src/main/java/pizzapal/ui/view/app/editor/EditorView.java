@@ -3,57 +3,66 @@ package pizzapal.ui.view.app.editor;
 import java.util.HashMap;
 import java.util.Map;
 
+import javafx.geometry.Orientation;
+import javafx.scene.control.Separator;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
-import pizzapal.ui.view.entities.storage.StorageView;
-import pizzapal.ui.view.entities.storage.StorageViewController;
 
 public class EditorView extends BorderPane {
 
-    private StorageController storageController;
-
     private Map<Tab, StorageController> controllerMap;
+
+    private MenuBarView menuBar;
+    private Separator separator;
+    private ToolBarView toolBar;
+    private TabPane tabPane;
+
+    private VBox vBox;
 
     public EditorView(Storage storage) {
 
-        storageController = new StorageController(storage);
-
         controllerMap = new HashMap<>();
 
-        TabPane tabPane = new TabPane();
-        StorageView storageView = new StorageViewController(storageController).getView();
-        Tab tab1 = new Tab("New Storage", storageView);
-        controllerMap.put(tab1, storageController);
-        tabPane.getTabs().add(tab1);
-        tab1.setOnCloseRequest(_ -> {
-            controllerMap.remove(tab1);
-        });
+        tabPane = new TabPane();
 
-        MenuBarView menuBar = new MenuBarView(controllerMap, tabPane);
-        ToolBarView toolBar = new ToolBarView();
+        menuBar = new MenuBarView(controllerMap, tabPane);
+        toolBar = new ToolBarView();
 
+        separator = new Separator();
+        separator.setOrientation(Orientation.HORIZONTAL);
+
+        vBox = new VBox(menuBar, separator, toolBar);
         setCenter(tabPane);
-        setLeft(toolBar);
-        setTop(menuBar);
+        setTop(vBox);
 
     }
 
-    /*
-     * public void addStorageTab() {
-     * Storage storage = StorageRepository.getInstance().createStorage();
-     * StorageController newStorageController = new StorageController(storage);
-     * Tab tab = new Tab("New Storage", new
-     * StorageViewController(newStorageController).getView());
-     * tabPane.getTabs().add(tab);
-     * tabPane.getSelectionModel().select(tab);
-     * controllerMap.put(tab, newStorageController);
-     * tab.setOnCloseRequest(_ -> {
-     * controllerMap.remove(tab);
-     * });
-     * }
-     */
+    public MenuBarView getMenuBar() {
+        return menuBar;
+    }
+
+    public ToolBarView getToolBar() {
+        return toolBar;
+    }
+
+    public boolean isToolBarVisible() {
+        return vBox.getChildren().contains(toolBar);
+    }
+
+    public void hideToolBar() {
+        vBox.getChildren().removeAll(separator, toolBar);
+    }
+
+    public void showToolBar() {
+        vBox.getChildren().addAll(separator, toolBar);
+    }
+
+    public TabPane getTabPane() {
+        return tabPane;
+    }
 
 }

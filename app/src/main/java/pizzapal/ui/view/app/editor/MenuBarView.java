@@ -9,18 +9,22 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import pizzapal.model.controller.StorageController;
 import pizzapal.ui.components.NotificationDropdown;
 import pizzapal.utils.NotificationManager;
-import pizzapal.utils.SceneManager;
-
-// TODO: EditorViewController !!!
 
 public class MenuBarView extends HBox {
+
+    private MenuItem newItem;
+    private MenuItem closeItem;
+
+    private MenuItem undoItem;
+    private MenuItem redoItem;
+
+    private MenuItem toggleToolbarItem;
 
     public MenuBarView(Map<Tab, StorageController> controllerMap, TabPane tabPane) {
 
@@ -29,46 +33,20 @@ public class MenuBarView extends HBox {
 
         // FILE MENU
         Menu fileMenu = new Menu("File");
-        MenuItem newItem = new MenuItem("New");
-        newItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
-        newItem.setOnAction(e -> {
-            // addStorageTab();
-        });
+        newItem = new MenuItem("New");
         MenuItem openItem = new MenuItem("Open");
-        MenuItem exitItem = new MenuItem("Close");
-        exitItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
-        exitItem.setOnAction(e -> {
-            SceneManager.getInstance().showMainMenu();
-        });
-        fileMenu.getItems().addAll(newItem, openItem, new SeparatorMenuItem(), exitItem);
+        closeItem = new MenuItem("Close");
+        fileMenu.getItems().addAll(newItem, openItem, new SeparatorMenuItem(), closeItem);
 
         // EDIT MENU
         Menu editMenu = new Menu("Edit");
-        MenuItem undoItem = new MenuItem("Undo");
-        undoItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Z"));
-        undoItem.setOnAction(e -> {
-            controllerMap.get(tabPane.getSelectionModel().getSelectedItem()).undo();
-        });
-        MenuItem redoItem = new MenuItem("Redo");
-        redoItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Y"));
-        redoItem.setOnAction(e -> {
-            controllerMap.get(tabPane.getSelectionModel().getSelectedItem()).redo();
-        });
+        undoItem = new MenuItem("Undo");
+        redoItem = new MenuItem("Redo");
         editMenu.getItems().addAll(undoItem, redoItem);
 
         // VIEW MENU
         Menu viewMenu = new Menu("View");
-        MenuItem toggleToolbarItem = new MenuItem("Show/Hide Toolbar");
-        toggleToolbarItem.setOnAction(e -> {
-            /*
-             * Node node = this.getLeft();
-             * if (node == null) {
-             * // this.setLeft(toolBar);
-             * } else {
-             * // this.setLeft(null);
-             * }
-             */
-        });
+        toggleToolbarItem = new MenuItem("Show/Hide Toolbar");
         viewMenu.getItems().add(toggleToolbarItem);
 
         // HELP MENU
@@ -107,6 +85,26 @@ public class MenuBarView extends HBox {
 
         this.getChildren().addAll(menuBar, spacer, dropdown.getButton());
 
+    }
+
+    public MenuItem getNewItem() {
+        return newItem;
+    }
+
+    public MenuItem getCloseItem() {
+        return closeItem;
+    }
+
+    public MenuItem getUndoItem() {
+        return undoItem;
+    }
+
+    public MenuItem getRedoItem() {
+        return redoItem;
+    }
+
+    public MenuItem getToogleToolBarItem() {
+        return toggleToolbarItem;
     }
 
 }

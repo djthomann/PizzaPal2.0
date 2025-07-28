@@ -13,7 +13,7 @@ import javafx.util.Duration;
 import pizzapal.model.repository.StorageRepository;
 import pizzapal.ui.UIConfig;
 import pizzapal.ui.components.TextButton;
-import pizzapal.ui.view.app.editor.EditorView;
+import pizzapal.ui.view.app.editor.EditorViewController;
 import pizzapal.utils.Helper;
 import pizzapal.utils.SceneManager;
 
@@ -39,7 +39,7 @@ public class MainMenu extends StackPane {
 
         TextButton newStorageButton = new TextButton("New Storage");
         newStorageButton.setOnAction(_ -> {
-            SceneManager.getInstance().showView(new EditorView(repository.createStorage()));
+            SceneManager.getInstance().showView(new EditorViewController(repository.createStorage()).getView());
         });
 
         TextButton openStorageButton = new TextButton("Open Storage");

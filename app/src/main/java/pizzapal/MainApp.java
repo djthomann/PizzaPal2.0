@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 import pizzapal.utils.Config;
 import pizzapal.utils.Helper;
 import pizzapal.utils.SceneManager;
-import pizzapal.utils.SoundPlayer;
 
 public class MainApp extends Application {
 
@@ -28,7 +27,7 @@ public class MainApp extends Application {
 
         manager.centerStage();
 
-        SoundPlayer.playStartupSound();
+        // SoundPlayer.playStartupSound();
 
     }
 
