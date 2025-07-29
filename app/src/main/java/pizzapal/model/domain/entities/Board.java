@@ -8,6 +8,7 @@ import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
+import pizzapal.utils.ToolState;
 
 public class Board extends Entity implements Observable<BoardChangeListener> {
 
@@ -20,6 +21,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     private List<Item> items = new ArrayList<>();
 
     private Color color;
+    public static final Color STANDARD_COLOR = ToolState.STANDARD_BOARD_COLOR;
 
     SupportChangeListener leftListener = (model, type) -> {
         switch (type) {
@@ -33,11 +35,23 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     };
 
     SupportChangeListener rightListener = (model, type) -> {
-        reactToChangeRight(model);
+        switch (type) {
+            case MOVE -> {
+                reactToChangeRight(model);
+            }
+            case DELETE -> {
+                delete();
+            }
+        }
+
     };
 
     // Relative to Support
     private float offsetY;
+
+    public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
+        this(supportLeft, supportRight, height, offsetY, STANDARD_COLOR);
+    }
 
     public Board(Support supportLeft, Support supportRight, float height, float offsetY, Color color) {
         super(supportRight.getPosX() - supportLeft.getPosX()
@@ -59,6 +73,12 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     }
 
     public void delete() {
+
+        for (Item i : items) {
+            i.setBoard(null);
+        }
+        items.clear();
+
         notifyListeners(ChangeType.DELETE);
     }
 

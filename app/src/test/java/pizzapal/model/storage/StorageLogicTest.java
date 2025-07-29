@@ -10,6 +10,7 @@ import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.model.service.StorageLogic;
+import pizzapal.model.service.StorageService;
 
 public class StorageLogicTest {
 
@@ -21,7 +22,9 @@ public class StorageLogicTest {
     public void init() {
         storage = new Storage(6f, 3f);
 
-        logic = new StorageLogic(storage);
+        StorageService service = new StorageService(storage);
+
+        logic = new StorageLogic(storage, service);
     }
 
     @Test

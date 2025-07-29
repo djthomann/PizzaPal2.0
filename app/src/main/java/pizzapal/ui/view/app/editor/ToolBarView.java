@@ -23,6 +23,8 @@ public class ToolBarView extends HBox {
 
     private CustomToggleButton selectButton;
 
+    private CustomToggleButton colorPipette;
+
     private CustomToggleButton itemButton;
     private TextFormatter<Float> itemWidthFormatter;
     private TextFormatter<Float> itemHeightFormatter;

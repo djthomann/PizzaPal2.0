@@ -22,6 +22,10 @@ public class StorageViewController {
 
     private ToolState toolState;
 
+    public StorageViewController(StorageController storageController) {
+        this(storageController, new ToolState());
+    }
+
     public StorageViewController(StorageController storageController, ToolState toolState) {
 
         this.storageController = storageController;
@@ -83,7 +87,8 @@ public class StorageViewController {
                     // Do nothing
                 }
                 case BOARD -> {
-                    storageController.addBoard(toolState.getBoardHeight(), toolState.getBoardColor(), posX, posY);
+                    storageController.addBoard(toolState.getBoardHeight(), toolState.getBoardColor(), posX, Helper
+                            .convertPixelPositionToHeightInStorage(storageController.getStorage(), (float) e.getY()));
                     storageView.hideGhostRectangle();
                 }
                 case SUPPORT -> {

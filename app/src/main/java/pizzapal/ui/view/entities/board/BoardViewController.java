@@ -14,7 +14,7 @@ public class BoardViewController extends EntityViewController<Board> {
     private StorageController storageController;
 
     public BoardViewController(StorageController storageController, Board board) {
-        super(new BoardView(board.getColor(), Helper.convertMetersToPixel(board.getWidth()),
+        super(storageController, board, new BoardView(board.getColor(), Helper.convertMetersToPixel(board.getWidth()),
                 Helper.convertMetersToPixel(board.getHeight()), Helper
                         .convertMetersToPixel(board.getSupportLeft().getPosX() + board.getSupportLeft().getWidth()),
                 Helper.getPixelPositionYInStorage(storageController.getStorage(), board.getPosY())));

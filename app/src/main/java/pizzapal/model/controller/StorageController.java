@@ -11,6 +11,7 @@ import pizzapal.model.commands.MoveBoardCommand;
 import pizzapal.model.commands.MoveSupportCommand;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.Entity;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.model.service.StorageLogic;
@@ -100,6 +101,17 @@ public class StorageController {
         return storage;
     }
 
+    public void delete(Entity e) {
+        if (e instanceof Item item) {
+            delete(item);
+        } else if (e instanceof Board board) {
+            delete(board);
+        } else if (e instanceof Support support) {
+            delete(support);
+        }
+
+    }
+
     public boolean moveSupport(Support support, float posX, float posY) {
         if (logic.placeSupportPossible(support, posX, posY)) {
             MoveSupportCommand moveCommand = new MoveSupportCommand(support, posX, posY);
@@ -119,9 +131,16 @@ public class StorageController {
     }
 
     public boolean delete(Support support) {
-        support.delete();
-        storage.getSupports().remove(support);
-        return true;
+        if (support.getBoardsLeft().isEmpty() && support.getBoardsRight().isEmpty()) {
+            storage.removeSupport(support);
+            support.setStorage(null);
+            support.delete();
+            return true;
+        } else {
+            NotificationManager.getInstance().addNotification("Can't delete Support");
+            return false;
+        }
+
     }
 
     public boolean moveBoard(Board board, float posX, float posY) {
@@ -145,10 +164,29 @@ public class StorageController {
     }
 
     public void addBoard(float height, Color color, float posX, float posY) {
-        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), height, 0,
+
+        float offsetY = service.getSupportLeftOfPos(posX).getHeight() - posY;
+        if (offsetY < 0) {
+            offsetY = 0;
+        }
+
+        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), height, offsetY,
                 color);
         storage.addBoard(board);
         notifyBoardCreationListeners(board);
+    }
+
+    public boolean delete(Board board) {
+
+        Support left = board.getSupportLeft();
+        Support right = board.getSupportRight();
+
+        left.getBoardsRight().remove(board);
+        right.getBoardsLeft().remove(board);
+
+        board.delete();
+
+        return true;
     }
 
     public boolean moveItem(Item item, float posX, float posY) {
@@ -167,9 +205,18 @@ public class StorageController {
         Board board = service.getBoardBelow(boards, posY);
         if (board == null) {
             NotificationManager.getInstance().addNotification("No Board below");
+            return false;
         }
 
         float offsetX = posX - board.getPosX();
+        if (offsetX < 0) {
+            offsetX = 0;
+        } else if (offsetX > board.getWidth() - item.getWidth()) {
+            System.out.println("OFFSET :" + offsetX);
+            System.out.println("BAORDW:" + board.getWidth());
+            System.out.println("ITEMW" + item.getWeight());
+            offsetX = board.getWidth() - item.getWidth();
+        }
 
         item.move(board, offsetX);
         return true;
@@ -182,10 +229,16 @@ public class StorageController {
         if (board == null) {
             NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found.");
         } else {
-            Item item = new Item(board, Color.DARKBLUE, 0.2f, height, width, 0);
+            float offsetX = posX - board.getPosX();
+            Item item = new Item(board, Color.DARKBLUE, 0.2f, height, width, offsetX);
             notifyItemCreationListeners(item);
         }
 
+    }
+
+    public void delete(Item item) {
+        System.out.println("Deleting item");
+        // Do nothing
     }
 
 }

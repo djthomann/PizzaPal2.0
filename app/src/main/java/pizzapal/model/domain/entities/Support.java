@@ -8,18 +8,24 @@ import pizzapal.model.domain.core.Storage;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
+import pizzapal.utils.ToolState;
 
 public class Support extends Entity implements Observable<SupportChangeListener> {
 
     private final List<SupportChangeListener> listeners = new ArrayList<>();
 
-    private final Storage storage;
+    private Storage storage;
 
     private List<Board> boardsLeft;
 
     private List<Board> boardsRight;
 
     private Color color;
+    private static final Color STANDARD_COLOR = ToolState.STANDARD_SUPPORT_COLOR;
+
+    public Support(Storage storage, float width, float height, float posX, float posY) {
+        this(storage, STANDARD_COLOR, width, height, posX, posY);
+    }
 
     public Support(Storage storage, Color color, float width, float height, float posX, float posY) {
         super(width, height, posX, posY);
@@ -31,6 +37,15 @@ public class Support extends Entity implements Observable<SupportChangeListener>
     }
 
     public void delete() {
+
+        for (Board b : boardsLeft) {
+            b.setSupportRight(null);
+        }
+
+        for (Board b : boardsRight) {
+            b.setSupportLeft(null);
+        }
+
         notifyListeners(ChangeType.DELETE);
     }
 
@@ -83,6 +98,10 @@ public class Support extends Entity implements Observable<SupportChangeListener>
     }
 
     // GETTERS AND SETTERS
+
+    public void setStorage(Storage storage) {
+        this.storage = storage;
+    }
 
     public Storage getStorage() {
         return storage;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.observability.BoardChangeListener;
+import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.ItemChangeListener;
 import pizzapal.model.observability.Observable;
 
@@ -21,7 +22,14 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     private List<ItemChangeListener> listeners = new ArrayList<>();
 
     private BoardChangeListener listener = (model, type) -> {
-        reactToBoardChange(model);
+        switch (type) {
+            case MOVE -> {
+                reactToBoardChange(model);
+            }
+            case DELETE -> {
+                delete();
+            }
+        }
     };
 
     public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
@@ -31,13 +39,20 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         this.weight = weight;
         this.offsetX = offsetX;
 
+        board.addItem(this);
+
         board.addListener(listener);
     }
 
-    private void notifyListeners() {
+    private void notifyListeners(ChangeType type) {
         for (ItemChangeListener l : listeners) {
-            l.onItemChange(this);
+            l.onItemChange(this, type);
         }
+    }
+
+    public void delete() {
+        // TODO: cleanup other items on top, not yet implemented
+        notifyListeners(ChangeType.DELETE);
     }
 
     public void move(Board board, float offsetX) {
@@ -82,7 +97,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public void setPosX(float posX) {
         this.posX = posX;
-        notifyListeners();
+        notifyListeners(ChangeType.MOVE);
     }
 
     public float getPosY() {
@@ -91,7 +106,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public void setPosY(float posY) {
         this.posY = posY;
-        notifyListeners();
+        notifyListeners(ChangeType.MOVE);
     }
 
     public Board getBoard() {
