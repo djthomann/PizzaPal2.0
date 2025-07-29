@@ -12,10 +12,10 @@ public class BoardView extends EntityView<Board> {
 
     private final Rectangle ghostRectangle;
 
-    public BoardView(float width, float height, float posX, float posY) {
+    public BoardView(Color color, float width, float height, float posX, float posY) {
 
         boardRectangle = new Rectangle(200, height);
-        boardRectangle.setFill(Color.GREEN);
+        boardRectangle.setFill(color);
 
         ghostRectangle = new Rectangle(200, height);
         ghostRectangle.setFill(Color.DARKGRAY);

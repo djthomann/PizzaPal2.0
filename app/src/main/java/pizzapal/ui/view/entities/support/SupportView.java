@@ -13,13 +13,13 @@ public class SupportView extends EntityView<Support> {
 
     private final Rectangle ghostRectangle;
 
-    public SupportView(float width, float height, float posX, float posY) {
+    public SupportView(Color color, float width, float height, float posX, float posY) {
 
         this.setPrefSize(width, height);
         this.setBackground(UIConfig.STORAGE_BACKGROUND_DARK);
 
         supportRectangle = new Rectangle(width, height);
-        supportRectangle.setFill(Color.BROWN);
+        supportRectangle.setFill(color);
 
         ghostRectangle = new Rectangle(width, height);
         ghostRectangle.setFill(Color.DARKGRAY);

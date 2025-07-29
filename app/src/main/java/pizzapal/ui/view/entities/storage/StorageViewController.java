@@ -83,11 +83,12 @@ public class StorageViewController {
                     // Do nothing
                 }
                 case BOARD -> {
-                    storageController.addBoard(toolState.getBoardHeight(), posX, posY);
+                    storageController.addBoard(toolState.getBoardHeight(), toolState.getBoardColor(), posX, posY);
                     storageView.hideGhostRectangle();
                 }
                 case SUPPORT -> {
-                    storageController.addSupport(toolState.getSupportWidth(), toolState.getSupportHeight(), posX, posY);
+                    storageController.addSupport(toolState.getSupportWidth(), toolState.getSupportHeight(),
+                            toolState.getSupportColor(), posX, posY);
                     storageView.hideGhostRectangle();
                 }
                 case ITEM -> {

@@ -1,15 +1,14 @@
 package pizzapal.ui.components;
 
-import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 
-public class TextButton extends Button {
+public class CustomToggleButton extends ToggleButton {
 
-    // TODO: Animate Color
-
-    public TextButton(String text) {
+    public CustomToggleButton(String text) {
         super(text);
 
         this.getStylesheets().add(getClass().getResource("/styles/button.css").toExternalForm());
+
     }
 
 }

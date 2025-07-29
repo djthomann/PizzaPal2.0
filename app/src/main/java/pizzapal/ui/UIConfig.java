@@ -67,7 +67,7 @@ public class UIConfig {
         public static final Border BUTTON_NORMAL_BORDER = new Border(new BorderStroke(
                         Color.BLACK,
                         BorderStrokeStyle.SOLID,
-                        BUTTON_CORNER_RADII,
+                        CornerRadii.EMPTY,
                         new BorderWidths(1)));
 
         public static final Background BUTTON_HOVER = new Background(

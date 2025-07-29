@@ -3,6 +3,7 @@ package pizzapal.model.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
 import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
@@ -17,6 +18,8 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     private Support supportRight;
 
     private List<Item> items = new ArrayList<>();
+
+    private Color color;
 
     SupportChangeListener leftListener = (model, type) -> {
         switch (type) {
@@ -36,7 +39,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     // Relative to Support
     private float offsetY;
 
-    public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
+    public Board(Support supportLeft, Support supportRight, float height, float offsetY, Color color) {
         super(supportRight.getPosX() - supportLeft.getPosX()
                 + supportLeft.getWidth(), height, supportLeft.getPosX(), supportLeft.getHeight() - offsetY);
         this.supportLeft = supportLeft;
@@ -45,6 +48,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.posY = supportLeft.getHeight() - offsetY;
         this.offsetY = offsetY;
         this.posX = supportLeft.getPosX();
+        this.color = color;
 
         supportLeft.addListener(leftListener);
         supportLeft.addBoardRight(this);
@@ -167,6 +171,14 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
 
     public void setOffsetY(float offsetY) {
         this.offsetY = offsetY;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
 }

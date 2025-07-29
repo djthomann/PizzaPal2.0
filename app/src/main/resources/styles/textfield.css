@@ -1,0 +1,21 @@
+
+.custom-textfield {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-border-style: solid;
+    -fx-cursor: text;
+}
+
+.custom-textfield:focused {
+    -fx-border-color: orange;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.custom-textfield ::selection {
+    -fx-background-color: orange;   /* Hintergrund der Markierung */
+    -fx-fill: white;                 /* Textfarbe der Markierung */
+}

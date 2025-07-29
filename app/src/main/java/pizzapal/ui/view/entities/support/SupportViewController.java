@@ -21,7 +21,7 @@ public class SupportViewController extends EntityViewController<Support> {
     private final ContextMenu contextMenu;
 
     public SupportViewController(StorageController storageController, Support support) {
-        super(new SupportView(Helper.convertMetersToPixel(support.getWidth()),
+        super(new SupportView(support.getColor(), Helper.convertMetersToPixel(support.getWidth()),
                 Helper.convertMetersToPixel(support.getHeight()), Helper.convertMetersToPixel(support.getPosX()),
                 Helper.getPixelPositionYInStorage(support.getStorage(), support)));
         this.storageController = storageController;

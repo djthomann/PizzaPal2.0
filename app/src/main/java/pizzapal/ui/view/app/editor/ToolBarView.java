@@ -5,37 +5,47 @@ import java.util.function.UnaryOperator;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.util.converter.FloatStringConverter;
+import pizzapal.ui.components.CustomToggleButton;
 import pizzapal.utils.ToolState;
 
 public class ToolBarView extends HBox {
 
-    private Button selectButton;
+    private ToggleGroup buttonGroup;
 
-    private Button itemButton;
+    private CustomToggleButton selectButton;
+
+    private CustomToggleButton itemButton;
     private TextFormatter<Float> itemWidthFormatter;
     private TextFormatter<Float> itemHeightFormatter;
 
-    private Button supportButton;
+    private CustomToggleButton supportButton;
     private TextFormatter<Float> supportWidthFormatter;
     private TextFormatter<Float> supportHeightFormatter;
+    private ColorPicker supportColorPicker;
 
-    private Button boardButton;
+    private CustomToggleButton boardButton;
     private TextFormatter<Float> boardHeightFormatter;
+    private ColorPicker boardColorPicker;
 
     public ToolBarView() {
 
         this.setPadding(new Insets(10));
         this.setSpacing(10);
-        this.setAlignment(Pos.CENTER_LEFT);
+        this.setAlignment(Pos.BOTTOM_LEFT);
 
-        selectButton = new Button("Select");
+        buttonGroup = new ToggleGroup();
+
+        selectButton = new CustomToggleButton("Select");
+        selectButton.setToggleGroup(buttonGroup);
 
         this.getChildren().addAll(selectButton, separator(), supportInput(), separator(), boardInput(), separator(),
                 itemInput());
@@ -49,64 +59,67 @@ public class ToolBarView extends HBox {
         return separator;
     }
 
+    public VBox inputFieldWithLabel(String labelText, TextFormatter<Float> formatter) {
+        Label label = new Label(labelText);
+        TextField textField = new TextField();
+        textField.getStylesheets().add(getClass().getResource("/styles/textfield.css").toExternalForm());
+        textField.getStyleClass().add("custom-textfield");
+        textField.setTextFormatter(formatter);
+        textField.setMaxWidth(50);
+
+        return new VBox(label, textField);
+    }
+
     public HBox itemInput() {
-        itemButton = new Button("Item");
+        itemButton = new CustomToggleButton("Item");
+        itemButton.setToggleGroup(buttonGroup);
 
-        Label itemWidthLabel = new Label("W:");
-        TextField itemWidthField = new TextField();
         itemWidthFormatter = floatFormatter(ToolState.STANDARD_ITEM_WIDTH);
-        itemWidthField.setTextFormatter(itemWidthFormatter);
-        itemWidthField.setMaxWidth(50);
+        VBox itemWidthField = inputFieldWithLabel("Width:", itemWidthFormatter);
 
-        Label itemHeightLabel = new Label("H:");
-        TextField itemHeightField = new TextField();
         itemHeightFormatter = floatFormatter(ToolState.STANDARD_ITEM_HEIGHT);
-        itemHeightField.setTextFormatter(itemHeightFormatter);
-        itemHeightField.setMaxWidth(50);
+        VBox itemHeightField = inputFieldWithLabel("Height:", itemHeightFormatter);
 
-        HBox itemInput = new HBox(itemButton, itemWidthLabel, itemWidthField, itemHeightLabel, itemHeightField);
+        HBox itemInput = new HBox(itemButton, itemWidthField, itemHeightField);
         itemInput.setSpacing(5);
-        itemInput.setAlignment(Pos.CENTER_LEFT);
+        itemInput.setAlignment(Pos.BOTTOM_LEFT);
 
         return itemInput;
     }
 
     public HBox supportInput() {
-        supportButton = new Button("Support");
+        supportButton = new CustomToggleButton("Support");
+        supportButton.setToggleGroup(buttonGroup);
 
-        Label supportWidthLabel = new Label("W:");
-        TextField supportWidthField = new TextField();
         supportWidthFormatter = floatFormatter(ToolState.STANDARD_SUPPORT_WIDTH);
-        supportWidthField.setTextFormatter(supportWidthFormatter);
-        supportWidthField.setMaxWidth(50);
+        VBox supportWidthField = inputFieldWithLabel("Width:", supportWidthFormatter);
 
-        Label supportHeightLabel = new Label("H:");
-        TextField supportHeightField = new TextField();
         supportHeightFormatter = floatFormatter(ToolState.STANDARD_SUPPORT_HEIGHT);
-        supportHeightField.setTextFormatter(supportHeightFormatter);
-        supportHeightField.setMaxWidth(50);
+        VBox supportHeightField = inputFieldWithLabel("Height:", supportHeightFormatter);
 
-        HBox supportInput = new HBox(supportButton, supportWidthLabel, supportWidthField, supportHeightLabel,
-                supportHeightField);
+        supportColorPicker = new ColorPicker(ToolState.STANDARD_SUPPORT_COLOR);
+        supportColorPicker.setMaxWidth(50);
+
+        HBox supportInput = new HBox(supportButton, supportWidthField, supportHeightField, supportColorPicker);
         supportInput.setSpacing(5);
-        supportInput.setAlignment(Pos.CENTER_LEFT);
+        supportInput.setAlignment(Pos.BOTTOM_LEFT);
 
         return supportInput;
     }
 
     public HBox boardInput() {
-        boardButton = new Button("Board");
+        boardButton = new CustomToggleButton("Board");
+        boardButton.setToggleGroup(buttonGroup);
 
-        Label boardHeightLabel = new Label("H:");
-
-        TextField boardHeightInput = new TextField();
         boardHeightFormatter = floatFormatter(ToolState.STANDARD_BOARD_HEIGHT);
-        boardHeightInput.setTextFormatter(boardHeightFormatter);
-        boardHeightInput.setMaxWidth(50);
+        VBox boardHeightField = inputFieldWithLabel("Height:", boardHeightFormatter);
 
-        HBox boardInput = new HBox(boardButton, boardHeightLabel, boardHeightInput);
+        boardColorPicker = new ColorPicker(ToolState.STANDARD_BOARD_COLOR);
+        boardColorPicker.setMaxWidth(50);
+
+        HBox boardInput = new HBox(boardButton, boardHeightField, boardColorPicker);
         boardInput.setSpacing(5);
-        boardInput.setAlignment(Pos.CENTER_LEFT);
+        boardInput.setAlignment(Pos.BOTTOM_LEFT);
 
         return boardInput;
     }
@@ -148,20 +161,28 @@ public class ToolBarView extends HBox {
         return itemHeightFormatter;
     }
 
-    public Button getSelectButton() {
+    public CustomToggleButton getSelectButton() {
         return selectButton;
     }
 
-    public Button getItemButton() {
+    public CustomToggleButton getItemButton() {
         return itemButton;
     }
 
-    public Button getSupportButton() {
+    public CustomToggleButton getSupportButton() {
         return supportButton;
     }
 
-    public Button getBoardButton() {
+    public CustomToggleButton getBoardButton() {
         return boardButton;
+    }
+
+    public ColorPicker getBoardColorPicker() {
+        return boardColorPicker;
+    }
+
+    public ColorPicker getSupportColorPicker() {
+        return supportColorPicker;
     }
 
 }

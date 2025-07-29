@@ -3,6 +3,7 @@ package pizzapal.model.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.paint.Color;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
@@ -18,11 +19,14 @@ public class Support extends Entity implements Observable<SupportChangeListener>
 
     private List<Board> boardsRight;
 
-    public Support(Storage storage, float width, float height, float posX, float posY) {
+    private Color color;
+
+    public Support(Storage storage, Color color, float width, float height, float posX, float posY) {
         super(width, height, posX, posY);
         this.storage = storage;
         boardsLeft = new ArrayList<>();
         boardsRight = new ArrayList<>();
+        this.color = color;
         storage.addSupport(this);
     }
 
@@ -98,6 +102,14 @@ public class Support extends Entity implements Observable<SupportChangeListener>
     public String toString() {
         return "Support [width=" + width + ", height=" + height + ", positionX=" + posX + ", positionY="
                 + posY + "]";
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
 }

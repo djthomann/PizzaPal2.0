@@ -112,8 +112,8 @@ public class StorageController {
         }
     }
 
-    public void addSupport(float width, float height, float posX, float posY) {
-        Support support = new Support(storage, width, height, posX, posY);
+    public void addSupport(float width, float height, Color color, float posX, float posY) {
+        Support support = new Support(storage, color, width, height, posX, posY);
         storage.addSupport(support);
         notifySupportCreationListeners(support);
     }
@@ -144,8 +144,9 @@ public class StorageController {
         }
     }
 
-    public void addBoard(float height, float posX, float posY) {
-        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), height, 0);
+    public void addBoard(float height, Color color, float posX, float posY) {
+        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), height, 0,
+                color);
         storage.addBoard(board);
         notifyBoardCreationListeners(board);
     }
