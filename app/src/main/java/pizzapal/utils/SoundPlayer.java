@@ -13,12 +13,16 @@ public class SoundPlayer {
             SoundPlayer.class.getResource("/sounds/notification.mp3").toString());
 
     public static void playStartupSound() {
-        startupSound.setVolume(volume);
-        startupSound.play();
+        if (Config.SOUND_ACTIVE) {
+            startupSound.setVolume(volume);
+            startupSound.play();
+        }
     }
 
     public static void playNotificationSounds() {
-        notificationSound.setVolume(volume);
-        notificationSound.play();
+        if (Config.SOUND_ACTIVE) {
+            notificationSound.setVolume(volume);
+            notificationSound.play();
+        }
     }
 }

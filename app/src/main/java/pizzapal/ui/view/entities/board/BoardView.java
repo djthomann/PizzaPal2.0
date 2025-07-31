@@ -67,4 +67,9 @@ public class BoardView extends EntityView<Board> {
         boardRectangle.setLayoutY(0);
     }
 
+    @Override
+    public Color getColor() {
+        return (Color) boardRectangle.getFill();
+    }
+
 }

@@ -1,6 +1,12 @@
 package pizzapal.utils;
 
 import javafx.scene.paint.Color;
+import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.Entity;
+import pizzapal.model.domain.entities.Ingredient;
+import pizzapal.model.domain.entities.Item;
+import pizzapal.model.domain.entities.Support;
+import pizzapal.model.repository.IngredientRepository;
 
 public class ToolState {
 
@@ -22,12 +28,14 @@ public class ToolState {
 
     private float itemWidth;
     public static final float STANDARD_ITEM_WIDTH = 0.4f;
-
     private float itemHeight;
     public static final float STANDARD_ITEM_HEIGHT = 0.4f;
+    private Ingredient itemIngredient;
+    public static final Ingredient STANDARD_ITEM_INGREDIENT = IngredientRepository.getInstance()
+            .getIngredient("Tomato");
 
     public enum Tool {
-        SELECT, SUPPORT, BOARD, ITEM
+        SELECT, PICKCOLOR, SUPPORT, BOARD, ITEM
     }
 
     public ToolState() {
@@ -39,6 +47,16 @@ public class ToolState {
         boardColor = STANDARD_BOARD_COLOR;
         itemWidth = STANDARD_ITEM_WIDTH;
         itemHeight = STANDARD_ITEM_HEIGHT;
+    }
+
+    public void setColor(Entity e, Color color) {
+        if (e instanceof Board) {
+            setBoardColor(color);
+        } else if (e instanceof Support) {
+            setSupportColor(color);
+        } else if (e instanceof Item i) {
+            // implement?
+        }
     }
 
     public void setCurrentTool(Tool currentTool) {
@@ -103,6 +121,14 @@ public class ToolState {
 
     public void setItemHeight(float itemHeight) {
         this.itemHeight = itemHeight;
+    }
+
+    public Ingredient getItemIngredient() {
+        return itemIngredient;
+    }
+
+    public void setItemIngredient(Ingredient itemIngredient) {
+        this.itemIngredient = itemIngredient;
     }
 
 }

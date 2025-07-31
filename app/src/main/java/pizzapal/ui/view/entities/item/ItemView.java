@@ -58,4 +58,9 @@ public class ItemView extends EntityView<Item> {
         itemRectangle.setLayoutY(posY);
     }
 
+    @Override
+    public Color getColor() {
+        return (Color) itemRectangle.getFill();
+    }
+
 }

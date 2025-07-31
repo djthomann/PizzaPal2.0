@@ -1,31 +1,54 @@
 package pizzapal.ui.view.app.editor;
 
+import java.util.Set;
+
+import javafx.collections.ObservableList;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextFormatter;
+import pizzapal.model.repository.IngredientRepository;
 import pizzapal.ui.components.CustomToggleButton;
 import pizzapal.utils.ToolState;
 import pizzapal.utils.ToolState.Tool;
 
 public class ToolBarViewController {
 
+    // TODO bilateral connect ToolBarView with ToolState
+
     private ToolBarView view;
 
     private static ToolState toolState;
 
+    private IngredientRepository ingredientRepository;
+
     public ToolBarViewController(ToolState toolState) {
         view = new ToolBarView();
-        this.toolState = toolState;
+        ingredientRepository = IngredientRepository.getInstance();
+        ToolBarViewController.toolState = toolState;
 
         initButtons();
 
         initFormatters();
 
+        initComboBox();
+
         initColorPickers();
     }
 
     public static void selectSelectTool() {
-        System.out.println("TOOL SELECT");
         toolState.setCurrentTool(Tool.SELECT);
+    }
+
+    public void initComboBox() {
+        ComboBox<String> comboBox = view.getIngredientComboBox();
+        ObservableList<String> items = comboBox.getItems();
+        Set<String> ingredients = ingredientRepository.getAllIngredientNames();
+        items.addAll(ingredients);
+
+        comboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
+            toolState.setItemIngredient(ingredientRepository.getIngredient(newValue));
+            System.out.println(toolState.getItemIngredient());
+        });
     }
 
     public void initButtons() {
@@ -33,6 +56,11 @@ public class ToolBarViewController {
         CustomToggleButton selectButton = view.getSelectButton();
         selectButton.setOnMouseClicked(_ -> {
             selectSelectTool();
+        });
+
+        CustomToggleButton pickColorButton = view.getPickColorButton();
+        pickColorButton.setOnMouseClicked(_ -> {
+            toolState.setCurrentTool(Tool.PICKCOLOR);
         });
 
         CustomToggleButton itemButton = view.getItemButton();

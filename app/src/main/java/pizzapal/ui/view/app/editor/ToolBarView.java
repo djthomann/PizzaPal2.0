@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.util.converter.FloatStringConverter;
 import pizzapal.ui.components.CustomToggleButton;
 import pizzapal.utils.ToolState;
@@ -23,11 +25,12 @@ public class ToolBarView extends HBox {
 
     private CustomToggleButton selectButton;
 
-    private CustomToggleButton colorPipette;
+    private CustomToggleButton pickColorButton;
 
     private CustomToggleButton itemButton;
     private TextFormatter<Float> itemWidthFormatter;
     private TextFormatter<Float> itemHeightFormatter;
+    private ComboBox<String> ingredientComboBox;
 
     private CustomToggleButton supportButton;
     private TextFormatter<Float> supportWidthFormatter;
@@ -49,7 +52,11 @@ public class ToolBarView extends HBox {
         selectButton = new CustomToggleButton("Select");
         selectButton.setToggleGroup(buttonGroup);
 
-        this.getChildren().addAll(selectButton, separator(), supportInput(), separator(), boardInput(), separator(),
+        pickColorButton = new CustomToggleButton("Pick");
+        pickColorButton.setToggleGroup(buttonGroup);
+
+        this.getChildren().addAll(selectButton, pickColorButton, separator(), supportInput(), separator(), boardInput(),
+                separator(),
                 itemInput());
     }
 
@@ -63,13 +70,15 @@ public class ToolBarView extends HBox {
 
     public VBox inputFieldWithLabel(String labelText, TextFormatter<Float> formatter) {
         Label label = new Label(labelText);
+        label.setFont(Font.font(10.5));
         TextField textField = new TextField();
-        textField.getStylesheets().add(getClass().getResource("/styles/textfield.css").toExternalForm());
-        textField.getStyleClass().add("custom-textfield");
         textField.setTextFormatter(formatter);
         textField.setMaxWidth(50);
 
-        return new VBox(label, textField);
+        VBox box = new VBox(label, textField);
+        box.setAlignment(Pos.BOTTOM_LEFT);
+
+        return box;
     }
 
     public HBox itemInput() {
@@ -77,12 +86,19 @@ public class ToolBarView extends HBox {
         itemButton.setToggleGroup(buttonGroup);
 
         itemWidthFormatter = floatFormatter(ToolState.STANDARD_ITEM_WIDTH);
-        VBox itemWidthField = inputFieldWithLabel("Width:", itemWidthFormatter);
+        VBox itemWidthField = inputFieldWithLabel("Width", itemWidthFormatter);
 
         itemHeightFormatter = floatFormatter(ToolState.STANDARD_ITEM_HEIGHT);
-        VBox itemHeightField = inputFieldWithLabel("Height:", itemHeightFormatter);
+        VBox itemHeightField = inputFieldWithLabel("Height", itemHeightFormatter);
 
-        HBox itemInput = new HBox(itemButton, itemWidthField, itemHeightField);
+        VBox ingredientInput = new VBox();
+        Label ingredientLabel = new Label("Ingredient");
+        ingredientLabel.setFont(Font.font(10.5));
+        ingredientInput.getChildren().add(ingredientLabel);
+        ingredientComboBox = new ComboBox<>();
+        ingredientInput.getChildren().add(ingredientComboBox);
+
+        HBox itemInput = new HBox(itemButton, itemWidthField, itemHeightField, ingredientInput);
         itemInput.setSpacing(5);
         itemInput.setAlignment(Pos.BOTTOM_LEFT);
 
@@ -94,10 +110,10 @@ public class ToolBarView extends HBox {
         supportButton.setToggleGroup(buttonGroup);
 
         supportWidthFormatter = floatFormatter(ToolState.STANDARD_SUPPORT_WIDTH);
-        VBox supportWidthField = inputFieldWithLabel("Width:", supportWidthFormatter);
+        VBox supportWidthField = inputFieldWithLabel("Width", supportWidthFormatter);
 
         supportHeightFormatter = floatFormatter(ToolState.STANDARD_SUPPORT_HEIGHT);
-        VBox supportHeightField = inputFieldWithLabel("Height:", supportHeightFormatter);
+        VBox supportHeightField = inputFieldWithLabel("Height", supportHeightFormatter);
 
         supportColorPicker = new ColorPicker(ToolState.STANDARD_SUPPORT_COLOR);
         supportColorPicker.setMaxWidth(50);
@@ -114,7 +130,7 @@ public class ToolBarView extends HBox {
         boardButton.setToggleGroup(buttonGroup);
 
         boardHeightFormatter = floatFormatter(ToolState.STANDARD_BOARD_HEIGHT);
-        VBox boardHeightField = inputFieldWithLabel("Height:", boardHeightFormatter);
+        VBox boardHeightField = inputFieldWithLabel("Height", boardHeightFormatter);
 
         boardColorPicker = new ColorPicker(ToolState.STANDARD_BOARD_COLOR);
         boardColorPicker.setMaxWidth(50);
@@ -163,6 +179,10 @@ public class ToolBarView extends HBox {
         return itemHeightFormatter;
     }
 
+    public ComboBox<String> getIngredientComboBox() {
+        return ingredientComboBox;
+    }
+
     public CustomToggleButton getSelectButton() {
         return selectButton;
     }
@@ -173,6 +193,10 @@ public class ToolBarView extends HBox {
 
     public CustomToggleButton getSupportButton() {
         return supportButton;
+    }
+
+    public CustomToggleButton getPickColorButton() {
+        return pickColorButton;
     }
 
     public CustomToggleButton getBoardButton() {

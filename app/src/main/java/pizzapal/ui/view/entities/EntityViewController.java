@@ -12,21 +12,30 @@ import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.ui.UIConfig;
 import pizzapal.utils.Helper;
+import pizzapal.utils.ToolState;
 
 public abstract class EntityViewController<E extends Entity> {
 
     private StorageController storageController;
+
+    private ToolState toolState;
 
     protected EntityView<E> view;
     protected E entity;
 
     private Double offsetX;
     private Double offsetY;
+    private boolean dragging = false;
 
     private final ContextMenu contextMenu;
 
-    protected EntityViewController(StorageController storageController, E entity, EntityView<E> view) {
+    // TODO: calc Width height etc. in Subclasses with method that need to be
+    // implemented and give these calc values to this superclass
+
+    protected EntityViewController(StorageController storageController, ToolState toolState, E entity,
+            EntityView<E> view) {
         this.storageController = storageController;
+        this.toolState = toolState;
         this.entity = entity;
         this.view = view;
 
@@ -92,20 +101,35 @@ public abstract class EntityViewController<E extends Entity> {
 
     public void initDragAndDrop() {
 
+        // TODO: Cleanup
+
         view.setOnMousePressed(e -> {
 
             MouseButton button = e.getButton();
 
-            switch (button) {
-                case PRIMARY -> {
-                    offsetX = e.getX();
-                    offsetY = e.getY();
-                    view.setCursor(Cursor.MOVE);
+            switch (toolState.getCurrentTool()) {
+                case SELECT -> {
+                    switch (button) {
+                        case PRIMARY -> {
+                            dragging = true;
+                            offsetX = e.getX();
+                            offsetY = e.getY();
+                            view.setCursor(Cursor.MOVE);
+                        }
+                        case SECONDARY -> {
+                            toggleContextMenu();
+                        }
+                        default -> {
+                        }
+                    }
                 }
-                case SECONDARY -> {
-                    toggleContextMenu();
+                case PICKCOLOR -> {
+                    System.out.println("CLICKED");
+                    toolState.setColor(entity, view.getColor());
                 }
                 default -> {
+                    // Don't react to other tools
+                    return;
                 }
             }
 
@@ -116,12 +140,22 @@ public abstract class EntityViewController<E extends Entity> {
             MouseButton button = e.getButton();
             view.toFront();
 
-            switch (button) {
-                case PRIMARY -> {
-                    view.setCursor(Cursor.MOVE);
-                    view.moveRectangle((float) (e.getX() - offsetX), (float) (e.getY() - offsetY));
+            switch (toolState.getCurrentTool()) {
+                case SELECT -> {
+                    switch (button) {
+                        case PRIMARY -> {
+                            if (dragging) {
+                                view.setCursor(Cursor.MOVE);
+                                view.moveRectangle((float) (e.getX() - offsetX), (float) (e.getY() - offsetY));
+                            }
+                        }
+                        default -> {
+                        }
+                    }
                 }
                 default -> {
+                    // Don't react to other tools
+                    return;
                 }
             }
 
@@ -131,24 +165,38 @@ public abstract class EntityViewController<E extends Entity> {
 
             MouseButton button = e.getButton();
 
-            switch (button) {
-                case PRIMARY -> {
+            switch (toolState.getCurrentTool()) {
+                case SELECT -> {
+                    switch (button) {
+                        case PRIMARY -> {
 
-                    Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
-                    float xInView = (float) (localPoint.getX() - offsetX);
-                    float yInView = (float) (localPoint.getY() - offsetY);
+                            if (dragging) {
+                                Point2D localPoint = view.getParent().sceneToLocal(e.getSceneX(), e.getSceneY());
+                                float xInView = (float) (localPoint.getX() - offsetX);
+                                float yInView = (float) (localPoint.getY() - offsetY);
 
-                    offsetX = 0D;
-                    offsetY = 0D;
+                                offsetX = 0D;
+                                offsetY = 0D;
 
-                    onMouseReleased(xInView, yInView);
+                                onMouseReleased(xInView, yInView);
+                                dragging = false;
+                            }
+
+                        }
+                        default -> {
+                        }
+                    }
                 }
                 default -> {
+                    // Don't react to other tools
+                    return;
                 }
             }
 
-            view.setCursor(Cursor.HAND);
+        });
 
+        view.setOnMouseEntered(_ -> {
+            // view.setCursor(Cursor.E_RESIZE);
         });
 
         view.setOnMouseExited(_ -> {

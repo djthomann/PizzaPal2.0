@@ -66,7 +66,7 @@ public class SupportViewTest extends ApplicationTest {
     }
 
     @Test
-    public void testContextMenu() {
+    public void testContextMenuOpens() {
         assertTrue(!controller.getContextMenu().isShowing());
 
         clickOn(view, MouseButton.SECONDARY);

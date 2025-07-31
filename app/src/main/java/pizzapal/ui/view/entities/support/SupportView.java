@@ -64,4 +64,9 @@ public class SupportView extends EntityView<Support> {
         return supportRectangle;
     }
 
+    @Override
+    public Color getColor() {
+        return (Color) supportRectangle.getFill();
+    }
+
 }

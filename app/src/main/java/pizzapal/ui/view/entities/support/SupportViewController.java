@@ -6,6 +6,7 @@ import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.view.entities.EntityViewController;
 import pizzapal.utils.Helper;
+import pizzapal.utils.ToolState;
 
 public class SupportViewController extends EntityViewController<Support> {
 
@@ -13,8 +14,8 @@ public class SupportViewController extends EntityViewController<Support> {
 
     private final StorageController storageController;
 
-    public SupportViewController(StorageController storageController, Support support) {
-        super(storageController, support,
+    public SupportViewController(StorageController storageController, ToolState toolState, Support support) {
+        super(storageController, toolState, support,
                 new SupportView(support.getColor(), Helper.convertMetersToPixel(support.getWidth()),
                         Helper.convertMetersToPixel(support.getHeight()),
                         Helper.convertMetersToPixel(support.getPosX()),

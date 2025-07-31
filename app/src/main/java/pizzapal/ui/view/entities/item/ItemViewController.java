@@ -6,6 +6,7 @@ import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.ui.view.entities.EntityViewController;
 import pizzapal.utils.Helper;
+import pizzapal.utils.ToolState;
 
 public class ItemViewController extends EntityViewController<Item> {
 
@@ -13,9 +14,10 @@ public class ItemViewController extends EntityViewController<Item> {
 
     private StorageController storageController;
 
-    public ItemViewController(StorageController storageController, Item item) {
+    public ItemViewController(StorageController storageController, ToolState toolState, Item item) {
 
-        super(storageController, item, new ItemView(item.getColor(), Helper.convertMetersToPixel(item.getWidth()),
+        super(storageController, toolState, item, new ItemView(item.getColor(),
+                Helper.convertMetersToPixel(item.getWidth()),
                 Helper.convertMetersToPixel(item.getHeight()), Helper.convertMetersToPixel(item.getPosX()),
                 Helper.getPixelPositionYInStorage(storageController.getStorage(), item.getPosY() + item.getHeight())));
         this.item = item;
@@ -47,4 +49,5 @@ public class ItemViewController extends EntityViewController<Item> {
             view.resetRectangle();
         }
     }
+
 }

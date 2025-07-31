@@ -32,15 +32,15 @@ public class StorageViewController {
         this.toolState = toolState;
 
         storageController.addSupportCreationListener(support -> {
-            storageView.getChildren().add(new SupportViewController(storageController, support).getView());
+            storageView.getChildren().add(new SupportViewController(storageController, toolState, support).getView());
         });
 
         storageController.addBoardCreationListener(board -> {
-            storageView.getChildren().add(new BoardViewController(storageController, board).getView());
+            storageView.getChildren().add(new BoardViewController(storageController, toolState, board).getView());
         });
 
         storageController.addItemCreationListener(item -> {
-            storageView.getChildren().addAll(new ItemViewController(storageController, item).getView());
+            storageView.getChildren().addAll(new ItemViewController(storageController, toolState, item).getView());
         });
 
         Storage storage = storageController.getStorage();
@@ -53,16 +53,16 @@ public class StorageViewController {
         List<Support> supports = storage.getSupports();
 
         for (Support support : supports) {
-            storageView.getChildren().add(new SupportViewController(storageController, support).getView());
+            storageView.getChildren().add(new SupportViewController(storageController, toolState, support).getView());
         }
 
         List<Board> boards = storage.getBoards();
 
         for (Board board : boards) {
-            storageView.getChildren().add(new BoardViewController(storageController, board).getView());
+            storageView.getChildren().add(new BoardViewController(storageController, toolState, board).getView());
 
             for (Item item : board.getItems()) {
-                storageView.getChildren().add(new ItemViewController(storageController, item).getView());
+                storageView.getChildren().add(new ItemViewController(storageController, toolState, item).getView());
             }
         }
 
@@ -85,6 +85,9 @@ public class StorageViewController {
             switch (selectedTool) {
                 case SELECT -> {
                     // Do nothing
+                }
+                case PICKCOLOR -> {
+
                 }
                 case BOARD -> {
                     storageController.addBoard(toolState.getBoardHeight(), toolState.getBoardColor(), posX, Helper

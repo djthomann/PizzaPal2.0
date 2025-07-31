@@ -2,3 +2,43 @@
     -fx-accent: orange;
     -fx-focus-color: orange;
 }
+
+.menu {
+    -fx-font-weight: bold;
+}
+
+.menu .menu-item {
+    -fx-font-weight: normal;
+}
+
+.menu .menu-item:hover {
+    -fx-cursor: hand;
+    -fx-background-color: -fx-accent;
+}
+
+.combo-box {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: lightgray;
+}
+
+.text-field {
+    -fx-background-color: white;
+    -fx-background-radius: 5px;
+    -fx-border-color: lightgray;
+    -fx-border-width: 1px;
+    -fx-border-radius: 2px;
+    -fx-border-style: solid;
+    -fx-cursor: text;
+}
+
+.text-field:focused {
+    -fx-border-color: orange;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.text-field ::selection {
+    -fx-background-color: orange; 
+    -fx-fill: white;                
+}

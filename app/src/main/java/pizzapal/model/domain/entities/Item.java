@@ -11,7 +11,7 @@ import pizzapal.model.observability.Observable;
 
 public class Item extends Entity implements Observable<ItemChangeListener> {
 
-    private Color color;
+    private Ingredient ingredient;
 
     private final float weight;
 
@@ -35,7 +35,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
         super(width, height, board.getPosX() + offsetX, board.getPosY());
         this.board = board;
-        this.color = color;
+        color = Color.RED;
         this.weight = weight;
         this.offsetX = offsetX;
 
@@ -72,11 +72,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     }
 
     public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
+        return ingredient.getColor();
     }
 
     public float getWeight() {
@@ -115,6 +111,14 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public void setIngredient(Ingredient ingredient) {
+        this.ingredient = ingredient;
     }
 
     @Override
