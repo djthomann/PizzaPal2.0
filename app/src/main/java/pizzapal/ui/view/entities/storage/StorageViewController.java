@@ -100,7 +100,8 @@ public class StorageViewController {
                     storageView.hideGhostRectangle();
                 }
                 case ITEM -> {
-                    storageController.addItem(toolState.getItemWidth(), toolState.getItemHeight(), posX, posY);
+                    storageController.addItem(toolState.getItemWidth(), toolState.getItemHeight(),
+                            toolState.getItemWeight(), posX, posY);
                     storageView.hideGhostRectangle();
                 }
             }

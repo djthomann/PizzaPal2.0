@@ -30,6 +30,7 @@ public class ToolBarView extends HBox {
     private CustomToggleButton itemButton;
     private TextFormatter<Float> itemWidthFormatter;
     private TextFormatter<Float> itemHeightFormatter;
+    private TextFormatter<Float> itemWeightFormatter;
     private ComboBox<String> ingredientComboBox;
 
     private CustomToggleButton supportButton;
@@ -91,6 +92,9 @@ public class ToolBarView extends HBox {
         itemHeightFormatter = floatFormatter(ToolState.STANDARD_ITEM_HEIGHT);
         VBox itemHeightField = inputFieldWithLabel("Height", itemHeightFormatter);
 
+        itemWeightFormatter = floatFormatter(ToolState.STANDARD_ITEM_WEIGHT);
+        VBox itemWeightField = inputFieldWithLabel("Weight", itemWeightFormatter);
+
         VBox ingredientInput = new VBox();
         Label ingredientLabel = new Label("Ingredient");
         ingredientLabel.setFont(Font.font(10.5));
@@ -98,7 +102,7 @@ public class ToolBarView extends HBox {
         ingredientComboBox = new ComboBox<>();
         ingredientInput.getChildren().add(ingredientComboBox);
 
-        HBox itemInput = new HBox(itemButton, itemWidthField, itemHeightField, ingredientInput);
+        HBox itemInput = new HBox(itemButton, itemWidthField, itemHeightField, itemWeightField, ingredientInput);
         itemInput.setSpacing(5);
         itemInput.setAlignment(Pos.BOTTOM_LEFT);
 
@@ -177,6 +181,10 @@ public class ToolBarView extends HBox {
 
     public TextFormatter<Float> getItemHeightFormatter() {
         return itemHeightFormatter;
+    }
+
+    public TextFormatter<Float> getItemWeightFormatter() {
+        return itemWeightFormatter;
     }
 
     public ComboBox<String> getIngredientComboBox() {

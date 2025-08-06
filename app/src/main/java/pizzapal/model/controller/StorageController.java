@@ -251,7 +251,7 @@ public class StorageController {
         return true;
     }
 
-    public void addItem(float width, float height, float posX, float posY) {
+    public void addItem(float width, float height, float weight, float posX, float posY) {
 
         Board board = service.getBoardAt(posX);
 
@@ -259,7 +259,7 @@ public class StorageController {
             NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found.");
         } else {
             float offsetX = posX - board.getPosX();
-            Item item = new Item(board, Color.DARKBLUE, 0.2f, height, width, offsetX);
+            Item item = new Item(board, Color.DARKBLUE, weight, width, height, offsetX);
             notifyItemCreationListeners(item);
         }
 

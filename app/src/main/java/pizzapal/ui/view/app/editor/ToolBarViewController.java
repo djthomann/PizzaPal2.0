@@ -97,14 +97,17 @@ public class ToolBarViewController {
 
         TextFormatter<Float> itemWidthFormatter = view.getItemWidthFormatter();
         itemWidthFormatter.valueProperty().addListener((_, _, newValue) -> {
-            System.out.println(newValue);
             toolState.setItemWidth(newValue);
         });
 
         TextFormatter<Float> itemHeightFormatter = view.getItemHeightFormatter();
         itemHeightFormatter.valueProperty().addListener((_, _, newValue) -> {
-            System.out.println(newValue);
             toolState.setItemHeight(newValue);
+        });
+
+        TextFormatter<Float> itemWeightFormatter = view.getItemWeightFormatter();
+        itemWeightFormatter.valueProperty().addListener((_, _, newValue) -> {
+            toolState.setItemWeight(newValue);
         });
 
     }

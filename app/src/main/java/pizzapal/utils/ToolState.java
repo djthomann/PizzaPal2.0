@@ -30,6 +30,8 @@ public class ToolState {
     public static final float STANDARD_ITEM_WIDTH = 0.4f;
     private float itemHeight;
     public static final float STANDARD_ITEM_HEIGHT = 0.4f;
+    private float itemWeight;
+    public static final float STANDARD_ITEM_WEIGHT = 0.5f;
     private Ingredient itemIngredient;
     public static final Ingredient STANDARD_ITEM_INGREDIENT = IngredientRepository.getInstance()
             .getIngredient("Tomato");
@@ -47,6 +49,7 @@ public class ToolState {
         boardColor = STANDARD_BOARD_COLOR;
         itemWidth = STANDARD_ITEM_WIDTH;
         itemHeight = STANDARD_ITEM_HEIGHT;
+        itemWeight = STANDARD_ITEM_WEIGHT;
     }
 
     public void setColor(Entity e, Color color) {
@@ -129,6 +132,14 @@ public class ToolState {
 
     public void setItemIngredient(Ingredient itemIngredient) {
         this.itemIngredient = itemIngredient;
+    }
+
+    public float getItemWeight() {
+        return itemWeight;
+    }
+
+    public void setItemWeight(float itemWeight) {
+        this.itemWeight = itemWeight;
     }
 
 }
