@@ -90,7 +90,10 @@ public class NotificationDropdown {
                 double buttonRightX = bellButton.localToScreen(bellButton.getWidth(), 0).getX();
                 double popupWidth = popup.getWidth();
                 double popupX = buttonRightX - popupWidth;
-                double popupY = bellButton.localToScreen(0, bellButton.getHeight()).getY();
+
+                double buttonTopY = bellButton.localToScreen(0, 0).getY(); // obere Kante
+                double popupHeight = popup.getHeight();
+                double popupY = buttonTopY - popupHeight; // nach oben verschieben
 
                 popup.setX(popupX);
                 popup.setY(popupY);

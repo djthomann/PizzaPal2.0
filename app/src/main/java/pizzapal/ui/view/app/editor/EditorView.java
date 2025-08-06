@@ -1,7 +1,5 @@
 package pizzapal.ui.view.app.editor;
 
-import javafx.geometry.Orientation;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -10,7 +8,6 @@ import pizzapal.utils.SceneManager;
 public class EditorView extends BorderPane {
 
     private MenuBarView menuBar;
-    private Separator separator;
     private ToolBarView toolBar;
     private TabPane tabPane;
 
@@ -22,13 +19,11 @@ public class EditorView extends BorderPane {
 
         menuBar = new MenuBarView();
 
-        separator = new Separator();
-        separator.setOrientation(Orientation.HORIZONTAL);
-
-        topContainer = new VBox(menuBar, separator);
+        topContainer = new VBox(menuBar);
 
         setCenter(tabPane);
         setTop(topContainer);
+        setBottom(new NotificationBarView());
 
     }
 
@@ -39,9 +34,9 @@ public class EditorView extends BorderPane {
     public void addToolBar(ToolBarView toolBar) {
         this.toolBar = toolBar;
         if (!topContainer.getChildren().contains(toolBar)) {
-            topContainer.getChildren().add(2, toolBar);
+            topContainer.getChildren().add(1, toolBar);
         } else {
-            topContainer.getChildren().set(2, toolBar);
+            topContainer.getChildren().set(1, toolBar);
         }
     }
 
@@ -58,12 +53,12 @@ public class EditorView extends BorderPane {
     }
 
     public void hideToolBar() {
-        topContainer.getChildren().removeAll(separator, toolBar);
+        topContainer.getChildren().remove(toolBar);
         SceneManager.getInstance().sizeStage();
     }
 
     public void showToolBar() {
-        topContainer.getChildren().addAll(separator, toolBar);
+        topContainer.getChildren().add(toolBar);
         SceneManager.getInstance().sizeStage();
     }
 
