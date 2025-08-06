@@ -123,6 +123,10 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         this.ingredient = ingredient;
     }
 
+    public float getOffsetX() {
+        return offsetX;
+    }
+
     @Override
     public void addListener(ItemChangeListener l) {
         listeners.add(l);

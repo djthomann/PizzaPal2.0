@@ -6,7 +6,6 @@ import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.Support;
-import pizzapal.utils.NotificationManager;
 
 public class StorageLogic {
 
@@ -39,23 +38,86 @@ public class StorageLogic {
         return false;
     }
 
-    public boolean placeSupportPossible(Support support, float posX, float posY) {
-
-        if (support.getPosX() == posX) {
-            NotificationManager.getInstance().addNotification("Is not a movement");
-            return true;
-        }
-
-        if (!positionInStorage(posX, posY)) {
-            NotificationManager.getInstance().addNotification("Not inside Storage");
-            return false;
-        }
-
+    public boolean movingSupportLeavesEnoughRoomsForItems(Support support, float posX) {
         boolean movingRight = support.getPosX() < posX;
-        if (movingThroughSupport(movingRight, support, posX)) {
-            NotificationManager.getInstance().addNotification("Moving through other support");
-            return false;
+        // Check enough space for items
+        if (movingRight) {
+
+            List<Board> boardsRight = support.getBoardsRight();
+
+            if (boardsRight.isEmpty()) {
+                // No need to check for items --> possible to move
+                return true;
+            }
+
+            Support right = boardsRight.get(0).getSupportRight();
+
+            for (Board b : boardsRight) {
+
+                for (Item i : b.getItems()) {
+
+                    float itemRightSide = posX + support.getWidth() + i.getOffsetX() + i.getWidth();
+                    float rightSupportLeftSide = right.getPosX();
+
+                    if (itemRightSide > rightSupportLeftSide) {
+                        return false;
+                    }
+
+                }
+
+            }
+
+        } else {
+
+            List<Board> boardsLeft = support.getBoardsLeft();
+
+            if (boardsLeft.isEmpty()) {
+                // No need to check for items --> possible to move
+                return true;
+            }
+
+            for (Board b : boardsLeft) {
+
+                for (Item i : b.getItems()) {
+
+                    float itemRightSide = i.getPosX() + i.getWidth();
+                    float newSupportLeftSide = posX;
+
+                    if (itemRightSide > newSupportLeftSide) {
+                        return false;
+                    }
+
+                }
+
+            }
+
         }
+
+        return true;
+    }
+
+    public boolean storageHasSpaceForSupportAt(float width, float posX) {
+
+        float leftSide = posX;
+        float rightSide = posX + width;
+        // Check for collisions
+        for (Support s : storage.getSupports()) {
+
+            boolean leftSideInside = s.getPosX() < leftSide && s.getPosX() + s.getWidth() > leftSide;
+            boolean rightSideInside = s.getPosX() < rightSide && s.getPosX() + s.getWidth() > rightSide;
+
+            if (leftSideInside || rightSideInside) {
+                // Collision
+                return false;
+
+            }
+        }
+
+        return true;
+
+    }
+
+    public boolean supportDoesntCollideWithOtherSupports(Support support, float posX) {
 
         float leftSide = posX;
         float rightSide = posX + support.getWidth();
@@ -67,12 +129,7 @@ public class StorageLogic {
 
             if (leftSideInside || rightSideInside) {
                 // Collision
-                NotificationManager.getInstance().addNotification("Collision happened");
-                if (s.equals(support)) {
-                    NotificationManager.getInstance().addNotification("Is same support");
-                    return true;
-                } else {
-                    NotificationManager.getInstance().addNotification("Different support");
+                if (!s.equals(support)) {
                     return false;
                 }
 
@@ -80,10 +137,11 @@ public class StorageLogic {
         }
 
         return true;
-
     }
 
-    public boolean movingThroughSupport(boolean movingRight, Support support, float posX) {
+    public boolean movingThroughSupport(Support support, float posX) {
+
+        boolean movingRight = support.getPosX() < posX;
 
         if (movingRight) {
             List<Board> boards = support.getBoardsRight();
@@ -114,23 +172,11 @@ public class StorageLogic {
         }
     }
 
-    public boolean moveBoardPossible(Board board, float posX, float posY) {
+    public boolean isPositionBetweenTwoSupports(float posX) {
+        Support left = service.getSupportLeftOfPos(posX);
+        Support right = service.getSupportRightOfPos(posX);
 
-        if (!positionInStorage(posX, posY)) {
-            NotificationManager.getInstance().addNotification("Not In Storage");
-            return false;
-        }
-
-        if (storageIsEmpty()) {
-            return false;
-        }
-
-        if (!service.isPositionBetweenTwoSupports(posX)) {
-            return false;
-        }
-
-        return true;
-
+        return left != null && right != null;
     }
 
     public boolean storageIsEmpty() {
@@ -205,9 +251,6 @@ public class StorageLogic {
 
                     float itemPosY = i.getPosY();
                     float undersideAbove = support.getHeight() - offsetY - board.getHeight();
-
-                    System.out.println("ITEM POS" + itemPosY);
-                    System.out.println("UNDERSIDE" + undersideAbove);
 
                     if (itemPosY > undersideAbove) {
                         return false;

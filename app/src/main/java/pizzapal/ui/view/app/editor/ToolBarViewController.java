@@ -45,9 +45,8 @@ public class ToolBarViewController {
         Set<String> ingredients = ingredientRepository.getAllIngredientNames();
         items.addAll(ingredients);
 
-        comboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
+        comboBox.valueProperty().addListener((_, _, newValue) -> {
             toolState.setItemIngredient(ingredientRepository.getIngredient(newValue));
-            System.out.println(toolState.getItemIngredient());
         });
     }
 

@@ -19,7 +19,7 @@ public class ItemViewController extends EntityViewController<Item> {
         super(storageController, toolState, item, new ItemView(item.getColor(),
                 Helper.convertMetersToPixel(item.getWidth()),
                 Helper.convertMetersToPixel(item.getHeight()), Helper.convertMetersToPixel(item.getPosX()),
-                Helper.getPixelPositionYInStorage(storageController.getStorage(), item.getPosY() + item.getHeight())));
+                Helper.getPixelPositionYInStorage(storageController.getStorage(), item.getPosY())));
         this.item = item;
         this.storageController = storageController;
 

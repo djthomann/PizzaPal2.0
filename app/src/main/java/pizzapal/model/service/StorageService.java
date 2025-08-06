@@ -42,26 +42,23 @@ public class StorageService {
         return right;
     }
 
-    public boolean isPositionBetweenTwoSupports(float posX) {
-        Support left = getSupportLeftOfPos(posX);
-        Support right = getSupportRightOfPos(posX);
+    public Board getBoardBelow(float posX, float posY) {
 
-        return left != null && right != null;
-    }
+        List<Board> boards = getBoardsAt(posX);
+        Board boardBelow = null;
 
-    public Board getBoardAt(float posX) {
-        Support left = getSupportLeftOfPos(posX);
-        Support right = getSupportRightOfPos(posX);
-
-        if (left == null) {
-            return null;
+        for (Board b : boards) {
+            if (b.getPosY() < posY) {
+                // candidate
+                if (boardBelow == null) {
+                    boardBelow = b;
+                } else if (boardBelow.getPosY() > b.getPosY()) {
+                    boardBelow = b;
+                }
+            }
         }
 
-        if (right == null) {
-            return null;
-        }
-
-        return left.getBoardsRight().get(0);
+        return boardBelow;
     }
 
     public List<Board> getBoardsAt(float posX) {

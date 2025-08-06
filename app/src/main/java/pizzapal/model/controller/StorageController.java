@@ -113,18 +113,40 @@ public class StorageController {
     }
 
     public boolean moveSupport(Support support, float posX, float posY) {
-        if (logic.placeSupportPossible(support, posX, posY)) {
-            MoveSupportCommand moveCommand = new MoveSupportCommand(support, posX, posY);
-            moveCommand.execute();
-            undoStack.push(moveCommand);
-            return true;
-        } else {
-            NotificationManager.getInstance().addNotification("Support can't be moved");
+
+        if (!logic.positionInStorage(posX, posY)) {
+            NotificationManager.getInstance().addNotification("Not inside Storage");
             return false;
         }
+
+        if (logic.movingThroughSupport(support, posX)) {
+            NotificationManager.getInstance().addNotification("Moving through other support");
+            return false;
+        }
+
+        if (!logic.supportDoesntCollideWithOtherSupports(support, posX)) {
+            NotificationManager.getInstance().addNotification("Collision with other support");
+            return false;
+        }
+
+        if (!logic.movingSupportLeavesEnoughRoomsForItems(support, posX)) {
+            NotificationManager.getInstance().addNotification("Not enough space for items");
+            return false;
+        }
+
+        MoveSupportCommand moveCommand = new MoveSupportCommand(support, posX, posY);
+        moveCommand.execute();
+        undoStack.push(moveCommand);
+        return true;
     }
 
     public void addSupport(float width, float height, Color color, float posX, float posY) {
+
+        if (!logic.storageHasSpaceForSupportAt(width, posX)) {
+            NotificationManager.getInstance().addNotification("No space for new support");
+            return;
+        }
+
         Support support = new Support(storage, color, width, height, posX, posY);
         storage.addSupport(support);
         notifySupportCreationListeners(support);
@@ -155,7 +177,7 @@ public class StorageController {
             return false;
         }
 
-        if (!service.isPositionBetweenTwoSupports(posX)) {
+        if (!logic.isPositionBetweenTwoSupports(posX)) {
             NotificationManager.getInstance().addNotification("Not between two supports");
             return false;
         }
@@ -193,6 +215,11 @@ public class StorageController {
     }
 
     public void addBoard(float height, Color color, float posX, float posY) {
+
+        if (!logic.isPositionBetweenTwoSupports(posX)) {
+            NotificationManager.getInstance().addNotification("Not between two supports");
+            return;
+        }
 
         float offsetY = service.getSupportLeftOfPos(posX).getHeight() - posY;
         if (offsetY < 0) {
@@ -241,9 +268,6 @@ public class StorageController {
         if (offsetX < 0) {
             offsetX = 0;
         } else if (offsetX > board.getWidth() - item.getWidth()) {
-            System.out.println("OFFSET :" + offsetX);
-            System.out.println("BAORDW:" + board.getWidth());
-            System.out.println("ITEMW" + item.getWeight());
             offsetX = board.getWidth() - item.getWidth();
         }
 
@@ -253,7 +277,7 @@ public class StorageController {
 
     public void addItem(float width, float height, float weight, float posX, float posY) {
 
-        Board board = service.getBoardAt(posX);
+        Board board = service.getBoardBelow(posX, posY);
 
         if (board == null) {
             NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found.");

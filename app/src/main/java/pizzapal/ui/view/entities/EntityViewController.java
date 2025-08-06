@@ -124,7 +124,6 @@ public abstract class EntityViewController<E extends Entity> {
                     }
                 }
                 case PICKCOLOR -> {
-                    System.out.println("CLICKED");
                     toolState.setColor(entity, view.getColor());
                 }
                 default -> {

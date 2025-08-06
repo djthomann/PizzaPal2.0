@@ -42,8 +42,6 @@ public class SceneManager {
 
     public void showView(Parent view) {
 
-        System.out.println("GOT" + view.toString());
-
         Scene scene = new Scene(view);
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());
 
