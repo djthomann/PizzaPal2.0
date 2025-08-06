@@ -16,7 +16,7 @@ public class SupportViewController extends EntityViewController<Support> {
 
     public SupportViewController(StorageController storageController, ToolState toolState, Support support) {
         super(storageController, toolState, support,
-                new SupportView(support.getColor(), Helper.convertMetersToPixel(support.getWidth()),
+                new SupportView(support.getColor().getColor(), Helper.convertMetersToPixel(support.getWidth()),
                         Helper.convertMetersToPixel(support.getHeight()),
                         Helper.convertMetersToPixel(support.getPosX()),
                         Helper.getPixelPositionYInStorage(support.getStorage(), support)));

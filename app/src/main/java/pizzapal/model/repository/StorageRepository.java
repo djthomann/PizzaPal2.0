@@ -1,5 +1,10 @@
 package pizzapal.model.repository;
 
+import java.io.File;
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import pizzapal.model.domain.core.Storage;
 
 public class StorageRepository {
@@ -44,6 +49,20 @@ public class StorageRepository {
          */
 
         return storage;
+    }
+
+    public void saveStorage(Storage storage) {
+
+    }
+
+    private static final ObjectMapper mapper = new ObjectMapper();
+
+    public static void saveToFile(Storage storage, String filename) throws IOException {
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), storage);
+    }
+
+    public static Storage loadFromFile(String filename) throws IOException {
+        return mapper.readValue(new File(filename), Storage.class);
     }
 
 }

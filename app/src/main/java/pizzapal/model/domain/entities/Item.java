@@ -3,24 +3,33 @@ package pizzapal.model.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javafx.scene.paint.Color;
 import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.ItemChangeListener;
 import pizzapal.model.observability.Observable;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Item extends Entity implements Observable<ItemChangeListener> {
+
+    public String id;
 
     private Ingredient ingredient;
 
-    private final float weight;
+    private float weight;
 
     private float offsetX;
 
     private Board board;
 
+    @JsonIgnore
     private List<ItemChangeListener> listeners = new ArrayList<>();
 
+    @JsonIgnore
     private BoardChangeListener listener = (model, type) -> {
         switch (type) {
             case MOVE -> {
@@ -31,6 +40,10 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
             }
         }
     };
+
+    public Item() {
+
+    }
 
     public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
         super(width, height, board.getPosX() + offsetX, board.getPosY() + height);
@@ -74,7 +87,8 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         setPosY(board.getPosY() + height);
     }
 
-    public Color getColor() {
+    @JsonIgnore
+    public SerializableColor getColor() {
         return ingredient.getColor();
     }
 
@@ -136,6 +150,10 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     @Override
     public void removeListener(ItemChangeListener l) {
         listeners.remove(l);
+    }
+
+    public BoardChangeListener getListener() {
+        return listener;
     }
 
 }

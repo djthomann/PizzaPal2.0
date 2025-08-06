@@ -3,15 +3,22 @@ package pizzapal.model.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javafx.scene.paint.Color;
 import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
-import pizzapal.utils.ToolState;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Board extends Entity implements Observable<BoardChangeListener> {
 
+    public String id;
+
+    @JsonIgnore
     private final List<BoardChangeListener> listeners = new ArrayList<>();
 
     private Support supportLeft;
@@ -20,9 +27,10 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
 
     private List<Item> items = new ArrayList<>();
 
-    private Color color;
-    public static final Color STANDARD_COLOR = ToolState.STANDARD_BOARD_COLOR;
+    private SerializableColor color;
+    // public static final Color STANDARD_COLOR = ToolState.STANDARD_BOARD_COLOR;
 
+    @JsonIgnore
     SupportChangeListener leftListener = (model, type) -> {
         switch (type) {
             case MOVE -> {
@@ -34,6 +42,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         }
     };
 
+    @JsonIgnore
     SupportChangeListener rightListener = (model, type) -> {
         switch (type) {
             case MOVE -> {
@@ -49,8 +58,8 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     // Relative to Support
     private float offsetY;
 
-    public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
-        this(supportLeft, supportRight, height, offsetY, STANDARD_COLOR);
+    public Board() {
+        items = new ArrayList<>();
     }
 
     public Board(Support supportLeft, Support supportRight, float height, float offsetY, Color color) {
@@ -59,7 +68,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.supportLeft = supportLeft;
         this.supportRight = supportRight;
         this.offsetY = offsetY;
-        this.color = color;
+        this.color = new SerializableColor(color);
 
         // supportLeft.addListener(leftListener);
         // supportLeft.addBoardRight(this);
@@ -67,6 +76,14 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         // supportRight.addListener(rightListener);
         // supportRight.addBoardLeft(this);
 
+        items = new ArrayList<>();
+
+    }
+
+    public void initListeners() {
+        for (Item i : items) {
+            listeners.add(i.getListener());
+        }
     }
 
     public void attach() {
@@ -204,11 +221,11 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.offsetY = offsetY;
     }
 
-    public Color getColor() {
+    public SerializableColor getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(SerializableColor color) {
         this.color = color;
     }
 

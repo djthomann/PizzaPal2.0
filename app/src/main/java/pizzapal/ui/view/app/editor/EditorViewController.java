@@ -1,5 +1,6 @@
 package pizzapal.ui.view.app.editor;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ import pizzapal.utils.ToolState;
 
 public class EditorViewController {
 
+    private Storage storage;
+
     private EditorView view;
 
     private Map<Tab, StorageController> controllerMap;
@@ -23,6 +26,8 @@ public class EditorViewController {
     private ToolState toolState;
 
     public EditorViewController(Storage storage) {
+
+        this.storage = storage;
 
         view = new EditorView();
         controllerMap = new HashMap<>();
@@ -48,6 +53,28 @@ public class EditorViewController {
         newItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
         newItem.setOnAction(_ -> {
             addStorageTab();
+        });
+
+        MenuItem openItem = menuBar.getOpenItem();
+        openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
+        openItem.setOnAction(_ -> {
+            try {
+                Storage storage = StorageRepository.loadFromFile("Test");
+                storage.initListeners();
+                addStorageTab(storage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        MenuItem saveItem = menuBar.getSaveItem();
+        saveItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
+        saveItem.setOnAction(_ -> {
+            try {
+                StorageRepository.saveToFile(storage, "Test");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
         MenuItem closeItem = menuBar.getCloseItem();
@@ -90,6 +117,12 @@ public class EditorViewController {
 
     public void addStorageTab() {
         Storage storage = StorageRepository.getInstance().createStorage();
+        StorageController newStorageController = new StorageController(storage);
+        Tab tab = new Tab("New Storage", new StorageViewController(newStorageController, toolState).getView());
+        addStorageTab(tab, newStorageController);
+    }
+
+    public void addStorageTab(Storage storage) {
         StorageController newStorageController = new StorageController(storage);
         Tab tab = new Tab("New Storage", new StorageViewController(newStorageController, toolState).getView());
         addStorageTab(tab, newStorageController);

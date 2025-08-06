@@ -8,6 +8,10 @@ public abstract class Entity {
     protected float posX;
     protected float posY;
 
+    protected Entity() {
+
+    }
+
     protected Entity(float width, float height, float posX, float posY) {
         this.width = width;
         this.height = height;

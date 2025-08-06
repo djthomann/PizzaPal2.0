@@ -8,6 +8,8 @@ import javafx.scene.control.SeparatorMenuItem;
 public class MenuBarView extends MenuBar {
 
     private MenuItem newItem;
+    private MenuItem openItem;
+    private MenuItem saveItem;
     private MenuItem closeItem;
 
     private MenuItem undoItem;
@@ -20,8 +22,8 @@ public class MenuBarView extends MenuBar {
         // FILE MENU
         Menu fileMenu = new Menu("File");
         newItem = new MenuItem("New");
-        MenuItem openItem = new MenuItem("Open");
-        MenuItem saveItem = new MenuItem("Save");
+        openItem = new MenuItem("Open");
+        saveItem = new MenuItem("Save");
         closeItem = new MenuItem("Close");
         fileMenu.getItems().addAll(newItem, openItem, saveItem, new SeparatorMenuItem(), closeItem);
 
@@ -48,6 +50,14 @@ public class MenuBarView extends MenuBar {
 
     public MenuItem getNewItem() {
         return newItem;
+    }
+
+    public MenuItem getOpenItem() {
+        return openItem;
+    }
+
+    public MenuItem getSaveItem() {
+        return saveItem;
     }
 
     public MenuItem getCloseItem() {

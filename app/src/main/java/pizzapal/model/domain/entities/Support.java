@@ -3,28 +3,36 @@ package pizzapal.model.domain.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javafx.scene.paint.Color;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
-import pizzapal.utils.ToolState;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Support extends Entity implements Observable<SupportChangeListener> {
 
+    public int id;
+
+    @JsonIgnore
     private final List<SupportChangeListener> listeners = new ArrayList<>();
 
     private Storage storage;
 
     private List<Board> boardsLeft;
-
     private List<Board> boardsRight;
 
-    private Color color;
-    private static final Color STANDARD_COLOR = ToolState.STANDARD_SUPPORT_COLOR;
+    private SerializableColor color;
+    // private static final Color STANDARD_COLOR = ToolState.STANDARD_SUPPORT_COLOR;
 
-    public Support(Storage storage, float width, float height, float posX, float posY) {
-        this(storage, STANDARD_COLOR, width, height, posX, posY);
+    public Support() {
+        super();
+        boardsLeft = new ArrayList<>();
+        boardsRight = new ArrayList<>();
     }
 
     public Support(Storage storage, Color color, float width, float height, float posX, float posY) {
@@ -32,8 +40,20 @@ public class Support extends Entity implements Observable<SupportChangeListener>
         this.storage = storage;
         boardsLeft = new ArrayList<>();
         boardsRight = new ArrayList<>();
-        this.color = color;
+        this.color = new SerializableColor(color);
         // storage.addSupport(this);
+    }
+
+    public void initListeners() {
+        for (Board b : boardsLeft) {
+            listeners.add(b.rightListener);
+            b.initListeners();
+        }
+
+        for (Board b : boardsRight) {
+            listeners.add(b.leftListener);
+            b.initListeners();
+        }
     }
 
     public void delete() {
@@ -123,11 +143,11 @@ public class Support extends Entity implements Observable<SupportChangeListener>
                 + posY + "]";
     }
 
-    public Color getColor() {
+    public SerializableColor getColor() {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(SerializableColor color) {
         this.color = color;
     }
 
