@@ -1,5 +1,6 @@
-package pizzapal.model.commands;
+package pizzapal.model.commands.move;
 
+import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
 
@@ -13,8 +14,8 @@ public class MoveBoardCommand implements Command {
     private final Support newSupportRight;
     private final Support oldSupportRight;
 
-    private final float newY;
-    private final float oldY;
+    private final float newOffset;
+    private final float oldOffset;
 
     public MoveBoardCommand(Board board, Support newSupportLeft, Support newSupportRight, float newY) {
         this.board = board;
@@ -22,18 +23,18 @@ public class MoveBoardCommand implements Command {
         this.oldSupportLeft = board.getSupportLeft();
         this.newSupportRight = newSupportRight;
         this.oldSupportRight = board.getSupportRight();
-        this.newY = newY;
-        this.oldY = board.getPosY();
+        this.newOffset = newY;
+        this.oldOffset = board.getOffsetY();
     }
 
     @Override
     public void execute() {
-        board.move(newSupportLeft, newSupportRight, newY);
+        board.move(newSupportLeft, newSupportRight, newOffset);
     }
 
     @Override
     public void undo() {
-        board.move(oldSupportLeft, oldSupportRight, oldY);
+        board.move(oldSupportLeft, oldSupportRight, oldOffset);
     }
 
 }

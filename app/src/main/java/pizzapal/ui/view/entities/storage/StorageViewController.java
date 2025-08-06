@@ -54,15 +54,15 @@ public class StorageViewController {
 
         for (Support support : supports) {
             storageView.getChildren().add(new SupportViewController(storageController, toolState, support).getView());
-        }
 
-        List<Board> boards = storage.getBoards();
+            List<Board> boards = support.getBoardsLeft();
 
-        for (Board board : boards) {
-            storageView.getChildren().add(new BoardViewController(storageController, toolState, board).getView());
+            for (Board board : boards) {
+                storageView.getChildren().add(new BoardViewController(storageController, toolState, board).getView());
 
-            for (Item item : board.getItems()) {
-                storageView.getChildren().add(new ItemViewController(storageController, toolState, item).getView());
+                for (Item item : board.getItems()) {
+                    storageView.getChildren().add(new ItemViewController(storageController, toolState, item).getView());
+                }
             }
         }
 

@@ -1,5 +1,6 @@
-package pizzapal.model.commands;
+package pizzapal.model.commands.move;
 
+import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Support;
 
 public class MoveSupportCommand implements Command {

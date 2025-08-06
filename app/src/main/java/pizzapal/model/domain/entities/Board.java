@@ -61,6 +61,15 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.offsetY = offsetY;
         this.color = color;
 
+        // supportLeft.addListener(leftListener);
+        // supportLeft.addBoardRight(this);
+
+        // supportRight.addListener(rightListener);
+        // supportRight.addBoardLeft(this);
+
+    }
+
+    public void attach() {
         supportLeft.addListener(leftListener);
         supportLeft.addBoardRight(this);
 
@@ -70,6 +79,12 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     }
 
     public void delete() {
+
+        supportLeft.getBoardsRight().remove(this);
+        supportLeft.removeListener(leftListener);
+
+        supportRight.getBoardsLeft().remove(this);
+        supportRight.removeListener(rightListener);
 
         for (Item i : items) {
             i.setBoard(null);

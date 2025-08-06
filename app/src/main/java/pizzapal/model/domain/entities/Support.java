@@ -33,7 +33,7 @@ public class Support extends Entity implements Observable<SupportChangeListener>
         boardsLeft = new ArrayList<>();
         boardsRight = new ArrayList<>();
         this.color = color;
-        storage.addSupport(this);
+        // storage.addSupport(this);
     }
 
     public void delete() {

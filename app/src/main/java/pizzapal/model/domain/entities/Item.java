@@ -40,16 +40,17 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         this.offsetX = offsetX;
 
         ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
-
-        board.addItem(this);
-
-        board.addListener(listener);
     }
 
     private void notifyListeners(ChangeType type) {
         for (ItemChangeListener l : listeners) {
             l.onItemChange(this, type);
         }
+    }
+
+    public void place() {
+        board.addItem(this);
+        board.addListener(listener);
     }
 
     public void delete() {

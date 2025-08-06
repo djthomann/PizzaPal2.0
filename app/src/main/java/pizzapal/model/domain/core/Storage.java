@@ -3,7 +3,6 @@ package pizzapal.model.domain.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
 
 public class Storage {
@@ -16,18 +15,15 @@ public class Storage {
 
     private List<Support> supports;
 
-    private List<Board> boards;
-
     public Storage(float width, float height) {
         this.width = width;
         this.height = height;
 
         supports = new ArrayList<>();
-        boards = new ArrayList<>();
     }
 
     public boolean isEmpty() {
-        return supports.isEmpty() && boards.isEmpty();
+        return supports.isEmpty();
     }
 
     public float getWidth() {
@@ -60,22 +56,6 @@ public class Storage {
 
     public void removeSupport(Support support) {
         supports.remove(support);
-    }
-
-    public List<Board> getBoards() {
-        return boards;
-    }
-
-    public void setBoards(List<Board> boards) {
-        this.boards = boards;
-    }
-
-    public void addBoard(Board board) {
-        boards.add(board);
-    }
-
-    public void removeBoard(Board board) {
-        boards.remove(board);
     }
 
 }

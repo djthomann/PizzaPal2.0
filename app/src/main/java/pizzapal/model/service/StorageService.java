@@ -45,20 +45,8 @@ public class StorageService {
     public Board getBoardBelow(float posX, float posY) {
 
         List<Board> boards = getBoardsAt(posX);
-        Board boardBelow = null;
 
-        for (Board b : boards) {
-            if (b.getPosY() < posY) {
-                // candidate
-                if (boardBelow == null) {
-                    boardBelow = b;
-                } else if (boardBelow.getPosY() > b.getPosY()) {
-                    boardBelow = b;
-                }
-            }
-        }
-
-        return boardBelow;
+        return getBoardBelow(boards, posY);
     }
 
     public List<Board> getBoardsAt(float posX) {

@@ -7,8 +7,12 @@ import java.util.List;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.commands.Command;
-import pizzapal.model.commands.MoveBoardCommand;
-import pizzapal.model.commands.MoveSupportCommand;
+import pizzapal.model.commands.add.AddBoardCommand;
+import pizzapal.model.commands.add.AddItemCommand;
+import pizzapal.model.commands.add.AddSupportCommand;
+import pizzapal.model.commands.move.MoveBoardCommand;
+import pizzapal.model.commands.move.MoveItemCommand;
+import pizzapal.model.commands.move.MoveSupportCommand;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Entity;
@@ -93,6 +97,13 @@ public class StorageController {
         if (!redoStack.isEmpty()) {
             Command command = redoStack.pop();
             command.execute();
+            if (command instanceof AddSupportCommand addSupportCommand) {
+                notifySupportCreationListeners(addSupportCommand.getSupport());
+            } else if (command instanceof AddBoardCommand addBoardCommand) {
+                notifyBoardCreationListeners(addBoardCommand.getBoard());
+            } else if (command instanceof AddItemCommand addItemCommand) {
+                notifyItemCreationListeners(addItemCommand.getItem());
+            }
             undoStack.push(command);
         }
     }
@@ -148,7 +159,9 @@ public class StorageController {
         }
 
         Support support = new Support(storage, color, width, height, posX, posY);
-        storage.addSupport(support);
+        AddSupportCommand addCommand = new AddSupportCommand(storage, support);
+        addCommand.execute();
+        undoStack.push(addCommand);
         notifySupportCreationListeners(support);
     }
 
@@ -228,18 +241,13 @@ public class StorageController {
 
         Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), height, offsetY,
                 color);
-        storage.addBoard(board);
+        AddBoardCommand addCommand = new AddBoardCommand(board);
+        addCommand.execute();
+        undoStack.push(addCommand);
         notifyBoardCreationListeners(board);
     }
 
     public boolean delete(Board board) {
-
-        Support left = board.getSupportLeft();
-        Support right = board.getSupportRight();
-
-        left.getBoardsRight().remove(board);
-        right.getBoardsLeft().remove(board);
-
         board.delete();
 
         return true;
@@ -271,7 +279,10 @@ public class StorageController {
             offsetX = board.getWidth() - item.getWidth();
         }
 
-        item.move(board, offsetX);
+        MoveItemCommand moveCommand = new MoveItemCommand(item, board, offsetX);
+        moveCommand.execute();
+        undoStack.push(moveCommand);
+        // item.move(board, offsetX);
         return true;
     }
 
@@ -281,11 +292,15 @@ public class StorageController {
 
         if (board == null) {
             NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found.");
-        } else {
-            float offsetX = posX - board.getPosX();
-            Item item = new Item(board, Color.DARKBLUE, weight, width, height, offsetX);
-            notifyItemCreationListeners(item);
+            return;
         }
+
+        float offsetX = posX - board.getPosX();
+        Item item = new Item(board, Color.DARKBLUE, weight, width, height, offsetX);
+        AddItemCommand addCommand = new AddItemCommand(item);
+        addCommand.execute();
+        undoStack.push(addCommand);
+        notifyItemCreationListeners(item);
 
     }
 
