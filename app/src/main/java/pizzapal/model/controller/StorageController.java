@@ -144,23 +144,52 @@ public class StorageController {
     }
 
     public boolean moveBoard(Board board, float posX, float posY) {
-        if (logic.moveBoardPossible(board, posX, posY)) {
-            Support left = service.getSupportLeftOfPos(posX);
-            float offsetY = left.getHeight() - posY;
 
-            if (offsetY < 0) {
-                offsetY = 0;
-            }
-
-            MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),
-                    service.getSupportRightOfPos(posX), offsetY);
-            moveCommand.execute();
-            undoStack.push(moveCommand);
-            return true;
-        } else {
-            NotificationManager.getInstance().addNotification("Move Board not possible");
+        if (!logic.positionInStorage(posX, posY)) {
+            NotificationManager.getInstance().addNotification("Not In Storage");
             return false;
         }
+
+        if (logic.storageIsEmpty()) {
+            NotificationManager.getInstance().addNotification("Storage is Empty");
+            return false;
+        }
+
+        if (!service.isPositionBetweenTwoSupports(posX)) {
+            NotificationManager.getInstance().addNotification("Not between two supports");
+            return false;
+        }
+
+        Support left = service.getSupportLeftOfPos(posX);
+        float offsetY = left.getHeight() - posY;
+
+        if (!logic.supportHasSpaceForBoardRight(left, board, offsetY)) {
+            NotificationManager.getInstance().addNotification("No space for board on support");
+            return false;
+        }
+
+        if (!logic.enoughSpaceForItemsLeftAbove(left, board, offsetY)) {
+            NotificationManager.getInstance().addNotification("Not enough space for items");
+            return false;
+        }
+
+        if (!logic.enoughSpaceForItemsLeftBelow(left, board, offsetY)) {
+            NotificationManager.getInstance().addNotification("Not enough space for items");
+            return false;
+        }
+
+        // snapping to top of support
+        if (offsetY < 0) {
+            offsetY = 0;
+        }
+
+        MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),
+                service.getSupportRightOfPos(posX), offsetY);
+        moveCommand.execute();
+        undoStack.push(moveCommand);
+
+        return true;
+
     }
 
     public void addBoard(float height, Color color, float posX, float posY) {

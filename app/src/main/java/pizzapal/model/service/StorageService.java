@@ -64,6 +64,61 @@ public class StorageService {
         return left.getBoardsRight().get(0);
     }
 
+    public List<Board> getBoardsAt(float posX) {
+        Support left = getSupportLeftOfPos(posX);
+        Support right = getSupportRightOfPos(posX);
+
+        if (left == null) {
+            return null;
+        }
+
+        if (right == null) {
+            return null;
+        }
+
+        return left.getBoardsRight();
+    }
+
+    public Board getBoardAboveOffset(List<Board> boards, float offsetY) {
+
+        Board board = null;
+
+        for (Board b : boards) {
+            if (b.getOffsetY() < offsetY) {
+                if (board == null) {
+                    board = b;
+                }
+
+                if (board.getOffsetY() < b.getOffsetY()) {
+                    board = b;
+                }
+            }
+        }
+
+        return board;
+
+    }
+
+    public Board getBoardBelowOffset(List<Board> boards, float offsetY) {
+
+        Board board = null;
+
+        for (Board b : boards) {
+            if (b.getOffsetY() > offsetY) {
+                if (board == null) {
+                    board = b;
+                }
+
+                if (board.getOffsetY() > b.getOffsetY()) {
+                    board = b;
+                }
+            }
+        }
+
+        return board;
+
+    }
+
     public Board getBoardBelow(List<Board> boards, float posY) {
         Board board = null;
 

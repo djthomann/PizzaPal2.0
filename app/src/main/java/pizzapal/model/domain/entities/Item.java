@@ -33,11 +33,13 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     };
 
     public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
-        super(width, height, board.getPosX() + offsetX, board.getPosY());
+        super(width, height, board.getPosX() + offsetX, board.getPosY() + height);
         this.board = board;
         color = Color.RED;
         this.weight = weight;
         this.offsetX = offsetX;
+
+        ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
 
         board.addItem(this);
 
@@ -57,7 +59,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public void move(Board board, float offsetX) {
         this.board.removeItem(this);
-        board.removeListener(listener);
+        this.board.removeListener(listener);
         this.board = board;
         board.addItem(this);
         board.addListener(listener);

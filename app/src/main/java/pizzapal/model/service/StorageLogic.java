@@ -4,6 +4,7 @@ import java.util.List;
 
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.utils.NotificationManager;
 
@@ -134,6 +135,102 @@ public class StorageLogic {
 
     public boolean storageIsEmpty() {
         return storage.isEmpty();
+    }
+
+    public boolean supportHasSpaceForBoardRight(Support support, Board board, float offsetY) {
+
+        List<Board> boardsRight = support.getBoardsRight();
+
+        for (Board b : boardsRight) {
+            if (!b.equals(board)) {
+
+                boolean enoughSpaceAbove = offsetY < b.getOffsetY() && offsetY + board.getHeight() < b.getOffsetY();
+                boolean enoughSpaceBelow = offsetY > b.getOffsetY() + b.getHeight();
+
+                return enoughSpaceAbove || enoughSpaceBelow;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean enoughSpaceForItemsLeftAbove(Support support, Board board, float offsetY) {
+
+        Board above = service.getBoardAboveOffset(support.getBoardsRight(), offsetY);
+
+        if (above == null || above.equals(board)) {
+            // nothing above, or only the same board
+            return true;
+        } else {
+
+            List<Item> items = board.getItems();
+
+            if (items.isEmpty()) {
+                // no items moving up
+                return true;
+            } else {
+                // items moving up
+                for (Item i : items) {
+
+                    float newItemPosY = support.getHeight() - offsetY + i.getHeight();
+                    float undersideAbove = above.getPosY() - above.getHeight();
+
+                    if (newItemPosY > undersideAbove) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    public boolean enoughSpaceForItemsLeftBelow(Support support, Board board, float offsetY) {
+
+        Board below = service.getBoardBelowOffset(support.getBoardsRight(), offsetY);
+
+        if (below == null || below.equals(board)) {
+            // nothing below, or only the same board
+            return true;
+        } else {
+
+            List<Item> items = below.getItems();
+
+            if (items.isEmpty()) {
+                // no items below
+                return true;
+            } else {
+                // check items below
+                for (Item i : items) {
+
+                    float itemPosY = i.getPosY();
+                    float undersideAbove = support.getHeight() - offsetY - board.getHeight();
+
+                    System.out.println("ITEM POS" + itemPosY);
+                    System.out.println("UNDERSIDE" + undersideAbove);
+
+                    if (itemPosY > undersideAbove) {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+    }
+
+    public boolean boardsCollide(Board board1, Board board2) {
+
+        return !boardsDontCollide(board1, board2);
+    }
+
+    private boolean boardsDontCollide(Board board1, Board board2) {
+        boolean boardAbove = board1.getPosY() < board2.getPosY()
+                && board1.getPosY() + board1.getHeight() < board2.getPosY();
+        boolean boardBelow = board1.getPosY() > board2.getPosY() + board2.getHeight()
+                && board1.getPosY() + board1.getHeight() > board2.getPosY() + board2.getHeight();
+
+        return boardAbove || boardBelow;
     }
 
 }

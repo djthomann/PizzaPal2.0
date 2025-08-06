@@ -108,4 +108,58 @@ public class StorageControllerTest {
         assertTrue(item1.getBoard() == null);
         assertTrue(item2.getBoard() == null);
     }
+
+    @Test
+    public void testMoveSingleItemBoardChange() {
+
+        Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
+        Support support2 = new Support(storage, 0.2f, 3f, 3f, 0f);
+
+        Board board1 = new Board(support1, support2, 0.2f, 0.5f);
+        Board board2 = new Board(support1, support2, 0.2f, 1f);
+
+        Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
+
+        assertTrue(controller.moveItem(item1, 2, 3));
+        assertEquals(board1, item1.getBoard());
+
+        assertTrue(controller.moveItem(item1, 2, 2.1f));
+        assertEquals(board2, item1.getBoard());
+        assertTrue(board1.getItems().isEmpty());
+
+    }
+
+    @Test
+    public void testMoveSingleItemPositionY() {
+        Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
+        Support support2 = new Support(storage, 0.2f, 3f, 3f, 0f);
+
+        Board board1 = new Board(support1, support2, 0.2f, 0f);
+        Board board2 = new Board(support1, support2, 0.2f, 1f);
+
+        Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
+
+        assertEquals(3.2f, item1.getPosY());
+
+        controller.moveItem(item1, 2f, 2.1f);
+
+        assertEquals(2.2f, item1.getPosY());
+
+    }
+
+    @Test
+    public void testMoveBoardItemPositionY() {
+        Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
+        Support support2 = new Support(storage, 0.2f, 3f, 3f, 0f);
+
+        Board board1 = new Board(support1, support2, 0.2f, 0f);
+
+        Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
+
+        assertEquals(3.2f, item1.getPosY());
+        assertTrue(controller.moveBoard(board1, 2f, 2f));
+        assertEquals(2.2f, item1.getPosY());
+        assertTrue(controller.moveBoard(board1, 2f, 1f));
+        assertEquals(1.2f, item1.getPosY());
+    }
 }

@@ -1,7 +1,9 @@
 package pizzapal.model.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,15 +63,30 @@ public class StorageServiceTest {
 
         Board board1 = new Board(support1, support2, 02f, 0);
 
-        Support left = service.getSupportLeftOfPos(3.5f);
-        Support right = service.getSupportRightOfPos(3.5f);
-
-        assertNotNull(left);
-        assertNotNull(right);
-
         Board b = service.getBoardAt(3.5f);
 
         assertEquals(board1, b);
+    }
+
+    @Test
+    public void testGetBoardsAt() {
+
+        Support support1 = new Support(storage, 0.2f, 1f, 3f, 0);
+        Support support2 = new Support(storage, 0.2f, 1f, 4f, 0);
+
+        List<Board> boards = new ArrayList<>();
+        Board board1 = new Board(support1, support2, 02f, 0);
+        Board board2 = new Board(support1, support2, 02f, 0.2f);
+        Board board3 = new Board(support1, support2, 02f, 0.4f);
+
+        boards.add(board1);
+        boards.add(board2);
+        boards.add(board3);
+
+        List<Board> b = service.getBoardsAt(3.5f);
+
+        assertEquals(boards, b);
+
     }
 
 }
