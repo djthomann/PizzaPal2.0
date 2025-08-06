@@ -25,10 +25,15 @@ public class UIConfig {
 
         public static final Font NORMAL_MEDIUM_FONT = Font.font("Arial", FontWeight.MEDIUM, 32);
 
+        public static final Font SMALL_NORMAL_BOLD_FONT = Font.font("Arial", FontWeight.BOLD, 18);
+
         public static final Font SMALL_BOLD_FONT = Font.font("Arial", FontWeight.BOLD, 12);
 
         public static final Background APP_BACKGROUND = new Background(
                         new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY));
+
+        public static final Background APP_BACKGROUND_DARKER = new Background(
+                        new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY));
 
         public static final Background STORAGE_BACKGROUND = new Background(
                         new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY));

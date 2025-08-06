@@ -35,6 +35,11 @@ public class NotificationManager {
         return instance;
     }
 
+    public void clearNotifications() {
+        notifications.clear();
+        notifyListeners();
+    }
+
     public void addNotification(String text) {
         notifications.add(text);
         notifyListeners();
@@ -42,9 +47,8 @@ public class NotificationManager {
     }
 
     public void removeNotification(String text) {
-        if (notifications.remove(text)) {
-            notifyListeners();
-        }
+        notifications.remove(text);
+        notifyListeners();
     }
 
     public interface NotificationListener {

@@ -34,4 +34,9 @@ public class IconButton extends Button {
         setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
     }
 
+    public void setImageSize(float width, float height) {
+        imageView.setFitHeight(width);
+        imageView.setFitWidth(height);
+    }
+
 }

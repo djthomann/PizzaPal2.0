@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
+import pizzapal.ui.UIConfig;
 import pizzapal.utils.NotificationManager;
 
 public class NotificationDropdown {
@@ -18,7 +22,7 @@ public class NotificationDropdown {
 
     private final VBox contentBox;
 
-    private final Button bellButton;
+    private Button bellButton;
 
     private List<String> notifications = new ArrayList<>();
 
@@ -29,10 +33,8 @@ public class NotificationDropdown {
         popup.setAutoHide(true);
 
         contentBox = new VBox();
-        contentBox.setSpacing(10);
         contentBox.setStyle("""
                     -fx-background-color: -fx-background;
-                    -fx-padding: 5;
                     -fx-border-color: black;
                     -fx-border-width: 1;
                     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 8, 0.1, 0, 2);
@@ -43,14 +45,21 @@ public class NotificationDropdown {
             notifications = newNotifications;
             Platform.runLater(() -> {
                 contentBox.getChildren().clear();
+
+                contentBox.getChildren().addAll(header());
+
                 for (String n : newNotifications) {
                     HBox h = new HBox();
-                    Label label = new Label(n);
-                    IconButton button = new IconButton("/icons/check.png");
-                    button.setOnAction(e -> {
+                    Label l = new Label(n);
+                    IconButton b = new IconButton("/icons/check.png");
+                    b.setImageSize(16, 16);
+                    b.setOnAction(e -> {
                         NotificationManager.getInstance().removeNotification(n);
                     });
-                    h.getChildren().addAll(label, button);
+                    Region spacer = new Region();
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+                    h.setPadding(new Insets(5));
+                    h.getChildren().addAll(l, spacer, b);
                     h.setAlignment(Pos.CENTER_RIGHT);
                     contentBox.getChildren().addAll(h);
                 }
@@ -58,6 +67,12 @@ public class NotificationDropdown {
             if (newNotifications.isEmpty()) {
                 popup.hide();
             }
+        });
+
+        Platform.runLater(() -> {
+            contentBox.layoutBoundsProperty().addListener((obs, oldBounds, newBounds) -> {
+                positionPopup(newBounds.getHeight(), contentBox.getWidth());
+            });
         });
 
         popup.getContent().add(contentBox);
@@ -69,6 +84,23 @@ public class NotificationDropdown {
 
     }
 
+    public HBox header() {
+        HBox hBox = new HBox();
+        Label label = new Label("Notifications");
+        label.setFont(UIConfig.SMALL_NORMAL_BOLD_FONT);
+        IconButton button = new IconButton("/icons/clear.png");
+        button.setOnAction(_ -> NotificationManager.getInstance().clearNotifications());
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        hBox.setBackground(UIConfig.APP_BACKGROUND_DARKER);
+        hBox.setPadding(new Insets(5));
+        hBox.setMinWidth(300);
+        hBox.getChildren().addAll(label, spacer, button);
+        hBox.setAlignment(Pos.CENTER);
+
+        return hBox;
+    }
+
     public void hide() {
         bellButton.setVisible(false);
     }
@@ -77,7 +109,7 @@ public class NotificationDropdown {
         bellButton.setVisible(true);
     }
 
-    public Button getButton() {
+    public Button getBellButton() {
         return bellButton;
     }
 
@@ -87,18 +119,20 @@ public class NotificationDropdown {
         } else if (!notifications.isEmpty()) {
             popup.show(bellButton, 0, 0);
             Platform.runLater(() -> {
-                double buttonRightX = bellButton.localToScreen(bellButton.getWidth(), 0).getX();
-                double popupWidth = popup.getWidth();
-                double popupX = buttonRightX - popupWidth;
-
-                double buttonTopY = bellButton.localToScreen(0, 0).getY(); // obere Kante
-                double popupHeight = popup.getHeight();
-                double popupY = buttonTopY - popupHeight; // nach oben verschieben
-
-                popup.setX(popupX);
-                popup.setY(popupY);
+                positionPopup(contentBox.getHeight(), contentBox.getWidth());
             });
         }
+    }
+
+    private void positionPopup(double popHeight, double popWidth) {
+        double buttonRightX = bellButton.localToScreen(bellButton.getWidth(), 0).getX();
+        double popupX = buttonRightX - popWidth - 10;
+
+        double buttonTopY = bellButton.localToScreen(0, 0).getY();
+        double popupY = buttonTopY - popHeight - 10;
+
+        popup.setX(popupX);
+        popup.setY(popupY);
     }
 
 }
