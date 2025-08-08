@@ -25,8 +25,6 @@ import pizzapal.utils.SceneManager;
 
 public class MainMenu extends StackPane {
 
-    private StorageRepository repository = StorageRepository.getInstance();
-
     private SettingsView settingsView;
 
     private VBox mainMenu;
@@ -55,10 +53,14 @@ public class MainMenu extends StackPane {
 
         TextButton newStorageButton = new TextButton("New Storage");
         newStorageButton.setOnAction(_ -> {
-            SceneManager.getInstance().showView(new EditorViewController(repository.createStorage()).getView());
+            SceneManager.getInstance().showView(new EditorViewController(StorageRepository.createStorage()).getView());
         });
 
         TextButton openStorageButton = new TextButton("Open Storage");
+        openStorageButton.setOnAction(_ -> {
+            SceneManager.getInstance()
+                    .showView(new EditorViewController(StorageRepository.loadFromFileChooser()).getView());
+        });
 
         TextButton openSettingsButton = new TextButton("Settings");
         openSettingsButton.setOnAction(_ -> {

@@ -1,5 +1,6 @@
 package pizzapal.ui.view.app.editor;
 
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -64,6 +65,10 @@ public class EditorView extends BorderPane {
 
     public TabPane getTabPane() {
         return tabPane;
+    }
+
+    public Tab getSelectedTab() {
+        return tabPane.getSelectionModel().getSelectedItem();
     }
 
 }

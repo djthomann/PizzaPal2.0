@@ -1,5 +1,6 @@
 package pizzapal.ui.view.app.editor;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class EditorViewController {
         toolState = new ToolState();
 
         StorageView storageView = new StorageViewController(storageController, toolState).getView();
-        Tab tab1 = new Tab("Storage 1", storageView);
+        Tab tab1 = new Tab("Storage 1.storage", storageView);
 
         ToolBarView toolBarView = new ToolBarViewController(toolState).getView();
 
@@ -56,22 +57,29 @@ public class EditorViewController {
         });
 
         MenuItem openItem = menuBar.getOpenItem();
-        openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
+        openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
         openItem.setOnAction(_ -> {
-            try {
-                Storage storage = StorageRepository.loadFromFile("Test");
-                storage.initListeners();
-                addStorageTab(storage);
-            } catch (IOException e) {
-                e.printStackTrace();
+
+            File selectedFile = StorageRepository.chooseFile();
+
+            if (selectedFile != null) {
+                try {
+                    Storage storage = StorageRepository.loadFromFile(selectedFile.getAbsolutePath());
+                    storage.initListeners();
+                    addStorageTab(storage, selectedFile.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         MenuItem saveItem = menuBar.getSaveItem();
-        saveItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
+        saveItem.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
         saveItem.setOnAction(_ -> {
             try {
-                StorageRepository.saveToFile(storage, "Test");
+                Tab currentTab = view.getSelectedTab();
+                Storage currentStorage = controllerMap.get(currentTab).getStorage();
+                StorageRepository.saveToFile(currentStorage, currentTab.getText());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -116,15 +124,15 @@ public class EditorViewController {
     }
 
     public void addStorageTab() {
-        Storage storage = StorageRepository.getInstance().createStorage();
+        Storage storage = StorageRepository.createStorage();
         StorageController newStorageController = new StorageController(storage);
-        Tab tab = new Tab("New Storage", new StorageViewController(newStorageController, toolState).getView());
+        Tab tab = new Tab("New Storage.storage", new StorageViewController(newStorageController, toolState).getView());
         addStorageTab(tab, newStorageController);
     }
 
-    public void addStorageTab(Storage storage) {
+    public void addStorageTab(Storage storage, String text) {
         StorageController newStorageController = new StorageController(storage);
-        Tab tab = new Tab("New Storage", new StorageViewController(newStorageController, toolState).getView());
+        Tab tab = new Tab(text, new StorageViewController(newStorageController, toolState).getView());
         addStorageTab(tab, newStorageController);
     }
 

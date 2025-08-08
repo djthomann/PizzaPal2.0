@@ -3,26 +3,21 @@ package pizzapal.model.repository;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import pizzapal.model.domain.core.Storage;
+import pizzapal.utils.SceneManager;
 
 public class StorageRepository {
 
-    private static StorageRepository instance;
+    private static final Logger logger = LoggerFactory.getLogger(StorageRepository.class);
 
-    private StorageRepository() {
-
-    }
-
-    public static StorageRepository getInstance() {
-        if (instance == null) {
-            instance = new StorageRepository();
-        }
-        return instance;
-    }
-
-    public Storage createStorage() {
+    public static Storage createStorage() {
         float widthInMeters = 9.0f;
         float heightInMeters = 5f;
         Storage storage = new Storage(widthInMeters, heightInMeters);
@@ -58,11 +53,44 @@ public class StorageRepository {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     public static void saveToFile(Storage storage, String filename) throws IOException {
+        logger.info("Saving Storage to File: " + filename);
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), storage);
     }
 
     public static Storage loadFromFile(String filename) throws IOException {
+        logger.info("Trying to read from file: " + filename);
         return mapper.readValue(new File(filename), Storage.class);
+    }
+
+    public static File chooseFile() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose File");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Storage Files", "*.storage"));
+
+        Stage stage = SceneManager.getInstance().getStage();
+
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        return selectedFile;
+
+    }
+
+    public static Storage loadFromFileChooser() {
+        File selectedFile = chooseFile();
+        Storage storage = null;
+
+        if (selectedFile != null) {
+            try {
+                storage = loadFromFile(selectedFile.getAbsolutePath());
+                storage.initListeners();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return storage;
     }
 
 }
