@@ -1,5 +1,6 @@
 package pizzapal.model.domain.entities;
 
+// TODO: MOVE more behaviour to this super class
 public abstract class Entity {
 
     protected float width;

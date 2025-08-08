@@ -2,5 +2,6 @@ package pizzapal.model.observability;
 
 public enum ChangeType {
     MOVE,
-    DELETE
+    DELETE,
+    EDIT
 }

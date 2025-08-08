@@ -95,6 +95,11 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
 
     }
 
+    public void edit(float height, SerializableColor color) {
+        setHeight(height);
+        setColor(color);
+    }
+
     public void delete() {
 
         supportLeft.getBoardsRight().remove(this);
@@ -221,12 +226,23 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.offsetY = offsetY;
     }
 
+    public void setWidth(float width) {
+        super.setWidth(width);
+        notifyListeners(ChangeType.EDIT);
+    }
+
+    public void setHeight(float height) {
+        super.setHeight(height);
+        notifyListeners(ChangeType.EDIT);
+    }
+
     public SerializableColor getColor() {
         return color;
     }
 
     public void setColor(SerializableColor color) {
         this.color = color;
+        notifyListeners(ChangeType.EDIT);
     }
 
 }

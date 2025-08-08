@@ -35,6 +35,9 @@ public class ItemViewController extends EntityViewController<Item> {
                         pane.getChildren().remove(view);
                     }
                 }
+                case EDIT -> {
+                    view.updateFromModelEdit(item);
+                }
             }
 
         });

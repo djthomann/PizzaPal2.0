@@ -66,6 +66,12 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         board.addListener(listener);
     }
 
+    public void edit(float width, float height, SerializableColor color) {
+        setWidth(width);
+        setHeight(height);
+        setColor(color);
+    }
+
     public void delete() {
         // TODO: cleanup other items on top, not yet implemented
         notifyListeners(ChangeType.DELETE);
@@ -90,6 +96,11 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     @JsonIgnore
     public SerializableColor getColor() {
         return ingredient.getColor();
+    }
+
+    public void setColor(SerializableColor color) {
+        ingredient.setColor(color);
+        notifyListeners(ChangeType.EDIT);
     }
 
     public float getWeight() {
@@ -140,6 +151,16 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public float getOffsetX() {
         return offsetX;
+    }
+
+    public void setWidth(float width) {
+        super.setWidth(width);
+        notifyListeners(ChangeType.EDIT);
+    }
+
+    public void setHeight(float height) {
+        super.setHeight(height);
+        notifyListeners(ChangeType.EDIT);
     }
 
     @Override

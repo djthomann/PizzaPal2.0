@@ -93,6 +93,12 @@ public class Support extends Entity implements Observable<SupportChangeListener>
         boardsRight.add(board);
     }
 
+    public void edit(float width, float height, SerializableColor color) {
+        setWidth(width);
+        setHeight(height);
+        setColor(color);
+    }
+
     public void move(float posX) {
         setPosX(posX);
     }
@@ -137,6 +143,16 @@ public class Support extends Entity implements Observable<SupportChangeListener>
         notifyListeners();
     }
 
+    public void setWidth(float width) {
+        super.setWidth(width);
+        notifyListeners(ChangeType.EDIT);
+    }
+
+    public void setHeight(float height) {
+        super.setHeight(height);
+        notifyListeners(ChangeType.EDIT);
+    }
+
     @Override
     public String toString() {
         return "Support [width=" + width + ", height=" + height + ", positionX=" + posX + ", positionY="
@@ -149,6 +165,7 @@ public class Support extends Entity implements Observable<SupportChangeListener>
 
     public void setColor(SerializableColor color) {
         this.color = color;
+        notifyListeners(ChangeType.EDIT);
     }
 
 }

@@ -3,12 +3,17 @@ package pizzapal.ui.view.entities;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.ui.UIConfig;
@@ -49,30 +54,53 @@ public abstract class EntityViewController<E extends Entity> {
 
     public void initContextMenu() {
 
-        // contextMenu.setStyle("-fx-background-color: black; -fx-border-color: black;
-        // -fx-border-width: 1;");
+        TextField tf1 = new TextField();
+        tf1.setPrefWidth(150);
+        tf1.setMaxWidth(150);
+        tf1.setPromptText("New Width");
+        CustomMenuItem item1 = new CustomMenuItem(tf1);
+        item1.setHideOnClick(false);
 
-        MenuItem item1 = new MenuItem("Option 1");
-        item1.setOnAction(e -> System.out.println("Option 1 geklickt"));
+        TextField tf2 = new TextField();
+        tf2.setPrefWidth(150);
+        tf2.setMaxWidth(150);
+        tf2.setPromptText("New Height");
+        CustomMenuItem item2 = new CustomMenuItem(tf2);
+        item2.setHideOnClick(false);
+
+        ColorPicker colorPicker = new ColorPicker(Color.RED);
+        CustomMenuItem colorItem = new CustomMenuItem(colorPicker);
+        colorItem.setHideOnClick(false);
+
+        MenuItem editItem = new MenuItem("Edit");
+        editItem.setOnAction(e -> {
+            storageController.edit(entity, Float.parseFloat(tf1.getText()), Float.parseFloat(tf2.getText()),
+                    colorPicker.getValue());
+            ;
+        });
 
         ImageView icon1 = new ImageView(Helper.loadImage("/icons/edit.png"));
         icon1.setFitWidth(16);
         icon1.setFitHeight(16);
-        item1.setGraphic(icon1);
-        item1.setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
+        editItem.setGraphic(icon1);
+        editItem.setStyle("-fx-font-weight: bold;");
 
-        MenuItem item2 = new MenuItem("Delete");
-        item2.setOnAction(e -> {
+        MenuItem deleteItem = new MenuItem("Delete");
+        deleteItem.setOnAction(e -> {
             storageController.delete(entity);
         });
 
         ImageView icon2 = new ImageView(Helper.loadImage("/icons/trash.png"));
         icon2.setFitWidth(16);
         icon2.setFitHeight(16);
-        item2.setGraphic(icon2);
-        item2.setStyle("-fx-text-fill: blue; -fx-font-weight: bold;");
+        deleteItem.setGraphic(icon2);
+        deleteItem.setStyle("-fx-font-weight: bold;");
 
-        contextMenu.getItems().addAll(item1, item2);
+        contextMenu.getItems().addAll(item1, item2, colorItem, editItem, new SeparatorMenuItem(), deleteItem);
+    }
+
+    public void showEditOptions() {
+
     }
 
     public void showContextMenu() {
@@ -201,6 +229,7 @@ public abstract class EntityViewController<E extends Entity> {
             if (toolState.getCurrentTool() == Tool.SELECT) {
                 view.setCursor(Cursor.MOVE);
                 view.getEntityRectangle().setEffect(new DropShadow(15, view.getColor().brighter()));
+                // TODO: Messes with Context Menu Alignment
             }
         });
 

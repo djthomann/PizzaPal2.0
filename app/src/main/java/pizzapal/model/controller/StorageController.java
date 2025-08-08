@@ -13,6 +13,9 @@ import pizzapal.model.commands.Command;
 import pizzapal.model.commands.add.AddBoardCommand;
 import pizzapal.model.commands.add.AddItemCommand;
 import pizzapal.model.commands.add.AddSupportCommand;
+import pizzapal.model.commands.edit.EditBoardCommand;
+import pizzapal.model.commands.edit.EditItemCommand;
+import pizzapal.model.commands.edit.EditSupportCommand;
 import pizzapal.model.commands.move.MoveBoardCommand;
 import pizzapal.model.commands.move.MoveItemCommand;
 import pizzapal.model.commands.move.MoveSupportCommand;
@@ -119,6 +122,18 @@ public class StorageController {
         return storage;
     }
 
+    public void edit(Entity e, float newWidth, float newHeight, Color newColor) {
+        logger.info(
+                "Editing Entity: " + e.toString() + "Params: " + newWidth + "" + newHeight + "" + newColor.toString());
+        if (e instanceof Item item) {
+            editItem(item, newWidth, newHeight, newColor);
+        } else if (e instanceof Board board) {
+            editBoard(board, newHeight, newColor);
+        } else if (e instanceof Support support) {
+            editSupport(support, newWidth, newHeight, newColor);
+        }
+    }
+
     public void delete(Entity e) {
         logger.info("Deleting Entity: " + e.toString());
         if (e instanceof Item item) {
@@ -172,6 +187,14 @@ public class StorageController {
         addCommand.execute();
         undoStack.push(addCommand);
         notifySupportCreationListeners(support);
+    }
+
+    public void editSupport(Support support, float newWidth, float newHeight, Color newColor) {
+
+        EditSupportCommand editCommand = new EditSupportCommand(support, newWidth, newHeight, newColor);
+        editCommand.execute();
+        undoStack.push(editCommand);
+
     }
 
     public boolean delete(Support support) {
@@ -257,6 +280,14 @@ public class StorageController {
         notifyBoardCreationListeners(board);
     }
 
+    private void editBoard(Board board, float newHeight, Color newColor) {
+
+        EditBoardCommand editCommand = new EditBoardCommand(board, newHeight, newColor);
+        editCommand.execute();
+        undoStack.push(editCommand);
+
+    }
+
     public boolean delete(Board board) {
         board.delete();
 
@@ -313,6 +344,13 @@ public class StorageController {
         undoStack.push(addCommand);
         notifyItemCreationListeners(item);
 
+    }
+
+    public void editItem(Item item, float newWidth, float newHeight, Color newColor) {
+
+        EditItemCommand editCommand = new EditItemCommand(item, newWidth, newHeight, newColor);
+        editCommand.execute();
+        undoStack.push(editCommand);
     }
 
     public void delete(Item item) {

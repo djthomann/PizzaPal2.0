@@ -35,6 +35,9 @@ public class SupportViewController extends EntityViewController<Support> {
                         pane.getChildren().remove(view);
                     }
                 }
+                case EDIT -> {
+                    view.updateFromModelEdit(model);
+                }
             }
 
         });

@@ -35,6 +35,9 @@ public class BoardViewController extends EntityViewController<Board> {
                         pane.getChildren().remove(view);
                     }
                 }
+                case EDIT -> {
+                    view.updateFromModelEdit(model);
+                }
             }
         });
 

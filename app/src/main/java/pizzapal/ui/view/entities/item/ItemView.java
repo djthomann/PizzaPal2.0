@@ -21,4 +21,24 @@ public class ItemView extends EntityView<Item> {
 
     }
 
+    @Override
+    public void updateFromModelEdit(Item item) {
+
+        float newWidth = Helper.convertMetersToPixel(item.getWidth());
+        float newHeight = Helper.convertMetersToPixel(item.getHeight());
+        Color newColor = item.getColor().getColor();
+
+        this.setPrefSize(newWidth, newHeight);
+
+        setLayoutY(Helper.getPixelPositionYInStorage(item.getBoard().getSupportLeft().getStorage(), item.getPosY()));
+
+        entityRectangle.setWidth(newWidth);
+        entityRectangle.setHeight(newHeight);
+        entityRectangle.setFill(newColor);
+
+        ghostRectangle.setWidth(newWidth);
+        ghostRectangle.setHeight(newHeight);
+
+    }
+
 }

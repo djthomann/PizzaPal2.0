@@ -22,4 +22,21 @@ public class BoardView extends EntityView<Board> {
         setWidth(newWidth);
     }
 
+    @Override
+    public void updateFromModelEdit(Board board) {
+
+        System.out.println("UPDATE FROM MODEL");
+
+        float newHeight = Helper.convertMetersToPixel(board.getHeight());
+        Color newColor = board.getColor().getColor();
+
+        this.setPrefHeight(newHeight);
+
+        entityRectangle.setHeight(newHeight);
+        entityRectangle.setFill(newColor);
+
+        ghostRectangle.setHeight(newHeight);
+
+    }
+
 }

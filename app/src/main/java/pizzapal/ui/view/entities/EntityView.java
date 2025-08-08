@@ -8,9 +8,9 @@ import pizzapal.ui.UIConfig;
 
 public abstract class EntityView<E extends Entity> extends Pane {
 
-    private Rectangle entityRectangle;
+    protected Rectangle entityRectangle;
 
-    private Rectangle ghostRectangle;
+    protected Rectangle ghostRectangle;
 
     protected EntityView(Color color, float width, float height, float posX, float posY) {
 
@@ -63,6 +63,8 @@ public abstract class EntityView<E extends Entity> extends Pane {
     }
 
     public abstract void updateFromModel(E e);
+
+    public abstract void updateFromModelEdit(E e);
 
     public void moveRectangle(float posX, float posY) {
         entityRectangle.setLayoutX(posX);
