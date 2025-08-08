@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.scene.paint.Color;
 import pizzapal.model.commands.Command;
 import pizzapal.model.commands.add.AddBoardCommand;
@@ -23,6 +26,8 @@ import pizzapal.model.service.StorageService;
 import pizzapal.utils.NotificationManager;
 
 public class StorageController {
+
+    private static final Logger logger = LoggerFactory.getLogger(StorageController.class);
 
     private final Storage storage;
 
@@ -88,6 +93,7 @@ public class StorageController {
     public void undo() {
         if (!undoStack.isEmpty()) {
             Command command = undoStack.pop();
+            logger.info("Undoing command: " + command.toString());
             command.undo();
             redoStack.push(command);
         }
@@ -96,6 +102,7 @@ public class StorageController {
     public void redo() {
         if (!redoStack.isEmpty()) {
             Command command = redoStack.pop();
+            logger.info("Redoing command: " + command.toString());
             command.execute();
             if (command instanceof AddSupportCommand addSupportCommand) {
                 notifySupportCreationListeners(addSupportCommand.getSupport());
@@ -113,6 +120,7 @@ public class StorageController {
     }
 
     public void delete(Entity e) {
+        logger.info("Deleting Entity: " + e.toString());
         if (e instanceof Item item) {
             delete(item);
         } else if (e instanceof Board board) {
@@ -146,6 +154,7 @@ public class StorageController {
         }
 
         MoveSupportCommand moveCommand = new MoveSupportCommand(support, posX, posY);
+        logger.info("Moving support: " + moveCommand.toString());
         moveCommand.execute();
         undoStack.push(moveCommand);
         return true;
@@ -220,6 +229,7 @@ public class StorageController {
 
         MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),
                 service.getSupportRightOfPos(posX), offsetY);
+        logger.info("Moving board: " + moveCommand.toString());
         moveCommand.execute();
         undoStack.push(moveCommand);
 
@@ -280,6 +290,7 @@ public class StorageController {
         }
 
         MoveItemCommand moveCommand = new MoveItemCommand(item, board, offsetX);
+        logger.info("Moving item: " + moveCommand.toString());
         moveCommand.execute();
         undoStack.push(moveCommand);
         // item.move(board, offsetX);
@@ -306,7 +317,6 @@ public class StorageController {
 
     public void delete(Item item) {
         System.out.println("Deleting item");
-        // Do nothing
     }
 
 }

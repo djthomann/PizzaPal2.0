@@ -3,7 +3,12 @@ package pizzapal.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class NotificationManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(NotificationManager.class);
 
     private static NotificationManager instance;
 
@@ -36,17 +41,20 @@ public class NotificationManager {
     }
 
     public void clearNotifications() {
+        logger.info("Clearing Notifications");
         notifications.clear();
         notifyListeners();
     }
 
     public void addNotification(String text) {
+        logger.info("Adding Notification: " + text);
         notifications.add(text);
         notifyListeners();
         SoundPlayer.playNotificationSounds();
     }
 
     public void removeNotification(String text) {
+        logger.info("Removing Notification: " + text);
         notifications.remove(text);
         notifyListeners();
     }
