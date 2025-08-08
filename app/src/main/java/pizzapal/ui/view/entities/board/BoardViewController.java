@@ -46,6 +46,7 @@ public class BoardViewController extends EntityViewController<Board> {
                 Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
                         yInView))) {
             view.resetRectangle();
+            view.toBack();
         }
     }
 

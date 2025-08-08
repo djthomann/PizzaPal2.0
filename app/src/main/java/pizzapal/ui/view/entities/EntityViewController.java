@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
@@ -13,6 +14,7 @@ import pizzapal.model.domain.entities.Entity;
 import pizzapal.ui.UIConfig;
 import pizzapal.utils.Helper;
 import pizzapal.utils.ToolState;
+import pizzapal.utils.ToolState.Tool;
 
 public abstract class EntityViewController<E extends Entity> {
 
@@ -114,6 +116,7 @@ public abstract class EntityViewController<E extends Entity> {
                             dragging = true;
                             offsetX = e.getX();
                             offsetY = e.getY();
+                            System.out.println("Pressed");
                             view.setCursor(Cursor.MOVE);
                         }
                         case SECONDARY -> {
@@ -144,7 +147,7 @@ public abstract class EntityViewController<E extends Entity> {
                     switch (button) {
                         case PRIMARY -> {
                             if (dragging) {
-                                view.setCursor(Cursor.MOVE);
+
                                 view.moveRectangle((float) (e.getX() - offsetX), (float) (e.getY() - offsetY));
                             }
                         }
@@ -195,11 +198,15 @@ public abstract class EntityViewController<E extends Entity> {
         });
 
         view.setOnMouseEntered(_ -> {
-            // view.setCursor(Cursor.E_RESIZE);
+            if (toolState.getCurrentTool() == Tool.SELECT) {
+                view.setCursor(Cursor.MOVE);
+                view.getEntityRectangle().setEffect(new DropShadow(15, view.getColor().brighter()));
+            }
         });
 
         view.setOnMouseExited(_ -> {
-            // view.setCursor(Cursor.DEFAULT);
+            view.setCursor(Cursor.DEFAULT);
+            view.getEntityRectangle().setEffect(null);
         });
     }
 

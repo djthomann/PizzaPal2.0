@@ -17,11 +17,20 @@ public abstract class EntityView<E extends Entity> extends Pane {
         this.setPrefSize(width, height);
         this.setBackground(UIConfig.BUTTON_HOVER);
 
+        /*
+         * DropShadow shadow = new DropShadow();
+         * shadow.setRadius(10);
+         * shadow.setOffsetX(5);
+         * shadow.setOffsetY(5);
+         * shadow.setColor(Color.color(0, 0, 0, 0.4));
+         */
+
         entityRectangle = new Rectangle(width, height);
         entityRectangle.setFill(color);
 
         ghostRectangle = new Rectangle(width, height);
         ghostRectangle.setFill(Color.DARKGRAY);
+        // ghostRectangle.setEffect(shadow);
 
         setLayoutX(posX);
         setLayoutY(posY);

@@ -1,7 +1,9 @@
 package pizzapal.ui.view.app.mainmenu;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,11 +16,13 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import pizzapal.model.domain.core.Storage;
 import pizzapal.model.repository.StorageRepository;
 import pizzapal.ui.UIConfig;
 import pizzapal.ui.components.TextButton;
 import pizzapal.ui.view.app.editor.EditorViewController;
-import pizzapal.ui.view.app.mainmenu.settings.SettingsView;
+import pizzapal.ui.view.app.mainmenu.submenu.NewStorageView;
+import pizzapal.ui.view.app.mainmenu.submenu.SettingsView;
 import pizzapal.utils.Config;
 import pizzapal.utils.Helper;
 import pizzapal.utils.SceneManager;
@@ -27,15 +31,22 @@ public class MainMenu extends StackPane {
 
     private SettingsView settingsView;
 
+    private NewStorageView newStorageView;
+
     private VBox mainMenu;
 
-    private VBox subMenu;
+    private ImageView imageView;
 
     public MainMenu() {
 
         settingsView = new SettingsView();
         settingsView.getBackButton().setOnAction(e -> {
             removeView(settingsView);
+        });
+
+        newStorageView = new NewStorageView();
+        newStorageView.getBackButton().setOnAction(e -> {
+            removeView(newStorageView);
         });
 
         setPrefSize(1000, 700);
@@ -45,6 +56,33 @@ public class MainMenu extends StackPane {
         Label labelTitle = new Label(Config.APP_NAME);
         labelTitle.setFont(UIConfig.EXTRA_LARGE_BOLD_FONT);
 
+        /*
+         * Text text = new Text("Hallo Welt");
+         * text.setFont(UIConfig.EXTRA_LARGE_BOLD_FONT);
+         * 
+         * LinearGradient gradient = new LinearGradient(
+         * 0, 0, 1, 0, true, CycleMethod.REPEAT,
+         * new Stop(0, Color.RED),
+         * new Stop(1, Color.YELLOW));
+         * text.setFill(gradient);
+         * 
+         * // Animation: Gradient verschieben
+         * Timeline timeline = new Timeline(
+         * new KeyFrame(Duration.ZERO, e -> {
+         * double t = (System.currentTimeMillis() % 2000) / 2000.0;
+         * LinearGradient movingGradient = new LinearGradient(
+         * t, 0, t + 1, 0, true, CycleMethod.REPEAT,
+         * new Stop(0, Color.RED),
+         * new Stop(0.5, Color.YELLOW),
+         * new Stop(1, Color.RED));
+         * text.setFill(movingGradient);
+         * }),
+         * new KeyFrame(Duration.millis(40)) // alle 40ms updaten (~25 FPS)
+         * );
+         * timeline.setCycleCount(Animation.INDEFINITE);
+         * timeline.play();
+         */
+
         Label labelDescription = new Label("Your interactive storage solution!");
         labelDescription.setFont(UIConfig.NORMAL_MEDIUM_FONT);
 
@@ -53,13 +91,18 @@ public class MainMenu extends StackPane {
 
         TextButton newStorageButton = new TextButton("New Storage");
         newStorageButton.setOnAction(_ -> {
-            SceneManager.getInstance().showView(new EditorViewController(StorageRepository.createStorage()).getView());
+            showSubMenu(newStorageView);
         });
 
         TextButton openStorageButton = new TextButton("Open Storage");
         openStorageButton.setOnAction(_ -> {
-            SceneManager.getInstance()
-                    .showView(new EditorViewController(StorageRepository.loadFromFileChooser()).getView());
+
+            Storage storage = StorageRepository.loadFromFileChooser();
+
+            if (storage != null) {
+                SceneManager.getInstance()
+                        .showView(new EditorViewController(StorageRepository.loadFromFileChooser()).getView());
+            }
         });
 
         TextButton openSettingsButton = new TextButton("Settings");
@@ -83,7 +126,7 @@ public class MainMenu extends StackPane {
         mainMenu.getChildren().addAll(labelTitle, labelDescription, spacer, buttonBox);
 
         Image image = Helper.loadImage("/icons/pizza.png");
-        ImageView imageView = new ImageView(image);
+        imageView = new ImageView(image);
 
         imageView.setTranslateX(500);
         imageView.setTranslateY(350);
@@ -103,6 +146,11 @@ public class MainMenu extends StackPane {
     }
 
     public void showSubMenu(Node newView) {
+
+        TranslateTransition moveImage = new TranslateTransition(Duration.millis(200), imageView);
+        moveImage.setToX(-500);
+        moveImage.setInterpolator(Interpolator.EASE_BOTH);
+
         if (this.getChildren().isEmpty()) {
             this.getChildren().add(newView);
             return;
@@ -116,18 +164,22 @@ public class MainMenu extends StackPane {
         fadeIn.setFromValue(0.0);
         fadeIn.setToValue(1.0);
 
-        fadeOut.setOnFinished(e -> {
+        moveImage.setOnFinished(e -> {
             this.getChildren().remove(mainMenu);
             this.getChildren().add(newView);
             fadeIn.play();
         });
+
+        fadeOut.setOnFinished(e -> moveImage.play());
 
         fadeOut.play();
     }
 
     public void removeView(Node view) {
 
-        Node oldView = this.getChildren().get(1);
+        TranslateTransition moveImage = new TranslateTransition(Duration.millis(200), imageView);
+        moveImage.setToX(500);
+        moveImage.setInterpolator(Interpolator.EASE_BOTH);
 
         FadeTransition fadeOut = new FadeTransition(Duration.millis(300), view);
         fadeOut.setFromValue(1.0);
@@ -137,11 +189,13 @@ public class MainMenu extends StackPane {
         fadeIn.setFromValue(0.0);
         fadeIn.setToValue(1.0);
 
-        fadeOut.setOnFinished(e -> {
+        moveImage.setOnFinished(e -> {
             this.getChildren().remove(view);
             this.getChildren().add(mainMenu);
             fadeIn.play();
         });
+
+        fadeOut.setOnFinished(e -> moveImage.play());
 
         fadeOut.play();
     }
