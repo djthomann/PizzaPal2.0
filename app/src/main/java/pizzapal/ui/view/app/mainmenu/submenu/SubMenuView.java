@@ -5,7 +5,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import pizzapal.ui.UIConfig;
 import pizzapal.ui.components.TextButton;
@@ -33,14 +32,11 @@ public abstract class SubMenuView extends VBox {
         controlsBox = new VBox();
         controlsBox.setSpacing(20);
         controlsBox.setAlignment(Pos.CENTER_RIGHT);
-        controlsBox.getChildren().add(backButton);
-
-        Region spacer = new Region();
-        VBox.setVgrow(spacer, Priority.ALWAYS);
+        VBox.setVgrow(controlsBox, Priority.ALWAYS);
 
         this.setAlignment(Pos.BOTTOM_RIGHT);
         this.setPadding(new Insets(60));
-        this.getChildren().addAll(labelTitle, labelSubtitle, spacer, controlsBox);
+        this.getChildren().addAll(labelTitle, labelSubtitle, controlsBox, backButton);
 
     }
 

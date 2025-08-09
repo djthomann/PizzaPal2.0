@@ -17,11 +17,16 @@ public class StorageRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageRepository.class);
 
-    public static Storage createStorage() {
-        float widthInMeters = 9.0f;
-        float heightInMeters = 5f;
-        Storage storage = new Storage(widthInMeters, heightInMeters);
+    public static Storage createStorage(String name, float width, float height) {
+        return new Storage(name, width, height);
+    }
 
+    public static Storage createStorage() {
+        return createStorage("Test Storage", 9.0f, 5f);
+    }
+
+    @Deprecated
+    public Storage createDummyStorage() {
         /*
          * Support support1 = new Support(storage, 0.2f, 2f, 1f, 0f);
          * Support support2 = new Support(storage, 0.2f, 2f, 2f, 0f);
@@ -42,8 +47,7 @@ public class StorageRepository {
          * 
          * storage.addBoard(board1);
          */
-
-        return storage;
+        return null;
     }
 
     public void saveStorage(Storage storage) {
@@ -52,9 +56,9 @@ public class StorageRepository {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static void saveToFile(Storage storage, String filename) throws IOException {
-        logger.info("Saving Storage to File: " + filename);
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(filename), storage);
+    public static void saveToFile(Storage storage) throws IOException {
+        logger.info("Saving Storage to File: " + storage.getName());
+        mapper.writerWithDefaultPrettyPrinter().writeValue(new File(storage.getName() + ".storage"), storage);
     }
 
     public static Storage loadFromFile(String filename) throws IOException {

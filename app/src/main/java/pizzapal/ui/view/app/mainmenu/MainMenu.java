@@ -141,7 +141,7 @@ public class MainMenu extends StackPane {
         rotate.play();
 
         this.setBackground(UIConfig.APP_BACKGROUND);
-        this.getChildren().addAll(imageView, mainMenu);
+        this.getChildren().addAll(mainMenu, imageView);
 
     }
 
@@ -166,7 +166,7 @@ public class MainMenu extends StackPane {
 
         moveImage.setOnFinished(e -> {
             this.getChildren().remove(mainMenu);
-            this.getChildren().add(newView);
+            this.getChildren().add(0, newView);
             fadeIn.play();
         });
 
@@ -191,7 +191,7 @@ public class MainMenu extends StackPane {
 
         moveImage.setOnFinished(e -> {
             this.getChildren().remove(view);
-            this.getChildren().add(mainMenu);
+            this.getChildren().add(0, mainMenu);
             fadeIn.play();
         });
 

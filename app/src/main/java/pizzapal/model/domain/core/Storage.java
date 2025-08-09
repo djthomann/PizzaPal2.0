@@ -14,6 +14,8 @@ public class Storage {
 
     public int id;
 
+    private String name;
+
     // In meters
     private float width;
 
@@ -26,7 +28,8 @@ public class Storage {
         supports = new ArrayList<>();
     }
 
-    public Storage(float width, float height) {
+    public Storage(String name, float width, float height) {
+        this.name = name;
         this.width = width;
         this.height = height;
 
@@ -42,6 +45,14 @@ public class Storage {
     @JsonIgnore
     public boolean isEmpty() {
         return supports.isEmpty();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public float getWidth() {

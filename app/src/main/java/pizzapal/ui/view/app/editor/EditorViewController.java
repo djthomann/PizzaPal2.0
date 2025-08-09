@@ -37,7 +37,7 @@ public class EditorViewController {
         toolState = new ToolState();
 
         StorageView storageView = new StorageViewController(storageController, toolState).getView();
-        Tab tab1 = new Tab("Storage 1.storage", storageView);
+        Tab tab1 = new Tab(storage.getName(), storageView);
 
         ToolBarView toolBarView = new ToolBarViewController(toolState).getView();
 
@@ -66,7 +66,7 @@ public class EditorViewController {
                 try {
                     Storage storage = StorageRepository.loadFromFile(selectedFile.getAbsolutePath());
                     storage.initListeners();
-                    addStorageTab(storage, selectedFile.getName());
+                    addStorageTab(storage, storage.getName());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -79,7 +79,7 @@ public class EditorViewController {
             try {
                 Tab currentTab = view.getSelectedTab();
                 Storage currentStorage = controllerMap.get(currentTab).getStorage();
-                StorageRepository.saveToFile(currentStorage, currentTab.getText());
+                StorageRepository.saveToFile(currentStorage);
             } catch (IOException e) {
                 e.printStackTrace();
             }

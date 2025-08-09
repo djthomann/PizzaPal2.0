@@ -71,9 +71,12 @@ public class SoundPlayer {
     }
 
     public static void playMainMenuTheme() {
-        mainMenuThemePlayer.setVolume(volume);
-        mainMenuThemePlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mainMenuThemePlayer.play();
+        if (Config.SOUND_ACTIVE) {
+            mainMenuThemePlayer.setVolume(volume);
+            mainMenuThemePlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mainMenuThemePlayer.play();
+        }
+
     }
 
     public static void stopMainMenuTheme() {
