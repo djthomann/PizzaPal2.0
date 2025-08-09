@@ -5,3 +5,6 @@
 build
 
 bin
+
+# Ignore storage files
+*.storage

@@ -27,6 +27,7 @@ import pizzapal.model.domain.entities.Support;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
 import pizzapal.utils.NotificationManager;
+import pizzapal.utils.SoundPlayer;
 
 public class StorageController {
 
@@ -136,6 +137,7 @@ public class StorageController {
 
     public void delete(Entity e) {
         logger.info("Deleting Entity: " + e.toString());
+        SoundPlayer.playGarbageSound();
         if (e instanceof Item item) {
             delete(item);
         } else if (e instanceof Board board) {

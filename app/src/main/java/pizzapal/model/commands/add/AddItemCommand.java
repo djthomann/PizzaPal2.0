@@ -1,9 +1,8 @@
 package pizzapal.model.commands.add;
 
-import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Item;
 
-public class AddItemCommand implements Command {
+public class AddItemCommand extends AddCommand {
 
     private final Item item;
 
@@ -13,6 +12,7 @@ public class AddItemCommand implements Command {
 
     @Override
     public void execute() {
+        super.execute();
         item.place();
     }
 
@@ -21,6 +21,7 @@ public class AddItemCommand implements Command {
         item.delete();
     }
 
+    // TODO: unnecessary???
     public Item getItem() {
         return item;
     }

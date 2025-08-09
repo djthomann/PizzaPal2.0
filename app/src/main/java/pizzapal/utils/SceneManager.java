@@ -42,9 +42,16 @@ public class SceneManager {
 
     public void showMainMenu() {
         showView(new MainMenu());
+
     }
 
     public void showView(Parent view) {
+
+        if (!(view instanceof MainMenu)) {
+            SoundPlayer.stopMainMenuTheme();
+        } else {
+            SoundPlayer.playMainMenuTheme();
+        }
 
         Scene scene = new Scene(view);
         scene.getStylesheets().add(getClass().getResource("/styles/style.css").toExternalForm());

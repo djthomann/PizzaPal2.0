@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import pizzapal.ui.UIConfig;
 import pizzapal.utils.NotificationManager;
+import pizzapal.utils.SoundPlayer;
 
 public class NotificationDropdown {
 
@@ -89,7 +90,10 @@ public class NotificationDropdown {
         Label label = new Label("Notifications");
         label.setFont(UIConfig.SMALL_NORMAL_BOLD_FONT);
         IconButton button = new IconButton("/icons/clear.png");
-        button.setOnAction(_ -> NotificationManager.getInstance().clearNotifications());
+        button.setOnAction(_ -> {
+            SoundPlayer.playSweepSound();
+            NotificationManager.getInstance().clearNotifications();
+        });
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         hBox.setBackground(UIConfig.APP_BACKGROUND_DARKER);

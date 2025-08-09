@@ -1,10 +1,9 @@
 package pizzapal.model.commands.add;
 
-import pizzapal.model.commands.Command;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Support;
 
-public class AddSupportCommand implements Command {
+public class AddSupportCommand extends AddCommand {
 
     private final Storage storage;
 
@@ -17,6 +16,7 @@ public class AddSupportCommand implements Command {
 
     @Override
     public void execute() {
+        super.execute();
         storage.addSupport(support);
     }
 

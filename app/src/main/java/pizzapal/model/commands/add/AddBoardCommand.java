@@ -1,9 +1,8 @@
 package pizzapal.model.commands.add;
 
-import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Board;
 
-public class AddBoardCommand implements Command {
+public class AddBoardCommand extends AddCommand {
 
     private final Board board;
 
@@ -13,6 +12,7 @@ public class AddBoardCommand implements Command {
 
     @Override
     public void execute() {
+        super.execute();
         board.attach();
     }
 

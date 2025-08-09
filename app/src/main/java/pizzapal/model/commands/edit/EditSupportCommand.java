@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
+import pizzapal.utils.SoundPlayer;
 
 public class EditSupportCommand implements Command {
 
@@ -31,6 +32,7 @@ public class EditSupportCommand implements Command {
 
     @Override
     public void execute() {
+        SoundPlayer.playEditSound();
         support.edit(newWidth, newHeight, newColor);
     }
 
