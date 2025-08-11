@@ -91,16 +91,21 @@ public class SupportViewTest extends ApplicationTest {
 
     @Test
     public void testPositionAfterMoving() {
+
+        Point2D topLeftOfView = view.localToScreen(0, 0);
         Point2D screenPoint = container.localToScreen(0, 0);
 
-        drag(view).dropTo(screenPoint);
+        moveTo(topLeftOfView).press(MouseButton.PRIMARY);
+        moveTo(screenPoint).release(MouseButton.PRIMARY);
 
         assertEquals(0, view.getLayoutX(), DELTA);
         assertEquals(150, view.getLayoutY(), DELTA);
 
         screenPoint = container.localToScreen(150, 100);
+        topLeftOfView = view.localToScreen(0, 0);
 
-        drag(view).dropTo(screenPoint);
+        moveTo(topLeftOfView).press(MouseButton.PRIMARY);
+        moveTo(screenPoint).release(MouseButton.PRIMARY);
 
         assertEquals(150, view.getLayoutX(), DELTA);
         assertEquals(150, view.getLayoutY(), DELTA);

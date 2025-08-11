@@ -3,9 +3,13 @@ package pizzapal.model.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
@@ -22,6 +26,13 @@ public class ItemTest {
     public void init() {
         storage = new Storage(10f, 5f);
         controller = new StorageController(storage);
+    }
+
+    @BeforeAll
+    public static void initToolkit() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.startup(latch::countDown);
+        latch.await();
     }
 
     @Test
@@ -49,22 +60,11 @@ public class ItemTest {
         Board board1 = new Board(support1, support2, 0.2f, 0.5f);
         Board board2 = new Board(support3, support4, 0.2f, 0.5f);
 
-        support1.addBoardRight(board1);
-        support2.addBoardLeft(board1);
-
-        support3.addBoardRight(board2);
-        support4.addBoardLeft(board2);
-
-        storage.addSupport(support1);
-        storage.addSupport(support2);
-        storage.addSupport(support3);
-        storage.addSupport(support4);
-
         Item item = new Item(board1, Color.YELLOW, 10, 0.5f, 0.5f, 0);
 
         assertEquals(board1, item.getBoard());
 
-        controller.moveItem(item, 4.5f, 0.6f);
+        assertTrue(controller.moveItem(item, 4.5f, 5f));
 
         assertEquals(board2, item.getBoard());
         assertTrue(board1.getItems().isEmpty());

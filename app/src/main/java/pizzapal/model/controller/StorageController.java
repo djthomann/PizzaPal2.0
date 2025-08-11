@@ -342,7 +342,7 @@ public class StorageController {
 
         float offsetX = posX - board.getPosX();
         Item item = new Item(board, Color.DARKBLUE, weight, width, height, offsetX);
-        AddItemCommand addCommand = new AddItemCommand(item);
+        AddItemCommand addCommand = new AddItemCommand(item, board);
         addCommand.execute();
         undoStack.push(addCommand);
         notifyItemCreationListeners(item);

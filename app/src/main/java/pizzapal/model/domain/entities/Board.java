@@ -117,7 +117,8 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         supportRight.removeListener(rightListener);
 
         for (Item i : items) {
-            i.setBoard(null);
+            i.delete();
+
         }
         items.clear();
 

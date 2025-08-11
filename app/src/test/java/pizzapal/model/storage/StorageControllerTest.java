@@ -4,9 +4,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javafx.application.Platform;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
@@ -24,6 +28,13 @@ public class StorageControllerTest {
         storage = new Storage(6f, 3f);
 
         controller = new StorageController(storage);
+    }
+
+    @BeforeAll
+    public static void initToolkit() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.startup(latch::countDown);
+        latch.await();
     }
 
     @Test

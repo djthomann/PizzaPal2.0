@@ -47,12 +47,15 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
         super(width, height, board.getPosX() + offsetX, board.getPosY() + height);
-        this.board = board;
         color = Color.RED;
         this.weight = weight;
         this.offsetX = offsetX;
 
         ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
+
+        if (board != null) {
+            placeOn(board);
+        }
     }
 
     private void notifyListeners(ChangeType type) {
@@ -61,7 +64,8 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         }
     }
 
-    public void place() {
+    public void placeOn(Board board) {
+        this.board = board;
         board.addItem(this);
         board.addListener(listener);
     }
@@ -73,6 +77,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     }
 
     public void delete() {
+        setBoard(null);
         // TODO: cleanup other items on top, not yet implemented
         notifyListeners(ChangeType.DELETE);
     }
