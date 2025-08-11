@@ -52,13 +52,13 @@ public class EditorViewController {
     public void initMenuBar(MenuBarView menuBar) {
         MenuItem newItem = menuBar.getNewItem();
         newItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
-        newItem.setOnAction(_ -> {
+        newItem.setOnAction(e -> {
             addStorageTab();
         });
 
         MenuItem openItem = menuBar.getOpenItem();
         openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
-        openItem.setOnAction(_ -> {
+        openItem.setOnAction(e -> {
 
             File selectedFile = StorageRepository.chooseFile();
 
@@ -67,44 +67,44 @@ public class EditorViewController {
                     Storage storage = StorageRepository.loadFromFile(selectedFile.getAbsolutePath());
                     storage.initListeners();
                     addStorageTab(storage, storage.getName());
-                } catch (IOException e) {
-                    e.printStackTrace();
+                } catch (IOException event) {
+                    event.printStackTrace();
                 }
             }
         });
 
         MenuItem saveItem = menuBar.getSaveItem();
         saveItem.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
-        saveItem.setOnAction(_ -> {
+        saveItem.setOnAction(e -> {
             try {
                 Tab currentTab = view.getSelectedTab();
                 Storage currentStorage = controllerMap.get(currentTab).getStorage();
                 StorageRepository.saveToFile(currentStorage);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException event) {
+                event.printStackTrace();
             }
         });
 
         MenuItem closeItem = menuBar.getCloseItem();
         closeItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
-        closeItem.setOnAction(_ -> {
+        closeItem.setOnAction(e -> {
             SceneManager.getInstance().showMainMenu();
         });
 
         MenuItem undoItem = menuBar.getUndoItem();
         undoItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Z"));
-        undoItem.setOnAction(_ -> {
+        undoItem.setOnAction(e -> {
             controllerMap.get(view.getTabPane().getSelectionModel().getSelectedItem()).undo();
         });
 
         MenuItem redoItem = menuBar.getRedoItem();
         redoItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Y"));
-        redoItem.setOnAction(_ -> {
+        redoItem.setOnAction(e -> {
             controllerMap.get(view.getTabPane().getSelectionModel().getSelectedItem()).redo();
         });
 
         MenuItem toggleToolBarItem = menuBar.getToogleToolBarItem();
-        toggleToolBarItem.setOnAction(_ -> {
+        toggleToolBarItem.setOnAction(e -> {
 
             if (view.isToolBarVisible()) {
                 view.hideToolBar();
@@ -116,7 +116,7 @@ public class EditorViewController {
 
     public void addStorageTab(Tab tab, StorageController controller) {
         controllerMap.put(tab, controller);
-        tab.setOnCloseRequest(_ -> {
+        tab.setOnCloseRequest(e -> {
             controllerMap.remove(tab);
         });
         view.getTabPane().getTabs().add(tab);

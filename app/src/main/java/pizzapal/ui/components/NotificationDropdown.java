@@ -80,7 +80,7 @@ public class NotificationDropdown {
 
         bellButton = new IconButton("/icons/bell.png");
         bellButton.setFocusTraversable(false);
-        bellButton.setOnAction(_ -> toggle());
+        bellButton.setOnAction(e -> toggle());
         hide();
 
     }
@@ -90,7 +90,7 @@ public class NotificationDropdown {
         Label label = new Label("Notifications");
         label.setFont(UIConfig.SMALL_NORMAL_BOLD_FONT);
         IconButton button = new IconButton("/icons/clear.png");
-        button.setOnAction(_ -> {
+        button.setOnAction(e -> {
             SoundPlayer.playSweepSound();
             NotificationManager.getInstance().clearNotifications();
         });

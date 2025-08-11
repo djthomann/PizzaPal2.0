@@ -90,12 +90,12 @@ public class MainMenu extends StackPane {
         buttonBox.setAlignment(Pos.CENTER_LEFT);
 
         TextButton newStorageButton = new TextButton("New Storage");
-        newStorageButton.setOnAction(_ -> {
+        newStorageButton.setOnAction(e -> {
             showSubMenu(newStorageView);
         });
 
         TextButton openStorageButton = new TextButton("Open Storage");
-        openStorageButton.setOnAction(_ -> {
+        openStorageButton.setOnAction(e -> {
 
             Storage storage = StorageRepository.loadFromFileChooser();
 
@@ -106,12 +106,12 @@ public class MainMenu extends StackPane {
         });
 
         TextButton openSettingsButton = new TextButton("Settings");
-        openSettingsButton.setOnAction(_ -> {
+        openSettingsButton.setOnAction(e -> {
             showSubMenu(settingsView);
         });
 
         TextButton exitApplicationButton = new TextButton("Exit");
-        exitApplicationButton.setOnAction(_ -> {
+        exitApplicationButton.setOnAction(e -> {
             Platform.exit();
         });
 

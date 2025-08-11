@@ -65,7 +65,7 @@ public class NewStorageView extends SubMenuView {
         backgroundInput.setMaxWidth(150);
 
         TextButton createButton = new TextButton("Create Storage");
-        createButton.setOnAction(_ -> {
+        createButton.setOnAction(e -> {
             if (nameInput.getText().isBlank() || widthInput.getText().isBlank() || heightInput.getText().isBlank()) {
 
                 SceneManager.getInstance()

@@ -30,8 +30,8 @@ public class IconButton extends Button {
 
         setBackground(null);
 
-        setOnMouseEntered(_ -> setCursor(Cursor.HAND));
-        setOnMouseExited(_ -> setCursor(Cursor.DEFAULT));
+        setOnMouseEntered(e -> setCursor(Cursor.HAND));
+        setOnMouseExited(e -> setCursor(Cursor.DEFAULT));
     }
 
     public void setImageSize(float width, float height) {

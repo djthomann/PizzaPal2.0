@@ -45,7 +45,7 @@ public class ToolBarViewController {
         Set<String> ingredients = ingredientRepository.getAllIngredientNames();
         items.addAll(ingredients);
 
-        comboBox.valueProperty().addListener((_, _, newValue) -> {
+        comboBox.valueProperty().addListener((obs, oldValue, newValue) -> {
             toolState.setItemIngredient(ingredientRepository.getIngredient(newValue));
         });
     }
@@ -53,59 +53,59 @@ public class ToolBarViewController {
     public void initButtons() {
 
         CustomToggleButton selectButton = view.getSelectButton();
-        selectButton.setOnMouseClicked(_ -> {
+        selectButton.setOnMouseClicked(e -> {
             selectSelectTool();
         });
 
         CustomToggleButton pickColorButton = view.getPickColorButton();
-        pickColorButton.setOnMouseClicked(_ -> {
+        pickColorButton.setOnMouseClicked(e -> {
             toolState.setCurrentTool(Tool.PICKCOLOR);
         });
 
         CustomToggleButton itemButton = view.getItemButton();
-        itemButton.setOnMouseClicked(_ -> {
+        itemButton.setOnMouseClicked(e -> {
             toolState.setCurrentTool(Tool.ITEM);
         });
 
         CustomToggleButton supportButton = view.getSupportButton();
-        supportButton.setOnMouseClicked(_ -> {
+        supportButton.setOnMouseClicked(e -> {
             toolState.setCurrentTool(Tool.SUPPORT);
         });
 
         CustomToggleButton boardButton = view.getBoardButton();
-        boardButton.setOnMouseClicked(_ -> {
+        boardButton.setOnMouseClicked(e -> {
             toolState.setCurrentTool(Tool.BOARD);
         });
     }
 
     public void initFormatters() {
         TextFormatter<Float> supportWidthFormatter = view.getSupportWidthFormatter();
-        supportWidthFormatter.valueProperty().addListener((_, _, newValue) -> {
+        supportWidthFormatter.valueProperty().addListener((obs, oldValue, newValue) -> {
             toolState.setSupportWidth(newValue);
         });
 
         TextFormatter<Float> suppotHeightFormatter = view.getSupportHeightFormatter();
-        suppotHeightFormatter.valueProperty().addListener((_, _, newValue) -> {
+        suppotHeightFormatter.valueProperty().addListener((obs, oldValue, newValue) -> {
             toolState.setSupportHeight(newValue);
         });
 
         TextFormatter<Float> boardHeightFormatter = view.getBoardHeightFormatter();
-        boardHeightFormatter.valueProperty().addListener((_, _, newValue) -> {
+        boardHeightFormatter.valueProperty().addListener((obs, oldValue, newValue) -> {
             toolState.setBoardHeight(newValue);
         });
 
         TextFormatter<Float> itemWidthFormatter = view.getItemWidthFormatter();
-        itemWidthFormatter.valueProperty().addListener((_, _, newValue) -> {
+        itemWidthFormatter.valueProperty().addListener((obs, oldValue, newValue) -> {
             toolState.setItemWidth(newValue);
         });
 
         TextFormatter<Float> itemHeightFormatter = view.getItemHeightFormatter();
-        itemHeightFormatter.valueProperty().addListener((_, _, newValue) -> {
+        itemHeightFormatter.valueProperty().addListener((obs, oldValue, newValue) -> {
             toolState.setItemHeight(newValue);
         });
 
         TextFormatter<Float> itemWeightFormatter = view.getItemWeightFormatter();
-        itemWeightFormatter.valueProperty().addListener((_, _, newValue) -> {
+        itemWeightFormatter.valueProperty().addListener((obs, oldValue, newValue) -> {
             toolState.setItemWeight(newValue);
         });
 
@@ -113,12 +113,12 @@ public class ToolBarViewController {
 
     public void initColorPickers() {
         ColorPicker boardColorPicker = view.getBoardColorPicker();
-        boardColorPicker.valueProperty().addListener((_, _, newColor) -> {
+        boardColorPicker.valueProperty().addListener((obs, oldValue, newColor) -> {
             toolState.setBoardColor(newColor);
         });
 
         ColorPicker supportColorPicker = view.getSupportColorPicker();
-        supportColorPicker.valueProperty().addListener((_, _, newColor) -> {
+        supportColorPicker.valueProperty().addListener((obs, oldValue, newColor) -> {
             toolState.setSupportColor(newColor);
         });
     }

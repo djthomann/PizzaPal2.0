@@ -229,14 +229,14 @@ public abstract class EntityViewController<E extends Entity> {
 
         });
 
-        view.setOnMouseEntered(_ -> {
+        view.setOnMouseEntered(e -> {
             if (toolState.getCurrentTool() == Tool.SELECT) {
                 view.setCursor(Cursor.MOVE);
                 showDropShadow();
             }
         });
 
-        view.setOnMouseExited(_ -> {
+        view.setOnMouseExited(e -> {
             view.setCursor(Cursor.DEFAULT);
             hideDropShadow();
         });

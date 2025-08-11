@@ -1,6 +1,7 @@
 plugins {
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.1.0'
+   id 'jacoco'
 }
 
 repositories {
@@ -8,7 +9,7 @@ repositories {
 }
 
 javafx {
-    version = "24.0.2"
+    version = "21.0.2"
     modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.media' ]
 }
 
@@ -18,9 +19,23 @@ application {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(24)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
+
+test {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 
 dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
