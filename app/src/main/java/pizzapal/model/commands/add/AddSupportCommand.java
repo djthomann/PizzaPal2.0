@@ -17,12 +17,13 @@ public class AddSupportCommand extends AddCommand {
     @Override
     public void execute() {
         super.execute();
-        storage.addSupport(support);
+        support.putInStorage(storage);
     }
 
     @Override
     public void undo() {
         storage.removeSupport(support);
+        // TODO: Take out of Storage
         support.setStorage(null);
         support.delete();
     }

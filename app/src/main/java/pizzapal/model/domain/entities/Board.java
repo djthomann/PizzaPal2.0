@@ -12,6 +12,7 @@ import pizzapal.model.observability.BoardChangeListener;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
+import pizzapal.utils.ToolState;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Board extends Entity implements Observable<BoardChangeListener> {
@@ -62,19 +63,23 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         items = new ArrayList<>();
     }
 
+    public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
+        this(supportLeft, supportRight, height, offsetY, ToolState.STANDARD_BOARD_COLOR);
+    }
+
+    public Board(float height, float offsetY, Color color) {
+        this(null, null, height, offsetY, color);
+    }
+
     public Board(Support supportLeft, Support supportRight, float height, float offsetY, Color color) {
         super(supportRight.getPosX() - supportLeft.getPosX()
                 + supportLeft.getWidth(), height, supportLeft.getPosX(), supportLeft.getHeight() - offsetY);
-        this.supportLeft = supportLeft;
-        this.supportRight = supportRight;
         this.offsetY = offsetY;
         this.color = new SerializableColor(color);
 
-        // supportLeft.addListener(leftListener);
-        // supportLeft.addBoardRight(this);
-
-        // supportRight.addListener(rightListener);
-        // supportRight.addBoardLeft(this);
+        if (supportLeft != null && supportRight != null) {
+            attach(supportLeft, supportRight);
+        }
 
         items = new ArrayList<>();
 
@@ -86,7 +91,10 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         }
     }
 
-    public void attach() {
+    public void attach(Support supportLeft, Support supportRight) {
+        this.supportLeft = supportLeft;
+        this.supportRight = supportRight;
+
         supportLeft.addListener(leftListener);
         supportLeft.addBoardRight(this);
 

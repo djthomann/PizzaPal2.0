@@ -28,6 +28,10 @@ public class Storage {
         supports = new ArrayList<>();
     }
 
+    public Storage(float width, float height) {
+        this("Empty name", width, height);
+    }
+
     public Storage(String name, float width, float height) {
         this.name = name;
         this.width = width;

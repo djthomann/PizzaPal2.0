@@ -105,6 +105,8 @@ public abstract class EntityViewController<E extends Entity> {
 
     public void showContextMenu() {
 
+        hideDropShadow();
+
         Bounds bounds = view.localToScreen(view.getBoundsInLocal());
 
         double x = bounds.getMinX() + view.widthProperty().get() + UIConfig.CONTEXT_MENU_OFFSET_PIXEL;
@@ -121,7 +123,9 @@ public abstract class EntityViewController<E extends Entity> {
         if (contextMenu.isShowing()) {
             hideContextMenu();
         } else {
+
             showContextMenu();
+
         }
     }
 
@@ -228,15 +232,23 @@ public abstract class EntityViewController<E extends Entity> {
         view.setOnMouseEntered(_ -> {
             if (toolState.getCurrentTool() == Tool.SELECT) {
                 view.setCursor(Cursor.MOVE);
-                view.getEntityRectangle().setEffect(new DropShadow(15, view.getColor().brighter()));
-                // TODO: Messes with Context Menu Alignment
+                showDropShadow();
             }
         });
 
         view.setOnMouseExited(_ -> {
             view.setCursor(Cursor.DEFAULT);
-            view.getEntityRectangle().setEffect(null);
+            hideDropShadow();
         });
+    }
+
+    private void showDropShadow() {
+        view.getEntityRectangle().setEffect(new DropShadow(15,
+                view.getColor().brighter()));
+    }
+
+    private void hideDropShadow() {
+        view.getEntityRectangle().setEffect(null);
     }
 
     protected abstract void onMouseReleased(float xInView, float yInView);

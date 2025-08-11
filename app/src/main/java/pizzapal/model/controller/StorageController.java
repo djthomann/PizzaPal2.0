@@ -184,7 +184,7 @@ public class StorageController {
             return;
         }
 
-        Support support = new Support(storage, color, width, height, posX, posY);
+        Support support = new Support(color, width, height, posX, posY);
         AddSupportCommand addCommand = new AddSupportCommand(storage, support);
         addCommand.execute();
         undoStack.push(addCommand);
@@ -274,9 +274,10 @@ public class StorageController {
             offsetY = 0;
         }
 
-        Board board = new Board(service.getSupportLeftOfPos(posX), service.getSupportRightOfPos(posX), height, offsetY,
+        Board board = new Board(height, offsetY,
                 color);
-        AddBoardCommand addCommand = new AddBoardCommand(board);
+        AddBoardCommand addCommand = new AddBoardCommand(board, service.getSupportLeftOfPos(posX),
+                service.getSupportRightOfPos(posX));
         addCommand.execute();
         undoStack.push(addCommand);
         notifyBoardCreationListeners(board);

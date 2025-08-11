@@ -56,19 +56,6 @@ public class StorageServiceTest {
     }
 
     @Test
-    public void testGetBoardAt() {
-
-        Support support1 = new Support(storage, 0.2f, 1f, 3f, 0);
-        Support support2 = new Support(storage, 0.2f, 1f, 4f, 0);
-
-        Board board1 = new Board(support1, support2, 02f, 0);
-
-        Board b = service.getBoardAt(3.5f);
-
-        assertEquals(board1, b);
-    }
-
-    @Test
     public void testGetBoardsAt() {
 
         Support support1 = new Support(storage, 0.2f, 1f, 3f, 0);

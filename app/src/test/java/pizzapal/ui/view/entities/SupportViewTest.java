@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
@@ -17,6 +18,7 @@ import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.view.entities.support.SupportView;
 import pizzapal.ui.view.entities.support.SupportViewController;
 import pizzapal.utils.Helper;
+import pizzapal.utils.ToolState;
 
 public class SupportViewTest extends ApplicationTest {
 
@@ -38,9 +40,11 @@ public class SupportViewTest extends ApplicationTest {
 
         StorageController controller = new StorageController(storage);
 
-        support = new Support(storage, 0.2f, 2f, 3f, 0);
+        support = new Support(storage, Color.BLACK, 0.2f, 2f, 3f, 0);
 
-        this.controller = new SupportViewController(controller, support);
+        ToolState toolState = new ToolState();
+
+        this.controller = new SupportViewController(controller, toolState, support);
 
         view = (SupportView) this.controller.getView();
 
@@ -67,6 +71,15 @@ public class SupportViewTest extends ApplicationTest {
 
     @Test
     public void testContextMenuOpens() {
+        assertTrue(!controller.getContextMenu().isShowing());
+
+        clickOn(view, MouseButton.SECONDARY);
+        assertTrue(controller.getContextMenu().isShowing());
+
+    }
+
+    @Test
+    public void testContextMenuOpensAndCloses() {
         assertTrue(!controller.getContextMenu().isShowing());
 
         clickOn(view, MouseButton.SECONDARY);

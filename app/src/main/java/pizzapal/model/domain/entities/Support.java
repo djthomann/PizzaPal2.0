@@ -12,6 +12,7 @@ import pizzapal.model.domain.core.Storage;
 import pizzapal.model.observability.ChangeType;
 import pizzapal.model.observability.Observable;
 import pizzapal.model.observability.SupportChangeListener;
+import pizzapal.utils.ToolState;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Support extends Entity implements Observable<SupportChangeListener> {
@@ -35,13 +36,32 @@ public class Support extends Entity implements Observable<SupportChangeListener>
         boardsRight = new ArrayList<>();
     }
 
+    public Support(Storage storage, float width, float height, float posX, float posY) {
+        this(storage, ToolState.STANDARD_SUPPORT_COLOR, width, height, posX, posY);
+    }
+
+    public Support(Color color, float width, float height, float posX, float posY) {
+        this(null, color, width, height, posX, posY);
+    }
+
+    public Support(float width, float height, float posX, float posY) {
+        this(null, ToolState.STANDARD_SUPPORT_COLOR, width, height, posX, posY);
+    }
+
     public Support(Storage storage, Color color, float width, float height, float posX, float posY) {
         super(width, height, posX, posY);
-        this.storage = storage;
         boardsLeft = new ArrayList<>();
         boardsRight = new ArrayList<>();
         this.color = new SerializableColor(color);
-        // storage.addSupport(this);
+
+        if (storage != null) {
+            putInStorage(storage);
+        }
+    }
+
+    public void putInStorage(Storage storage) {
+        this.storage = storage;
+        storage.addSupport(this);
     }
 
     public void initListeners() {

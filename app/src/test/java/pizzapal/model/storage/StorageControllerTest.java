@@ -35,6 +35,24 @@ public class StorageControllerTest {
     }
 
     @Test
+    public void testAddSupportFromConstructor() {
+        Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
+
+        assertFalse(storage.isEmpty());
+        assertEquals(support1, storage.getSupports().get(0));
+    }
+
+    @Test
+    public void testAddSupportByPlacing() {
+        Support support1 = new Support(0.2f, 3f, 1f, 0f);
+
+        support1.putInStorage(storage);
+
+        assertFalse(storage.isEmpty());
+        assertEquals(support1, storage.getSupports().get(0));
+    }
+
+    @Test
     public void testMoveBoardBetweenSupports() {
 
         Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);

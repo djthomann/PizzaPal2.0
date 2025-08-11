@@ -14,6 +14,7 @@ import pizzapal.ui.view.entities.board.BoardView;
 import pizzapal.ui.view.entities.board.BoardViewController;
 import pizzapal.ui.view.entities.support.SupportViewController;
 import pizzapal.utils.Helper;
+import pizzapal.utils.ToolState;
 
 public class BoardViewTest extends ApplicationTest {
 
@@ -46,12 +47,14 @@ public class BoardViewTest extends ApplicationTest {
 
         board = new Board(rightSupport, leftSupport, 0.2f, 0);
 
+        ToolState toolstate = new ToolState();
+
         container = new Pane();
         container.setPrefSize(Helper.convertMetersToPixel(6f), Helper.convertMetersToPixel(3f));
         container.getChildren().addAll(
-                new BoardViewController(controller, board).getView(),
-                new SupportViewController(controller, leftSupport).getView(),
-                new SupportViewController(controller, rightSupport).getView());
+                new BoardViewController(controller, toolstate, board).getView(),
+                new SupportViewController(controller, toolstate, leftSupport).getView(),
+                new SupportViewController(controller, toolstate, rightSupport).getView());
 
         Scene scene = new Scene(container);
         stage.setScene(scene);
@@ -63,12 +66,6 @@ public class BoardViewTest extends ApplicationTest {
         // assertEquals(Helper.convertMetersToPixel(4f - 2f - 0.2f), board.getWidth(),
         // DELTA);
 
-        try {
-            Thread.sleep(20000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     @Test
