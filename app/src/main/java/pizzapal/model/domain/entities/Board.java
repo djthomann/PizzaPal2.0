@@ -68,7 +68,9 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     }
 
     public Board(float height, float offsetY, Color color) {
-        this(null, null, height, offsetY, color);
+        super(0, height, 0, 0);
+        this.offsetY = offsetY;
+        this.color = new SerializableColor(color);
     }
 
     public Board(Support supportLeft, Support supportRight, float height, float offsetY, Color color) {
@@ -92,8 +94,13 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     }
 
     public void attach(Support supportLeft, Support supportRight) {
+
         this.supportLeft = supportLeft;
         this.supportRight = supportRight;
+
+        setWidth(getWidth());
+        setPosX(supportLeft.getPosX());
+        setPosY(supportLeft.getHeight() - offsetY);
 
         supportLeft.addListener(leftListener);
         supportLeft.addBoardRight(this);

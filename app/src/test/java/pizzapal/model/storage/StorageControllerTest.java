@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javafx.application.Platform;
+import javafx.scene.paint.Color;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
@@ -61,6 +62,26 @@ public class StorageControllerTest {
 
         assertFalse(storage.isEmpty());
         assertEquals(support1, storage.getSupports().get(0));
+    }
+
+    @Test
+    public void testAddBoardByPlacing() {
+        Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
+        Support support2 = new Support(storage, 0.2f, 3f, 3f, 0f);
+
+        assertTrue(support1.getBoardsRight().isEmpty());
+        assertTrue(support2.getBoardsLeft().isEmpty());
+
+        controller.addBoard(0.2f, Color.BROWN, 2.5f, 1f);
+
+        assertFalse(support1.getBoardsRight().isEmpty());
+        assertFalse(support2.getBoardsLeft().isEmpty());
+
+        Board board = support1.getBoardsRight().get(0);
+
+        assertEquals(support1, board.getSupportLeft());
+        assertEquals(support2, board.getSupportRight());
+
     }
 
     @Test

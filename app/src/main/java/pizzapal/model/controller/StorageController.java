@@ -274,10 +274,13 @@ public class StorageController {
             offsetY = 0;
         }
 
+        Support left = service.getSupportLeftOfPos(posX);
+        Support right = service.getSupportRightOfPos(posX);
+
         Board board = new Board(height, offsetY,
                 color);
-        AddBoardCommand addCommand = new AddBoardCommand(board, service.getSupportLeftOfPos(posX),
-                service.getSupportRightOfPos(posX));
+        AddBoardCommand addCommand = new AddBoardCommand(board, left,
+                right);
         addCommand.execute();
         undoStack.push(addCommand);
         notifyBoardCreationListeners(board);
