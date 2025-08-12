@@ -29,6 +29,7 @@ import pizzapal.model.service.StorageService;
 import pizzapal.utils.NotificationManager;
 import pizzapal.utils.SoundPlayer;
 
+// TODO: Refactor into diffrent protected Controllers
 public class StorageController {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageController.class);
@@ -179,7 +180,7 @@ public class StorageController {
 
     public void addSupport(float width, float height, Color color, float posX, float posY) {
 
-        if (!logic.storageHasSpaceForSupportAt(width, posX)) {
+        if (!logic.storageHasSpaceForSupportAt(width, posX)) { // TODO: refactor!
             NotificationManager.getInstance().addNotification("No space for new support");
             return;
         }
@@ -339,8 +340,13 @@ public class StorageController {
             offsetX = board.getWidth() - item.getWidth();
         }
 
-        if (!logic.boardHasEnoughSpaceForItem(board, item, offsetX)) {
+        if (!logic.boardItemsDontCollide(board, item, offsetX)) {
             NotificationManager.getInstance().addNotification("Collides with other item");
+            return false;
+        }
+
+        if (!logic.boardHasEnoughVerticalSpace(board, item)) {
+            NotificationManager.getInstance().addNotification("Not enough vertical space on board");
             return false;
         }
 
@@ -374,7 +380,7 @@ public class StorageController {
         }
 
         float offsetX = posX - board.getPosX();
-        Item item = new Item(board, Color.DARKBLUE, weight, width, height, offsetX);
+        Item item = new Item(Color.DARKBLUE, weight, width, height, offsetX);
         AddItemCommand addCommand = new AddItemCommand(item, board);
         addCommand.execute();
         undoStack.push(addCommand);
