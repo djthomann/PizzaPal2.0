@@ -180,6 +180,23 @@ public class StorageControllerTest {
     }
 
     @Test
+    public void testMoveSingleItemListenersChanged() {
+
+        Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
+        Support support2 = new Support(storage, 0.2f, 3f, 3f, 0f);
+
+        Board board1 = new Board(support1, support2, 0.2f, 0.5f);
+        Board board2 = new Board(support1, support2, 0.2f, 1f);
+
+        Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
+
+        assertTrue(controller.moveItem(item1, 2, 2.2f));
+        assertTrue(board2.containsListener(item1.getListener()));
+        assertFalse(board1.containsListener(item1.getListener()));
+
+    }
+
+    @Test
     public void testMoveSingleItemPositionY() {
         Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
         Support support2 = new Support(storage, 0.2f, 3f, 3f, 0f);
@@ -212,4 +229,22 @@ public class StorageControllerTest {
         assertTrue(controller.moveBoard(board1, 2f, 1f));
         assertEquals(1.2f, item1.getPosY());
     }
+
+    @Test
+    public void testMoveBoardAfterItemLeft() {
+        Support support1 = new Support(storage, 0.2f, 3f, 1f, 0f);
+        Support support2 = new Support(storage, 0.2f, 3f, 3f, 0f);
+
+        Board board1 = new Board(support1, support2, 0.2f, 0.5f);
+        Board board2 = new Board(support1, support2, 0.2f, 1f);
+
+        Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
+
+        assertTrue(controller.moveItem(item1, 2, 2.2f));
+        assertEquals(board2.getPosY() + item1.getHeight(), item1.getPosY());
+
+        assertTrue(controller.moveBoard(board1, 2f, 1f));
+        assertEquals(board2.getPosY() + item1.getHeight(), item1.getPosY());
+    }
+
 }

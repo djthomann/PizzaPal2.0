@@ -279,6 +279,16 @@ public class StorageController {
 
         Board board = new Board(height, offsetY,
                 color);
+
+        if (!logic.enoughSpaceForItemsLeftAbove(left, board, offsetY)) {
+            NotificationManager.getInstance().addNotification("Not enough space for items");
+        }
+
+        if (!logic.enoughSpaceForItemsLeftBelow(left, board, offsetY)) {
+            NotificationManager.getInstance().addNotification("Not enough space for items");
+
+        }
+
         AddBoardCommand addCommand = new AddBoardCommand(board, left,
                 right);
         addCommand.execute();
@@ -302,16 +312,19 @@ public class StorageController {
 
     public boolean moveItem(Item item, float posX, float posY) {
 
-        // TODO Should be done in logic
-        Support left = service.getSupportLeftOfPos(posX);
-        Support right = service.getSupportRightOfPos(posX);
-
-        if (left == null || right == null)
+        if (!logic.isPositionBetweenTwoSupports(posX)) {
+            NotificationManager.getInstance().addNotification("Not between two supports");
             return false;
+        }
+
+        Support left = service.getSupportLeftOfPos(posX);
 
         List<Board> boards = left.getBoardsRight();
-        if (boards.isEmpty())
+        if (boards.isEmpty()) {
+
+            NotificationManager.getInstance().addNotification("No boards found");
             return false;
+        }
 
         Board board = service.getBoardBelow(boards, posY);
         if (board == null) {
@@ -326,20 +339,37 @@ public class StorageController {
             offsetX = board.getWidth() - item.getWidth();
         }
 
+        if (!logic.boardHasEnoughSpaceForItem(board, item, offsetX)) {
+            NotificationManager.getInstance().addNotification("Collides with other item");
+            return false;
+        }
+
         MoveItemCommand moveCommand = new MoveItemCommand(item, board, offsetX);
         logger.info("Moving item: " + moveCommand.toString());
         moveCommand.execute();
         undoStack.push(moveCommand);
-        // item.move(board, offsetX);
         return true;
     }
 
     public void addItem(float width, float height, float weight, float posX, float posY) {
 
+        if (!logic.isPositionBetweenTwoSupports(posX)) {
+            NotificationManager.getInstance().addNotification("Not between two supports");
+        }
+
+        Support left = service.getSupportLeftOfPos(posX);
+
+        List<Board> boards = left.getBoardsRight();
+        if (boards.isEmpty()) {
+
+            NotificationManager.getInstance().addNotification("No boards found");
+            return;
+        }
+
         Board board = service.getBoardBelow(posX, posY);
 
         if (board == null) {
-            NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found.");
+            NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found below");
             return;
         }
 

@@ -276,4 +276,21 @@ public class StorageLogic {
         return boardAbove || boardBelow;
     }
 
+    public boolean boardHasEnoughSpaceForItem(Board board, Item item, float offsetX) {
+
+        for (Item i : board.getItems()) {
+            boolean leftSideInside = i.getOffsetX() < offsetX && i.getOffsetX() + i.getWidth() > offsetX;
+            System.out.println("Left: " + leftSideInside);
+            boolean rightSideInside = offsetX + item.getWidth() > i.getOffsetX()
+                    && offsetX + item.getWidth() < i.getOffsetX() + i.getWidth();
+            System.out.println("Right: " + rightSideInside);
+
+            if (!i.equals(item) && (leftSideInside || rightSideInside)) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
 }

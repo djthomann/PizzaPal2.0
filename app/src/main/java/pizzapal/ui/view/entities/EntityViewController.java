@@ -58,6 +58,7 @@ public abstract class EntityViewController<E extends Entity> {
         tf1.setPrefWidth(150);
         tf1.setMaxWidth(150);
         tf1.setPromptText("New Width");
+        tf1.setId("newWidthField");
         CustomMenuItem item1 = new CustomMenuItem(tf1);
         item1.setHideOnClick(false);
 
@@ -65,6 +66,7 @@ public abstract class EntityViewController<E extends Entity> {
         tf2.setPrefWidth(150);
         tf2.setMaxWidth(150);
         tf2.setPromptText("New Height");
+        tf2.setId("newHeightField");
         CustomMenuItem item2 = new CustomMenuItem(tf2);
         item2.setHideOnClick(false);
 

@@ -13,6 +13,8 @@ public class ItemView extends EntityView<Item> {
 
     public void updateFromModel(Item item) {
 
+        System.out.println("UPDATE FROM MODEL");
+
         resetRectangle();
 
         this.setLayoutX(Helper.convertMetersToPixel(item.getPosX()));

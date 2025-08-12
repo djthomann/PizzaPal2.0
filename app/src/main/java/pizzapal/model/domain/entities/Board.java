@@ -149,6 +149,10 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         notifyListeners();
     }
 
+    public boolean containsListener(BoardChangeListener l) {
+        return listeners.contains(l);
+    }
+
     @Override
     public void addListener(BoardChangeListener l) {
         listeners.add(l);

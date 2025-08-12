@@ -31,6 +31,7 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     @JsonIgnore
     private BoardChangeListener listener = (model, type) -> {
+        System.out.println("REACT TO BOARD");
         switch (type) {
             case MOVE -> {
                 reactToBoardChange(model);

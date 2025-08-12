@@ -108,7 +108,7 @@ public class StorageService {
         Board board = null;
 
         for (Board b : boards) {
-            if (b.getPosY() < posY) {
+            if (b.getPosY() <= posY) {
                 if (board == null) {
                     board = b;
                 }
@@ -120,6 +120,6 @@ public class StorageService {
         }
 
         return board;
-    }
 
+    }
 }

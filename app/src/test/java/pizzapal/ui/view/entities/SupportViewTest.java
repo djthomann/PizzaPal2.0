@@ -123,4 +123,37 @@ public class SupportViewTest extends ApplicationTest {
 
     }
 
+    @Test
+    public void testEditWidthViaContextMenu() {
+        rightClickOn(view);
+        clickOn("#newWidthField");
+        write("0.5");
+
+        clickOn("Edit");
+    }
+
+    @Test
+    public void testEditHeightViaContextMenu() {
+        rightClickOn(view);
+        clickOn("#newHeightField");
+        write("3.3");
+
+        clickOn("Edit");
+    }
+
+    @Test
+    public void testEditEverythingViaContextMenu() {
+        rightClickOn(view);
+        clickOn("#newWidthField");
+        write("0.5");
+
+        clickOn("#newHeightField");
+        write("2.5");
+
+        clickOn("Edit");
+
+        assertEquals(0.5f, support.getWidth(), DELTA);
+        assertEquals(2.5f, support.getHeight(), DELTA);
+    }
+
 }
