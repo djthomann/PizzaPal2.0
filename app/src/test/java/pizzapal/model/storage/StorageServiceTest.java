@@ -83,20 +83,39 @@ public class StorageServiceTest {
         Support support2 = new Support(storage, 0.2f, 1f, 4f, 0);
 
         List<Board> boards = new ArrayList<>();
-        Board board1 = new Board(support1, support2, 02f, 0);
-        Board board2 = new Board(support1, support2, 02f, 0.2f);
-        Board board3 = new Board(support1, support2, 02f, 0.4f);
+        Board board1 = new Board(support1, support2, 2f, 0);
+        Board board2 = new Board(support1, support2, 2f, 0.2f);
+        Board board3 = new Board(support1, support2, 2f, 0.4f);
 
         boards.add(board1);
         boards.add(board2);
         boards.add(board3);
 
-        List<Board> b = service.getBoardsAt(3.5f);
-
         assertEquals(board3, service.getBoardBelow(boards, 0.7f));
         assertEquals(board2, service.getBoardBelow(boards, 0.8f));
         assertEquals(board1, service.getBoardBelow(boards, 1f));
 
+    }
+
+    @Test
+    public void testGetBoardAbove() {
+        Support support1 = new Support(storage, 0.2f, 1f, 3f, 0);
+        Support support2 = new Support(storage, 0.2f, 1f, 4f, 0);
+
+        List<Board> boards = new ArrayList<>();
+        Board board1 = new Board(support1, support2, 2f, 0);
+        Board board2 = new Board(support1, support2, 2f, 0.2f);
+        Board board3 = new Board(support1, support2, 2f, 0.4f);
+
+        boards.add(board1);
+        boards.add(board2);
+        boards.add(board3);
+
+        assertEquals(board1, service.getBoardAbove(boards, 0.9f));
+        assertEquals(board1, service.getBoardAbove(boards, 0.8f));
+        assertEquals(board2, service.getBoardAbove(boards, 0.7f));
+        assertEquals(board2, service.getBoardAbove(boards, 0.6f));
+        assertEquals(board3, service.getBoardAbove(boards, 0.5f));
     }
 
 }

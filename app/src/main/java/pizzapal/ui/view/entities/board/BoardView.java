@@ -25,8 +25,6 @@ public class BoardView extends EntityView<Board> {
     @Override
     public void updateFromModelEdit(Board board) {
 
-        System.out.println("UPDATE FROM MODEL");
-
         float newHeight = Helper.convertMetersToPixel(board.getHeight());
         Color newColor = board.getColor().getColor();
 

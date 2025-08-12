@@ -150,7 +150,6 @@ public abstract class EntityViewController<E extends Entity> {
                             dragging = true;
                             offsetX = e.getX();
                             offsetY = e.getY();
-                            System.out.println("Pressed");
                             view.setCursor(Cursor.MOVE);
                         }
                         case SECONDARY -> {

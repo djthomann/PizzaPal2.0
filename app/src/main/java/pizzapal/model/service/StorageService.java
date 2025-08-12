@@ -113,7 +113,7 @@ public class StorageService {
                     board = b;
                 }
 
-                if (board.getPosY() < b.getPosY()) {
+                if (board.getPosY() <= b.getPosY()) {
                     board = b;
                 }
             }
@@ -121,5 +121,23 @@ public class StorageService {
 
         return board;
 
+    }
+
+    public Board getBoardAbove(List<Board> boards, float posY) {
+        Board board = null;
+
+        for (Board b : boards) {
+            if (b.getPosY() > posY) {
+                if (board == null) {
+                    board = b;
+                }
+
+                if (board.getPosY() > b.getPosY()) {
+                    board = b;
+                }
+            }
+        }
+
+        return board;
     }
 }

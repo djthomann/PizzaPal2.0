@@ -31,7 +31,6 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     @JsonIgnore
     private BoardChangeListener listener = (model, type) -> {
-        System.out.println("REACT TO BOARD");
         switch (type) {
             case MOVE -> {
                 reactToBoardChange(model);
@@ -44,6 +43,15 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public Item() {
 
+    }
+
+    public Item(Color color, float weight, float width, float height, float offsetX) {
+        super(width, height, 0, 0);
+        color = Color.RED;
+        this.weight = weight;
+        this.offsetX = offsetX;
+
+        ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
     }
 
     public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
@@ -67,6 +75,10 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public void placeOn(Board board) {
         this.board = board;
+
+        setPosX(board.getPosX() + offsetX);
+        setPosY(board.getPosY() + height);
+
         board.addItem(this);
         board.addListener(listener);
     }
