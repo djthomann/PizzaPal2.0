@@ -10,18 +10,12 @@ import pizzapal.utils.ToolState;
 
 public class SupportViewController extends EntityViewController<Support> {
 
-    private final Support support;
-
-    private final StorageController storageController;
-
     public SupportViewController(StorageController storageController, ToolState toolState, Support support) {
         super(storageController, toolState, support,
                 new SupportView(support.getColor().getColor(), Helper.convertMetersToPixel(support.getWidth()),
                         Helper.convertMetersToPixel(support.getHeight()),
                         Helper.convertMetersToPixel(support.getPosX()),
                         Helper.getPixelPositionYInStorage(support.getStorage(), support)));
-        this.storageController = storageController;
-        this.support = support;
 
         support.addListener((model, type) -> {
 
@@ -44,11 +38,4 @@ public class SupportViewController extends EntityViewController<Support> {
 
     }
 
-    @Override
-    protected void onMouseReleased(float xInView, float yInView) {
-        if (!storageController.move(support, Helper.convertPixelToMeters(xInView),
-                Helper.convertPixelToMeters(yInView))) {
-            view.resetRectangle();
-        }
-    }
 }

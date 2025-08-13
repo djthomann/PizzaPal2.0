@@ -10,19 +10,12 @@ import pizzapal.utils.ToolState;
 
 public class BoardViewController extends EntityViewController<Board> {
 
-    private Board board;
-
-    private StorageController storageController;
-
     public BoardViewController(StorageController storageController, ToolState toolState, Board board) {
         super(storageController, toolState, board, new BoardView(board.getColor().getColor(),
                 Helper.convertMetersToPixel(board.getWidth()),
                 Helper.convertMetersToPixel(board.getHeight()), Helper
                         .convertMetersToPixel(board.getSupportLeft().getPosX() + board.getSupportLeft().getWidth()),
                 Helper.getPixelPositionYInStorage(storageController.getStorage(), board.getPosY())));
-        this.board = board;
-
-        this.storageController = storageController;
 
         board.addListener((model, type) -> {
             switch (type) {
@@ -41,16 +34,6 @@ public class BoardViewController extends EntityViewController<Board> {
             }
         });
 
-    }
-
-    @Override
-    protected void onMouseReleased(float xInView, float yInView) {
-        if (!storageController.move(board, Helper.convertPixelToMeters(xInView),
-                Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
-                        yInView))) {
-            view.resetRectangle();
-            view.toBack();
-        }
     }
 
 }

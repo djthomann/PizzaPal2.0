@@ -99,7 +99,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.supportRight = supportRight;
 
         setWidth(getWidth());
-        setPosX(supportLeft.getPosX());
+        setPosX(supportLeft.getPosX() + supportLeft.getWidth());
         setPosY(supportLeft.getHeight() - offsetY);
 
         supportLeft.addListener(leftListener);

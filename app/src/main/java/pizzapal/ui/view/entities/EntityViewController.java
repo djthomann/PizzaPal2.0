@@ -213,7 +213,12 @@ public abstract class EntityViewController<E extends Entity> {
                                 offsetX = 0D;
                                 offsetY = 0D;
 
-                                onMouseReleased(xInView, yInView);
+                                if (!storageController.move(entity, Helper.convertPixelToMeters(xInView),
+                                        Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
+                                                yInView))) {
+                                    view.resetRectangle();
+                                    view.toBack();
+                                }
                                 dragging = false;
                             }
 
@@ -251,8 +256,6 @@ public abstract class EntityViewController<E extends Entity> {
     private void hideDropShadow() {
         view.getEntityRectangle().setEffect(null);
     }
-
-    protected abstract void onMouseReleased(float xInView, float yInView);
 
     public Pane getView() {
         return view;
