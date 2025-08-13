@@ -41,9 +41,9 @@ public class NewStorageView extends SubMenuView {
         leftBtn.setOnAction(e -> changeColor(colorBox, -1));
         rightBtn.setOnAction(e -> changeColor(colorBox, 1));
 
-        InputFieldWithLabel nameInput = new InputFieldWithLabel("Name", "New Storage", 150);
-        InputFieldWithLabel widthInput = new InputFieldWithLabel("Width", "9.0", 70);
-        InputFieldWithLabel heightInput = new InputFieldWithLabel("Height", "5.0", 70);
+        InputFieldWithLabel<String> nameInput = new InputFieldWithLabel<>("Name", "New Storage", 150);
+        InputFieldWithLabel<Float> widthInput = new InputFieldWithLabel<>("Width", "9.0", 70);
+        InputFieldWithLabel<Float> heightInput = new InputFieldWithLabel<>("Height", "5.0", 70);
 
         HBox dimensionInput = new HBox(widthInput, heightInput);
         dimensionInput.setSpacing(10);

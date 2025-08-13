@@ -9,7 +9,7 @@ import javafx.util.Duration;
 
 public class SoundPlayer {
 
-    private static Double volume = 0.33;
+    private static float volume = Config.INITIAL_VOLUME;
 
     private static Media mainMenuTheme = new Media(
             SoundPlayer.class.getResource("/sounds/jazz-background-music.mp3").toString());
@@ -44,10 +44,8 @@ public class SoundPlayer {
     }
 
     public static void playSound(AudioClip clip) {
-        if (Config.SOUND_ACTIVE) {
-            clip.setVolume(volume);
-            clip.play();
-        }
+        clip.setVolume(volume);
+        clip.play();
     }
 
     public static void fadeOut(MediaPlayer player, int durationMillis) {
@@ -71,11 +69,9 @@ public class SoundPlayer {
     }
 
     public static void playMainMenuTheme() {
-        if (Config.SOUND_ACTIVE) {
-            mainMenuThemePlayer.setVolume(volume);
-            mainMenuThemePlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            mainMenuThemePlayer.play();
-        }
+        mainMenuThemePlayer.setVolume(volume);
+        mainMenuThemePlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mainMenuThemePlayer.play();
 
     }
 
@@ -105,6 +101,21 @@ public class SoundPlayer {
 
     public static void playAddSound() {
         playSound(addSound);
+    }
+
+    public static float getVolume() {
+        return SoundPlayer.volume;
+    }
+
+    public static void setVolume(float volume) {
+        if (volume >= 0 && volume <= 1) {
+            SoundPlayer.volume = volume;
+            mainMenuThemePlayer.setVolume(volume);
+        }
+    }
+
+    public static boolean soundActive() {
+        return volume > 0;
     }
 
 }
