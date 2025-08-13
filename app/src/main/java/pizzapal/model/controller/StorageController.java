@@ -13,6 +13,9 @@ import pizzapal.model.commands.Command;
 import pizzapal.model.commands.add.AddBoardCommand;
 import pizzapal.model.commands.add.AddItemCommand;
 import pizzapal.model.commands.add.AddSupportCommand;
+import pizzapal.model.commands.delete.DeleteBoardCommand;
+import pizzapal.model.commands.delete.DeleteItemCommand;
+import pizzapal.model.commands.delete.DeleteSupportCommand;
 import pizzapal.model.commands.edit.EditBoardCommand;
 import pizzapal.model.commands.edit.EditItemCommand;
 import pizzapal.model.commands.edit.EditSupportCommand;
@@ -29,8 +32,8 @@ import pizzapal.model.listener.create.ItemCreationListener;
 import pizzapal.model.listener.create.SupportCreationListener;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
-import pizzapal.utils.SoundPlayer;
 
+// TODO Refactor methods even more
 public class StorageController {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageController.class);
@@ -105,6 +108,13 @@ public class StorageController {
             Command command = undoStack.pop();
             logger.info("Undoing command: " + command.toString());
             command.undo();
+            if (command instanceof DeleteSupportCommand deleteSupportCommand) {
+                notifySupportCreationListeners(deleteSupportCommand.getSupport());
+            } else if (command instanceof DeleteBoardCommand deleteBoardCommand) {
+                notifyBoardCreationListeners(deleteBoardCommand.getBoard());
+            } else if (command instanceof DeleteItemCommand deleteItemCommand) {
+                notifyItemCreationListeners(deleteItemCommand.getItem());
+            }
             redoStack.push(command);
         }
     }
@@ -143,7 +153,6 @@ public class StorageController {
 
     public void delete(Entity e) {
         logger.info("Deleting Entity: " + e.toString());
-        SoundPlayer.playGarbageSound();
         if (e instanceof Item item) {
             delete(item);
         } else if (e instanceof Board board) {
@@ -179,14 +188,21 @@ public class StorageController {
 
     public void editSupport(Support support, float newWidth, float newHeight, Color newColor) {
 
-        EditSupportCommand editCommand = new EditSupportCommand(support, newWidth, newHeight, newColor);
+        EditSupportCommand editCommand = supportController.editSupport(support, newWidth, newHeight, newColor);
         editCommand.execute();
         undoStack.push(editCommand);
 
     }
 
     public boolean delete(Support support) {
-        return supportController.delete(support);
+        DeleteSupportCommand deleteCommand = supportController.delete(support);
+        if (deleteCommand != null) {
+            deleteCommand.execute();
+            undoStack.push(deleteCommand);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean moveBoard(Board board, float posX, float posY) {
@@ -222,7 +238,14 @@ public class StorageController {
     }
 
     public boolean delete(Board board) {
-        return boardController.delete(board);
+        DeleteBoardCommand deleteCommand = boardController.delete(board);
+        if (deleteCommand != null) {
+            deleteCommand.execute();
+            undoStack.push(deleteCommand);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean moveItem(Item item, float posX, float posY) {
@@ -259,7 +282,14 @@ public class StorageController {
     }
 
     public boolean delete(Item item) {
-        return itemController.delete(item);
+        DeleteItemCommand deleteCommand = itemController.delete(item);
+        if (deleteCommand != null) {
+            deleteCommand.execute();
+            undoStack.push(deleteCommand);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

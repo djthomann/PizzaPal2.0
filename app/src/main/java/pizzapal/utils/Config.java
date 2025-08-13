@@ -8,6 +8,6 @@ public class Config {
 
     public static final int PIXEL_PER_METER = 150;
 
-    public static final boolean SOUND_ACTIVE = false;
+    public static final boolean SOUND_ACTIVE = true;
 
 }

@@ -2,6 +2,7 @@ package pizzapal.model.controller;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.commands.add.AddSupportCommand;
+import pizzapal.model.commands.delete.DeleteSupportCommand;
 import pizzapal.model.commands.edit.EditSupportCommand;
 import pizzapal.model.commands.move.MoveSupportCommand;
 import pizzapal.model.domain.entities.Support;
@@ -41,6 +42,7 @@ public class SupportController extends EntityController<Support> {
         return moveCommand;
     }
 
+    // TODO: Fix bug where you can put another support directly on an existing one
     public AddSupportCommand addSupport(float width, float height, Color color, float posX, float posY) {
 
         if (!logic.storageHasSpaceForSupportAt(width, posX)) { // TODO: refactor!
@@ -62,13 +64,13 @@ public class SupportController extends EntityController<Support> {
 
     }
 
-    public boolean delete(Support support) {
+    public DeleteSupportCommand delete(Support support) {
         if (support.getBoardsLeft().isEmpty() && support.getBoardsRight().isEmpty()) {
-            support.delete();
-            return true;
+            DeleteSupportCommand deleteCommand = new DeleteSupportCommand(service.getStorage(), support);
+            return deleteCommand;
         } else {
             NotificationManager.getInstance().addNotification("Can't delete Support");
-            return false;
+            return null;
         }
 
     }

@@ -2,6 +2,7 @@ package pizzapal.model.controller;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.commands.add.AddBoardCommand;
+import pizzapal.model.commands.delete.DeleteBoardCommand;
 import pizzapal.model.commands.edit.EditBoardCommand;
 import pizzapal.model.commands.move.MoveBoardCommand;
 import pizzapal.model.domain.entities.Board;
@@ -103,10 +104,8 @@ class BoardController extends EntityController<Board> {
 
     }
 
-    public boolean delete(Board board) {
-        board.delete();
-
-        return true;
+    public DeleteBoardCommand delete(Board board) {
+        return new DeleteBoardCommand(board);
     }
 
 }

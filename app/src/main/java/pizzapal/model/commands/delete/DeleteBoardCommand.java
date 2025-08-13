@@ -1,30 +1,29 @@
-package pizzapal.model.commands.add;
+package pizzapal.model.commands.delete;
 
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
 
-public class AddBoardCommand extends AddCommand {
+public class DeleteBoardCommand extends DeleteCommand {
 
     private final Board board;
-
     private final Support supportLeft;
     private final Support supportRight;
 
-    public AddBoardCommand(Board board, Support supportLeft, Support supportRight) {
+    public DeleteBoardCommand(Board board) {
         this.board = board;
-        this.supportLeft = supportLeft;
-        this.supportRight = supportRight;
+        this.supportLeft = board.getSupportLeft();
+        this.supportRight = board.getSupportRight();
     }
 
     @Override
     public void execute() {
         super.execute();
-        board.attach(supportLeft, supportRight);
+        board.delete();
     }
 
     @Override
     public void undo() {
-        board.delete();
+        board.attach(supportLeft, supportRight);
     }
 
     public Board getBoard() {

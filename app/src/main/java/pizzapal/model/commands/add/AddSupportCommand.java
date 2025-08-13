@@ -6,7 +6,6 @@ import pizzapal.model.domain.entities.Support;
 public class AddSupportCommand extends AddCommand {
 
     private final Storage storage;
-
     private final Support support;
 
     public AddSupportCommand(Storage storage, Support support) {
@@ -22,9 +21,6 @@ public class AddSupportCommand extends AddCommand {
 
     @Override
     public void undo() {
-        storage.removeSupport(support);
-        // TODO: Take out of Storage
-        support.setStorage(null);
         support.delete();
     }
 

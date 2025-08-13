@@ -1,27 +1,27 @@
-package pizzapal.model.commands.add;
+package pizzapal.model.commands.delete;
 
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Item;
 
-public class AddItemCommand extends AddCommand {
+public class DeleteItemCommand extends DeleteCommand {
 
     private final Item item;
     private final Board board;
 
-    public AddItemCommand(Item item, Board board) {
+    public DeleteItemCommand(Item item) {
         this.item = item;
-        this.board = board;
+        this.board = item.getBoard();
     }
 
     @Override
     public void execute() {
         super.execute();
-        item.placeOn(board);
+        item.delete();
     }
 
     @Override
     public void undo() {
-        item.delete();
+        item.placeOn(board);
     }
 
     public Item getItem() {

@@ -90,8 +90,9 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
     }
 
     public void delete() {
-        setBoard(null);
-        // TODO: cleanup other items on top, not yet implemented
+        board.removeItem(this);
+        board.removeListener(listener);
+
         notifyListeners(ChangeType.DELETE);
     }
 

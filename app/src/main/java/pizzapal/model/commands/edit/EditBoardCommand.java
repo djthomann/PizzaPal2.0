@@ -1,12 +1,10 @@
 package pizzapal.model.commands.edit;
 
 import javafx.scene.paint.Color;
-import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.SerializableColor;
-import pizzapal.utils.SoundPlayer;
 
-public class EditBoardCommand implements Command {
+public class EditBoardCommand extends EditCommand {
 
     private final Board board;
 
@@ -26,7 +24,7 @@ public class EditBoardCommand implements Command {
 
     @Override
     public void execute() {
-        SoundPlayer.playEditSound();
+        super.execute();
         board.edit(newHeight, newColor);
     }
 

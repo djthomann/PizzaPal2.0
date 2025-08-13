@@ -4,6 +4,7 @@ import java.util.List;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.commands.add.AddItemCommand;
+import pizzapal.model.commands.delete.DeleteItemCommand;
 import pizzapal.model.commands.edit.EditItemCommand;
 import pizzapal.model.commands.move.MoveItemCommand;
 import pizzapal.model.domain.entities.Board;
@@ -97,10 +98,8 @@ public class ItemController extends EntityController<Item> {
         return editCommand;
     }
 
-    // TODO
-    public boolean delete(Item item) {
-        System.out.println("Deleting item");
-        return true;
+    public DeleteItemCommand delete(Item item) {
+        return new DeleteItemCommand(item);
     }
 
 }
