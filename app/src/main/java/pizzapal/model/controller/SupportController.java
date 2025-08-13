@@ -66,7 +66,7 @@ public class SupportController extends EntityController<Support> {
 
     public DeleteSupportCommand delete(Support support) {
         if (support.getBoardsLeft().isEmpty() && support.getBoardsRight().isEmpty()) {
-            DeleteSupportCommand deleteCommand = new DeleteSupportCommand(service.getStorage(), support);
+            DeleteSupportCommand deleteCommand = new DeleteSupportCommand(support);
             return deleteCommand;
         } else {
             NotificationManager.getInstance().addNotification("Can't delete Support");

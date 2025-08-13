@@ -3,15 +3,13 @@ package pizzapal.model.commands.add;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Support;
 
-public class AddBoardCommand extends AddCommand {
-
-    private final Board board;
+public class AddBoardCommand extends AddCommand<Board> {
 
     private final Support supportLeft;
     private final Support supportRight;
 
     public AddBoardCommand(Board board, Support supportLeft, Support supportRight) {
-        this.board = board;
+        super(board);
         this.supportLeft = supportLeft;
         this.supportRight = supportRight;
     }
@@ -19,16 +17,16 @@ public class AddBoardCommand extends AddCommand {
     @Override
     public void execute() {
         super.execute();
-        board.attach(supportLeft, supportRight);
+        entity.attach(supportLeft, supportRight);
     }
 
     @Override
     public void undo() {
-        board.delete();
+        entity.delete();
     }
 
     public Board getBoard() {
-        return board;
+        return entity;
     }
 
 }
