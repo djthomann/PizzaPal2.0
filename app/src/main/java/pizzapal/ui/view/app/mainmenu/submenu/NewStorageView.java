@@ -1,9 +1,11 @@
 package pizzapal.ui.view.app.mainmenu.submenu;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
@@ -29,7 +31,7 @@ public class NewStorageView extends SubMenuView {
             Color.LIGHTPINK);
 
     public NewStorageView() {
-        super("New Storage", "Start your journey!");
+        super("New Storage", "Start your journey!", SubMenuPosition.TOP_RIGHT);
 
         Region colorBox = new Region();
         colorBox.setPrefSize(150, 100);
@@ -41,7 +43,22 @@ public class NewStorageView extends SubMenuView {
         leftBtn.setOnAction(e -> changeColor(colorBox, -1));
         rightBtn.setOnAction(e -> changeColor(colorBox, 1));
 
-        InputFieldWithLabel<String> nameInput = new InputFieldWithLabel<>("Name", "New Storage", 150);
+        UnaryOperator<TextFormatter.Change> lettersOnlyFilter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.isEmpty()) {
+                return change;
+            } else if (newText.matches("^[A-Za-z]+( [A-Za-z]+)*[0-9]*$")) {
+                return change;
+            }
+            return null; // invalid
+        };
+        TextFormatter<String> stringFormatter = new TextFormatter<>(lettersOnlyFilter);
+
+        InputFieldWithLabel<String> nameInput = new InputFieldWithLabel<>("Name", "New Storage", 150, stringFormatter);
+        nameInput.getTextField().textProperty().addListener((obs, oldValue, newValue) -> {
+            titleLabel.setText(newValue);
+        });
+
         InputFieldWithLabel<Float> widthInput = new InputFieldWithLabel<>("Width", "9.0", 70);
         InputFieldWithLabel<Float> heightInput = new InputFieldWithLabel<>("Height", "5.0", 70);
 

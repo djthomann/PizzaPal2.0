@@ -34,4 +34,8 @@ public class InputFieldWithLabel<T> extends VBox {
         return textField.getText();
     }
 
+    public TextField getTextField() {
+        return textField;
+    }
+
 }

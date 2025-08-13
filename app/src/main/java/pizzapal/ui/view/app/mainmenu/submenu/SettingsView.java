@@ -17,7 +17,7 @@ public class SettingsView extends SubMenuView {
 
     public SettingsView() {
 
-        super("Settings", "Configure PizzaPal!");
+        super("Settings", "Configure PizzaPal!", SubMenuPosition.BOTTOM_LEFT);
 
         Label label = new Label("Volume");
         label.setFont(Font.font(10.5));
@@ -65,13 +65,13 @@ public class SettingsView extends SubMenuView {
                 Config.PIXEL_PER_METER,
                 positiveIntFilter);
 
-        positiveIntFormatter.valueProperty().addListener((obs, oldValue, newValue) -> {
-            Config.PIXEL_PER_METER = newValue;
-        });
-
         InputFieldWithLabel<Integer> pixelPerMeterInput = new InputFieldWithLabel<>("Pixels per meter",
                 initialString, 150,
                 positiveIntFormatter);
+
+        pixelPerMeterInput.getTextField().textProperty().addListener((obs, oldValue, newValue) -> {
+            Config.PIXEL_PER_METER = Integer.parseInt(newValue);
+        });
 
         addControlOnTop(pixelPerMeterInput);
         addControlOnTop(volumeBox);

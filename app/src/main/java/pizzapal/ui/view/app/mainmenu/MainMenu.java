@@ -7,7 +7,6 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,6 +22,7 @@ import pizzapal.ui.components.TextButton;
 import pizzapal.ui.view.app.editor.EditorViewController;
 import pizzapal.ui.view.app.mainmenu.submenu.NewStorageView;
 import pizzapal.ui.view.app.mainmenu.submenu.SettingsView;
+import pizzapal.ui.view.app.mainmenu.submenu.SubMenuView;
 import pizzapal.utils.Config;
 import pizzapal.utils.Helper;
 import pizzapal.utils.SceneManager;
@@ -145,10 +145,17 @@ public class MainMenu extends StackPane {
 
     }
 
-    public void showSubMenu(Node newView) {
+    public void showSubMenu(SubMenuView newView) {
 
         TranslateTransition moveImage = new TranslateTransition(Duration.millis(200), imageView);
-        moveImage.setToX(-500);
+        switch (newView.getPosition()) {
+            case TOP_RIGHT -> {
+                moveImage.setToX(-500);
+            }
+            case BOTTOM_LEFT -> {
+                moveImage.setToY(-350);
+            }
+        }
         moveImage.setInterpolator(Interpolator.EASE_BOTH);
 
         if (this.getChildren().isEmpty()) {
@@ -175,10 +182,11 @@ public class MainMenu extends StackPane {
         fadeOut.play();
     }
 
-    public void removeView(Node view) {
+    public void removeView(SubMenuView view) {
 
         TranslateTransition moveImage = new TranslateTransition(Duration.millis(200), imageView);
         moveImage.setToX(500);
+        moveImage.setToY(350);
         moveImage.setInterpolator(Interpolator.EASE_BOTH);
 
         FadeTransition fadeOut = new FadeTransition(Duration.millis(300), view);
