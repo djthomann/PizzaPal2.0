@@ -14,6 +14,10 @@ public class StorageService {
         this.storage = storage;
     }
 
+    public Storage getStorage() {
+        return storage;
+    }
+
     public Support getSupportLeftOfPos(float posX) {
         Support left = null;
 

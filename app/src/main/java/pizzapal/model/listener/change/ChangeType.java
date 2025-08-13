@@ -1,4 +1,4 @@
-package pizzapal.model.observability;
+package pizzapal.model.listener.change;
 
 public enum ChangeType {
     MOVE,

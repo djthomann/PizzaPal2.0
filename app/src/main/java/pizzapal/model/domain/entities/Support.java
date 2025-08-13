@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.domain.core.Storage;
-import pizzapal.model.observability.ChangeType;
+import pizzapal.model.listener.change.ChangeType;
+import pizzapal.model.listener.change.SupportChangeListener;
 import pizzapal.model.observability.Observable;
-import pizzapal.model.observability.SupportChangeListener;
 import pizzapal.utils.ToolState;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -77,6 +77,9 @@ public class Support extends Entity implements Observable<SupportChangeListener>
     }
 
     public void delete() {
+
+        storage.removeSupport(this);
+        storage = null;
 
         for (Board b : boardsLeft) {
             b.setSupportRight(null);

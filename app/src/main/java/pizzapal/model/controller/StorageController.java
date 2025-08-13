@@ -24,33 +24,38 @@ import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.Support;
+import pizzapal.model.listener.create.BoardCreationListener;
+import pizzapal.model.listener.create.ItemCreationListener;
+import pizzapal.model.listener.create.SupportCreationListener;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
-import pizzapal.utils.NotificationManager;
 import pizzapal.utils.SoundPlayer;
 
-// TODO: Refactor into diffrent protected Controllers
 public class StorageController {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageController.class);
 
     private final Storage storage;
 
-    private final StorageLogic logic;
-
-    private final StorageService service;
-
     private final Deque<Command> redoStack = new ArrayDeque<>();
     private final Deque<Command> undoStack = new ArrayDeque<>();
 
-    private List<SupportCreationListener> supportCreationListeners = new ArrayList<>();
-    private List<BoardCreationListener> boardCreationListeners = new ArrayList<>();
-    private List<ItemCreationListener> itemCreationListeners = new ArrayList<>();
+    private final List<SupportCreationListener> supportCreationListeners = new ArrayList<>();
+    private final List<BoardCreationListener> boardCreationListeners = new ArrayList<>();
+    private final List<ItemCreationListener> itemCreationListeners = new ArrayList<>();
+
+    private final BoardController boardController;
+    private final SupportController supportController;
+    private final ItemController itemController;
 
     public StorageController(Storage storage) {
         this.storage = storage;
-        service = new StorageService(storage);
-        logic = new StorageLogic(storage, service);
+        StorageService service = new StorageService(storage);
+        StorageLogic logic = new StorageLogic(storage, service);
+
+        boardController = new BoardController(logic, service);
+        supportController = new SupportController(logic, service);
+        itemController = new ItemController(logic, service);
     }
 
     public void addSupportCreationListener(SupportCreationListener l) {
@@ -151,45 +156,25 @@ public class StorageController {
 
     public boolean moveSupport(Support support, float posX, float posY) {
 
-        if (!logic.positionInStorage(posX, posY)) {
-            NotificationManager.getInstance().addNotification("Not inside Storage");
+        MoveSupportCommand moveCommand = supportController.moveSupport(support, posX, posY);
+        if (moveCommand != null) {
+            logger.info("Moving support: " + moveCommand.toString());
+            moveCommand.execute();
+            undoStack.push(moveCommand);
+            return true;
+        } else {
             return false;
         }
-
-        if (logic.movingThroughSupport(support, posX)) {
-            NotificationManager.getInstance().addNotification("Moving through other support");
-            return false;
-        }
-
-        if (!logic.supportDoesntCollideWithOtherSupports(support, posX)) {
-            NotificationManager.getInstance().addNotification("Collision with other support");
-            return false;
-        }
-
-        if (!logic.movingSupportLeavesEnoughRoomsForItems(support, posX)) {
-            NotificationManager.getInstance().addNotification("Not enough space for items");
-            return false;
-        }
-
-        MoveSupportCommand moveCommand = new MoveSupportCommand(support, posX, posY);
-        logger.info("Moving support: " + moveCommand.toString());
-        moveCommand.execute();
-        undoStack.push(moveCommand);
-        return true;
     }
 
     public void addSupport(float width, float height, Color color, float posX, float posY) {
 
-        if (!logic.storageHasSpaceForSupportAt(width, posX)) { // TODO: refactor!
-            NotificationManager.getInstance().addNotification("No space for new support");
-            return;
+        AddSupportCommand addCommand = supportController.addSupport(width, height, color, posX, posY);
+        if (addCommand != null) {
+            addCommand.execute();
+            undoStack.push(addCommand);
+            notifySupportCreationListeners(addCommand.getSupport());
         }
-
-        Support support = new Support(color, width, height, posX, posY);
-        AddSupportCommand addCommand = new AddSupportCommand(storage, support);
-        addCommand.execute();
-        undoStack.push(addCommand);
-        notifySupportCreationListeners(support);
     }
 
     public void editSupport(Support support, float newWidth, float newHeight, Color newColor) {
@@ -201,202 +186,80 @@ public class StorageController {
     }
 
     public boolean delete(Support support) {
-        if (support.getBoardsLeft().isEmpty() && support.getBoardsRight().isEmpty()) {
-            storage.removeSupport(support);
-            support.setStorage(null);
-            support.delete();
-            return true;
-        } else {
-            NotificationManager.getInstance().addNotification("Can't delete Support");
-            return false;
-        }
-
+        return supportController.delete(support);
     }
 
     public boolean moveBoard(Board board, float posX, float posY) {
 
-        if (!logic.positionInStorage(posX, posY)) {
-            NotificationManager.getInstance().addNotification("Not In Storage");
+        MoveBoardCommand moveCommand = boardController.moveBoard(board, posX, posY);
+        if (moveCommand != null) {
+            logger.info("Moving board: " + moveCommand.toString());
+            moveCommand.execute();
+            undoStack.push(moveCommand);
+            return true;
+        } else {
             return false;
         }
-
-        if (logic.storageIsEmpty()) {
-            NotificationManager.getInstance().addNotification("Storage is Empty");
-            return false;
-        }
-
-        if (!logic.isPositionBetweenTwoSupports(posX)) {
-            NotificationManager.getInstance().addNotification("Not between two supports");
-            return false;
-        }
-
-        Support left = service.getSupportLeftOfPos(posX);
-        float offsetY = left.getHeight() - posY;
-
-        if (!logic.supportHasSpaceForBoardRight(left, board, offsetY)) {
-            NotificationManager.getInstance().addNotification("No space for board on support");
-            return false;
-        }
-
-        if (!logic.enoughSpaceForItemsLeftAbove(left, board, offsetY)) {
-            NotificationManager.getInstance().addNotification("Not enough space for items");
-            return false;
-        }
-
-        if (!logic.enoughSpaceForItemsLeftBelow(left, board, offsetY)) {
-            NotificationManager.getInstance().addNotification("Not enough space for items");
-            return false;
-        }
-
-        // snapping to top of support
-        if (offsetY < 0) {
-            offsetY = 0;
-        }
-
-        MoveBoardCommand moveCommand = new MoveBoardCommand(board, service.getSupportLeftOfPos(posX),
-                service.getSupportRightOfPos(posX), offsetY);
-        logger.info("Moving board: " + moveCommand.toString());
-        moveCommand.execute();
-        undoStack.push(moveCommand);
-
-        return true;
 
     }
 
     public void addBoard(float height, Color color, float posX, float posY) {
 
-        if (!logic.isPositionBetweenTwoSupports(posX)) {
-            NotificationManager.getInstance().addNotification("Not between two supports");
-            return;
+        AddBoardCommand addCommand = boardController.addBoard(height, color, posX, posY);
+        if (addCommand != null) {
+            addCommand.execute();
+            undoStack.push(addCommand);
+            notifyBoardCreationListeners(addCommand.getBoard());
         }
-
-        float offsetY = service.getSupportLeftOfPos(posX).getHeight() - posY;
-        if (offsetY < 0) {
-            offsetY = 0;
-        }
-
-        Support left = service.getSupportLeftOfPos(posX);
-        Support right = service.getSupportRightOfPos(posX);
-
-        Board board = new Board(height, offsetY,
-                color);
-
-        if (!logic.enoughSpaceForItemsLeftAbove(left, board, offsetY)) {
-            NotificationManager.getInstance().addNotification("Not enough space for items");
-        }
-
-        if (!logic.enoughSpaceForItemsLeftBelow(left, board, offsetY)) {
-            NotificationManager.getInstance().addNotification("Not enough space for items");
-
-        }
-
-        AddBoardCommand addCommand = new AddBoardCommand(board, left,
-                right);
-        addCommand.execute();
-        undoStack.push(addCommand);
-        notifyBoardCreationListeners(board);
     }
 
     private void editBoard(Board board, float newHeight, Color newColor) {
 
-        EditBoardCommand editCommand = new EditBoardCommand(board, newHeight, newColor);
+        EditBoardCommand editCommand = boardController.editBoard(board, newHeight, newColor);
         editCommand.execute();
         undoStack.push(editCommand);
 
     }
 
     public boolean delete(Board board) {
-        board.delete();
-
-        return true;
+        return boardController.delete(board);
     }
 
     public boolean moveItem(Item item, float posX, float posY) {
 
-        if (!logic.isPositionBetweenTwoSupports(posX)) {
-            NotificationManager.getInstance().addNotification("Not between two supports");
+        MoveItemCommand moveCommand = itemController.moveItem(item, posX, posY);
+        if (moveCommand != null) {
+            logger.info("Moving item: " + moveCommand.toString());
+            moveCommand.execute();
+            undoStack.push(moveCommand);
+            return true;
+        } else {
             return false;
         }
-
-        Support left = service.getSupportLeftOfPos(posX);
-
-        List<Board> boards = left.getBoardsRight();
-        if (boards.isEmpty()) {
-
-            NotificationManager.getInstance().addNotification("No boards found");
-            return false;
-        }
-
-        Board board = service.getBoardBelow(boards, posY);
-        if (board == null) {
-            NotificationManager.getInstance().addNotification("No Board below");
-            return false;
-        }
-
-        float offsetX = posX - board.getPosX();
-        if (offsetX < 0) {
-            offsetX = 0;
-        } else if (offsetX > board.getWidth() - item.getWidth()) {
-            offsetX = board.getWidth() - item.getWidth();
-        }
-
-        if (!logic.boardItemsDontCollide(board, item, offsetX)) {
-            NotificationManager.getInstance().addNotification("Collides with other item");
-            return false;
-        }
-
-        if (!logic.boardHasEnoughVerticalSpace(board, item)) {
-            NotificationManager.getInstance().addNotification("Not enough vertical space on board");
-            return false;
-        }
-
-        MoveItemCommand moveCommand = new MoveItemCommand(item, board, offsetX);
-        logger.info("Moving item: " + moveCommand.toString());
-        moveCommand.execute();
-        undoStack.push(moveCommand);
-        return true;
     }
 
     public void addItem(float width, float height, float weight, float posX, float posY) {
 
-        if (!logic.isPositionBetweenTwoSupports(posX)) {
-            NotificationManager.getInstance().addNotification("Not between two supports");
+        AddItemCommand addCommand = itemController.addItem(width, height, weight, posX, posY);
+        if (addCommand != null) {
+            addCommand.execute();
+            undoStack.push(addCommand);
+            notifyItemCreationListeners(addCommand.getItem());
         }
-
-        Support left = service.getSupportLeftOfPos(posX);
-
-        List<Board> boards = left.getBoardsRight();
-        if (boards.isEmpty()) {
-
-            NotificationManager.getInstance().addNotification("No boards found");
-            return;
-        }
-
-        Board board = service.getBoardBelow(posX, posY);
-
-        if (board == null) {
-            NotificationManager.getInstance().addNotification("Couldn't place Item. No Board found below");
-            return;
-        }
-
-        float offsetX = posX - board.getPosX();
-        Item item = new Item(Color.DARKBLUE, weight, width, height, offsetX);
-        AddItemCommand addCommand = new AddItemCommand(item, board);
-        addCommand.execute();
-        undoStack.push(addCommand);
-        notifyItemCreationListeners(item);
 
     }
 
     public void editItem(Item item, float newWidth, float newHeight, Color newColor) {
 
-        EditItemCommand editCommand = new EditItemCommand(item, newWidth, newHeight, newColor);
-        editCommand.execute();
-        undoStack.push(editCommand);
+        EditItemCommand editCommand = itemController.editItem(item, newWidth, newHeight, newColor);
+        if (editCommand != null) {
+            editCommand.execute();
+            undoStack.push(editCommand);
+        }
     }
 
-    public void delete(Item item) {
-        System.out.println("Deleting item");
+    public boolean delete(Item item) {
+        return itemController.delete(item);
     }
 
 }

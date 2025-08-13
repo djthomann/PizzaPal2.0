@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javafx.scene.paint.Color;
-import pizzapal.model.observability.BoardChangeListener;
-import pizzapal.model.observability.ChangeType;
+import pizzapal.model.listener.change.BoardChangeListener;
+import pizzapal.model.listener.change.ChangeType;
+import pizzapal.model.listener.change.SupportChangeListener;
 import pizzapal.model.observability.Observable;
-import pizzapal.model.observability.SupportChangeListener;
 import pizzapal.utils.ToolState;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")

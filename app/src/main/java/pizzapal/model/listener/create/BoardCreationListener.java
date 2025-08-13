@@ -1,4 +1,4 @@
-package pizzapal.model.controller;
+package pizzapal.model.listener.create;
 
 import pizzapal.model.domain.entities.Board;
 
