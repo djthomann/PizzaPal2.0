@@ -61,12 +61,12 @@ public class StorageRepository {
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File(storage.getName() + ".storage"), storage);
     }
 
-    public static Storage loadFromFile(String filename) throws IOException {
+    private static Storage loadFromFile(String filename) throws IOException {
         logger.info("Trying to read from file: " + filename);
         return mapper.readValue(new File(filename), Storage.class);
     }
 
-    public static File chooseFile() {
+    private static File chooseFile() {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose File");

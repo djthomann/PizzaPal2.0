@@ -101,7 +101,7 @@ public class MainMenu extends StackPane {
 
             if (storage != null) {
                 SceneManager.getInstance()
-                        .showView(new EditorViewController(StorageRepository.loadFromFileChooser()).getView());
+                        .showView(new EditorViewController(storage).getView());
             }
         });
 

@@ -39,12 +39,14 @@ public class MenuBarView extends MenuBar {
         viewMenu.getItems().add(toggleToolbarItem);
 
         // HELP MENU
-        Menu helpMenu = new Menu("Help");
-        MenuItem shortcutItem = new MenuItem("Shortcuts");
-        MenuItem aboutItem = new MenuItem("About");
-        helpMenu.getItems().addAll(shortcutItem, aboutItem);
+        /*
+         * Menu helpMenu = new Menu("Help");
+         * MenuItem shortcutItem = new MenuItem("Shortcuts");
+         * MenuItem aboutItem = new MenuItem("About");
+         * helpMenu.getItems().addAll(shortcutItem, aboutItem);
+         */
 
-        this.getMenus().addAll(fileMenu, editMenu, viewMenu, helpMenu);
+        this.getMenus().addAll(fileMenu, editMenu, viewMenu);
 
     }
 

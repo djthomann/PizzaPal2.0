@@ -1,6 +1,5 @@
 package pizzapal.ui.view.app.editor;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class EditorViewController {
 
         addStorageTab(tab1, storageController);
 
-        initMenuBar(view.getMenuBar());
+        initMenuBar(view.getMenuBar()); // TODO: Refactor
 
         view.addToolBar(toolBarView);
 
@@ -60,16 +59,11 @@ public class EditorViewController {
         openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
         openItem.setOnAction(e -> {
 
-            File selectedFile = StorageRepository.chooseFile();
+            Storage storage = StorageRepository.loadFromFileChooser();
 
-            if (selectedFile != null) {
-                try {
-                    Storage storage = StorageRepository.loadFromFile(selectedFile.getAbsolutePath());
-                    storage.initListeners();
-                    addStorageTab(storage, storage.getName());
-                } catch (IOException event) {
-                    event.printStackTrace();
-                }
+            if (storage != null) {
+                storage.initListeners();
+                addStorageTab(storage, storage.getName());
             }
         });
 
