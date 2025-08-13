@@ -42,7 +42,7 @@ public class NotificationDropdown {
                 """);
 
         // really inefficient!
-        NotificationManager.getInstance().addListener(newNotifications -> {
+        NotificationManager.getInstance().addAllNewListener(newNotifications -> {
             notifications = newNotifications;
             Platform.runLater(() -> {
                 contentBox.getChildren().clear();

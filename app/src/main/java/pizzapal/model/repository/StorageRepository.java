@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import pizzapal.model.domain.core.Storage;
+import pizzapal.utils.NotificationManager;
 import pizzapal.utils.SceneManager;
 
 public class StorageRepository {
@@ -58,11 +59,13 @@ public class StorageRepository {
 
     public static void saveToFile(Storage storage) throws IOException {
         logger.info("Saving Storage to File: " + storage.getName());
+        NotificationManager.getInstance().addNotification("Saving Storage to File: " + storage.getName());
         mapper.writerWithDefaultPrettyPrinter().writeValue(new File(storage.getName() + ".storage"), storage);
     }
 
     private static Storage loadFromFile(String filename) throws IOException {
         logger.info("Trying to read from file: " + filename);
+        NotificationManager.getInstance().addNotification("Trying to read from file: " + filename);
         return mapper.readValue(new File(filename), Storage.class);
     }
 

@@ -14,21 +14,37 @@ public class NotificationManager {
 
     private List<String> notifications = new ArrayList<>();
 
-    private final List<NotificationListener> listeners = new ArrayList<>();
+    private final List<NewNotificationListener> newListeners = new ArrayList<>();
+
+    private final List<AllNewNotificationListener> listeners = new ArrayList<>();
 
     private NotificationManager() {
     }
 
-    public void addListener(NotificationListener l) {
+    public void addNewListener(NewNotificationListener l) {
+        newListeners.add(l);
+    }
+
+    public void removeNewListener(NewNotificationListener l) {
+        newListeners.remove(l);
+    }
+
+    public void notifyListenersNew(String newNotification) {
+        for (NewNotificationListener l : newListeners) {
+            l.onNewNotification(newNotification);
+        }
+    }
+
+    public void addAllNewListener(AllNewNotificationListener l) {
         listeners.add(l);
     }
 
-    public void removeListener(NotificationListener l) {
+    public void removeAllNewListener(AllNewNotificationListener l) {
         listeners.remove(l);
     }
 
-    public void notifyListeners() {
-        for (NotificationListener l : listeners) {
+    public void notifyListenersAllNew() {
+        for (AllNewNotificationListener l : listeners) {
             l.onNotificationsChanged(notifications);
         }
     }
@@ -43,26 +59,31 @@ public class NotificationManager {
     public void clearNotifications() {
         logger.info("Clearing Notifications");
         notifications.clear();
-        notifyListeners();
+        notifyListenersAllNew();
     }
 
     public void addNotification(String text) {
         logger.info("Adding Notification: " + text);
         notifications.add(text);
-        notifyListeners();
+        notifyListenersNew(text);
+        notifyListenersAllNew();
         SoundPlayer.playNotificationSounds();
     }
 
     public void removeNotification(String text) {
         logger.info("Removing Notification: " + text);
         notifications.remove(text);
-        notifyListeners();
+        notifyListenersAllNew();
     }
 
-    public interface NotificationListener {
+    public interface AllNewNotificationListener {
 
         void onNotificationsChanged(List<String> newNotifications);
 
+    }
+
+    public interface NewNotificationListener {
+        void onNewNotification(String newNotification);
     }
 
 }
