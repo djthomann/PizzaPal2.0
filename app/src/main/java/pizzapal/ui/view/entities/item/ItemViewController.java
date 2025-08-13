@@ -46,7 +46,7 @@ public class ItemViewController extends EntityViewController<Item> {
 
     @Override
     protected void onMouseReleased(float xInView, float yInView) {
-        if (!storageController.moveItem(item, Helper.convertPixelToMeters(xInView),
+        if (!storageController.move(item, Helper.convertPixelToMeters(xInView),
                 Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
                         yInView))) {
             view.resetRectangle();

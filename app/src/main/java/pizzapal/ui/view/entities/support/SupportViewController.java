@@ -46,7 +46,7 @@ public class SupportViewController extends EntityViewController<Support> {
 
     @Override
     protected void onMouseReleased(float xInView, float yInView) {
-        if (!storageController.moveSupport(support, Helper.convertPixelToMeters(xInView),
+        if (!storageController.move(support, Helper.convertPixelToMeters(xInView),
                 Helper.convertPixelToMeters(yInView))) {
             view.resetRectangle();
         }

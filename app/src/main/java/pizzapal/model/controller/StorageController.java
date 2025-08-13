@@ -19,9 +19,6 @@ import pizzapal.model.commands.delete.DeleteSupportCommand;
 import pizzapal.model.commands.edit.EditBoardCommand;
 import pizzapal.model.commands.edit.EditItemCommand;
 import pizzapal.model.commands.edit.EditSupportCommand;
-import pizzapal.model.commands.move.MoveBoardCommand;
-import pizzapal.model.commands.move.MoveItemCommand;
-import pizzapal.model.commands.move.MoveSupportCommand;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Entity;
@@ -33,7 +30,7 @@ import pizzapal.model.listener.create.SupportCreationListener;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
 
-// TODO Refactor methods even more
+// TODO Refactor add and edit methods even more
 public class StorageController {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageController.class);
@@ -59,48 +56,6 @@ public class StorageController {
         boardController = new BoardController(logic, service);
         supportController = new SupportController(logic, service);
         itemController = new ItemController(logic, service);
-    }
-
-    public void addSupportCreationListener(SupportCreationListener l) {
-        supportCreationListeners.add(l);
-    }
-
-    public void removeSupportCreationListener(SupportCreationListener l) {
-        supportCreationListeners.remove(l);
-    }
-
-    public void notifySupportCreationListeners(Support support) {
-        for (SupportCreationListener l : supportCreationListeners) {
-            l.onSupportCreated(support);
-        }
-    }
-
-    public void addBoardCreationListener(BoardCreationListener l) {
-        boardCreationListeners.add(l);
-    }
-
-    public void removeBoardCreationListener(BoardCreationListener l) {
-        boardCreationListeners.remove(l);
-    }
-
-    public void notifyBoardCreationListeners(Board board) {
-        for (BoardCreationListener l : boardCreationListeners) {
-            l.onBoardCreate(board);
-        }
-    }
-
-    public void addItemCreationListener(ItemCreationListener l) {
-        itemCreationListeners.add(l);
-    }
-
-    public void removeItemCreationListener(ItemCreationListener l) {
-        itemCreationListeners.remove(l);
-    }
-
-    public void notifyItemCreationListeners(Item item) {
-        for (ItemCreationListener l : itemCreationListeners) {
-            l.onItemCreate(item);
-        }
     }
 
     public void undo() {
@@ -153,21 +108,32 @@ public class StorageController {
 
     public void delete(Entity e) {
         logger.info("Deleting Entity: " + e.toString());
+        Command deleteCommand = null;
         if (e instanceof Item item) {
-            delete(item);
+            deleteCommand = itemController.delete(item);
         } else if (e instanceof Board board) {
-            delete(board);
+            deleteCommand = boardController.delete(board);
         } else if (e instanceof Support support) {
-            delete(support);
+            deleteCommand = supportController.delete(support);
         }
-
+        if (deleteCommand != null) {
+            deleteCommand.execute();
+            undoStack.push(deleteCommand);
+        }
     }
 
-    public boolean moveSupport(Support support, float posX, float posY) {
-
-        MoveSupportCommand moveCommand = supportController.moveSupport(support, posX, posY);
+    // TODO: return necessary?
+    public boolean move(Entity e, float posX, float posY) {
+        logger.info("Moving Entity: " + e.toString());
+        Command moveCommand = null;
+        if (e instanceof Item item) {
+            moveCommand = itemController.moveItem(item, posX, posY);
+        } else if (e instanceof Board board) {
+            moveCommand = boardController.moveBoard(board, posX, posY);
+        } else if (e instanceof Support support) {
+            moveCommand = supportController.moveSupport(support, posX, posY);
+        }
         if (moveCommand != null) {
-            logger.info("Moving support: " + moveCommand.toString());
             moveCommand.execute();
             undoStack.push(moveCommand);
             return true;
@@ -194,31 +160,6 @@ public class StorageController {
 
     }
 
-    public boolean delete(Support support) {
-        DeleteSupportCommand deleteCommand = supportController.delete(support);
-        if (deleteCommand != null) {
-            deleteCommand.execute();
-            undoStack.push(deleteCommand);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean moveBoard(Board board, float posX, float posY) {
-
-        MoveBoardCommand moveCommand = boardController.moveBoard(board, posX, posY);
-        if (moveCommand != null) {
-            logger.info("Moving board: " + moveCommand.toString());
-            moveCommand.execute();
-            undoStack.push(moveCommand);
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
     public void addBoard(float height, Color color, float posX, float posY) {
 
         AddBoardCommand addCommand = boardController.addBoard(height, color, posX, posY);
@@ -235,30 +176,6 @@ public class StorageController {
         editCommand.execute();
         undoStack.push(editCommand);
 
-    }
-
-    public boolean delete(Board board) {
-        DeleteBoardCommand deleteCommand = boardController.delete(board);
-        if (deleteCommand != null) {
-            deleteCommand.execute();
-            undoStack.push(deleteCommand);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean moveItem(Item item, float posX, float posY) {
-
-        MoveItemCommand moveCommand = itemController.moveItem(item, posX, posY);
-        if (moveCommand != null) {
-            logger.info("Moving item: " + moveCommand.toString());
-            moveCommand.execute();
-            undoStack.push(moveCommand);
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public void addItem(float width, float height, float weight, float posX, float posY) {
@@ -281,14 +198,45 @@ public class StorageController {
         }
     }
 
-    public boolean delete(Item item) {
-        DeleteItemCommand deleteCommand = itemController.delete(item);
-        if (deleteCommand != null) {
-            deleteCommand.execute();
-            undoStack.push(deleteCommand);
-            return true;
-        } else {
-            return false;
+    public void addSupportCreationListener(SupportCreationListener l) {
+        supportCreationListeners.add(l);
+    }
+
+    public void removeSupportCreationListener(SupportCreationListener l) {
+        supportCreationListeners.remove(l);
+    }
+
+    public void notifySupportCreationListeners(Support support) {
+        for (SupportCreationListener l : supportCreationListeners) {
+            l.onSupportCreated(support);
+        }
+    }
+
+    public void addBoardCreationListener(BoardCreationListener l) {
+        boardCreationListeners.add(l);
+    }
+
+    public void removeBoardCreationListener(BoardCreationListener l) {
+        boardCreationListeners.remove(l);
+    }
+
+    public void notifyBoardCreationListeners(Board board) {
+        for (BoardCreationListener l : boardCreationListeners) {
+            l.onBoardCreate(board);
+        }
+    }
+
+    public void addItemCreationListener(ItemCreationListener l) {
+        itemCreationListeners.add(l);
+    }
+
+    public void removeItemCreationListener(ItemCreationListener l) {
+        itemCreationListeners.remove(l);
+    }
+
+    public void notifyItemCreationListeners(Item item) {
+        for (ItemCreationListener l : itemCreationListeners) {
+            l.onItemCreate(item);
         }
     }
 

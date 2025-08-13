@@ -45,7 +45,7 @@ public class BoardViewController extends EntityViewController<Board> {
 
     @Override
     protected void onMouseReleased(float xInView, float yInView) {
-        if (!storageController.moveBoard(board, Helper.convertPixelToMeters(xInView),
+        if (!storageController.move(board, Helper.convertPixelToMeters(xInView),
                 Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(),
                         yInView))) {
             view.resetRectangle();
