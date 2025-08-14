@@ -20,6 +20,7 @@ public class DeleteSupportCommand extends DeleteCommand<Support> {
 
     @Override
     public void undo() {
+        super.undo();
         entity.putInStorage(storage);
     }
 

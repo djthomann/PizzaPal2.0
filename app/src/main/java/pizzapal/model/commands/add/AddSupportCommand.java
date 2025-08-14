@@ -20,6 +20,7 @@ public class AddSupportCommand extends AddCommand<Support> {
 
     @Override
     public void undo() {
+        super.undo();
         entity.delete();
     }
 

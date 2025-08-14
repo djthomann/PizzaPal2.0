@@ -17,4 +17,9 @@ public abstract class DeleteCommand<E extends Entity> implements Command {
         SoundPlayer.playGarbageSound();
     }
 
+    @Override
+    public void undo() {
+        SoundPlayer.playAddSound();
+    }
+
 }

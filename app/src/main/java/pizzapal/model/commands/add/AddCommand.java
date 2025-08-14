@@ -17,4 +17,9 @@ public abstract class AddCommand<E extends Entity> implements Command {
         SoundPlayer.playAddSound();
     }
 
+    @Override
+    public void undo() {
+        SoundPlayer.playGarbageSound();
+    }
+
 }

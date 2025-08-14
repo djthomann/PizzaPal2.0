@@ -22,6 +22,7 @@ public class DeleteBoardCommand extends DeleteCommand<Board> {
 
     @Override
     public void undo() {
+        super.undo();
         entity.attach(supportLeft, supportRight);
     }
 

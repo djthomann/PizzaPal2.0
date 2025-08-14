@@ -20,6 +20,7 @@ public class AddItemCommand extends AddCommand<Item> {
 
     @Override
     public void undo() {
+        super.undo();
         entity.delete();
     }
 

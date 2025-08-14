@@ -20,6 +20,7 @@ public class DeleteItemCommand extends DeleteCommand<Item> {
 
     @Override
     public void undo() {
+        super.undo();
         entity.placeOn(board);
     }
 
