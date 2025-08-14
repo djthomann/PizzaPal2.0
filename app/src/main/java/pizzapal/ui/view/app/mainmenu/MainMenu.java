@@ -177,6 +177,10 @@ public class MainMenu extends StackPane {
             fadeIn.play();
         });
 
+        fadeIn.setOnFinished(e -> {
+            newView.onShow();
+        });
+
         fadeOut.setOnFinished(e -> moveImage.play());
 
         fadeOut.play();

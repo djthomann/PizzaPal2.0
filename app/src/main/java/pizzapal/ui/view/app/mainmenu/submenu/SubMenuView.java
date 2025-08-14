@@ -58,6 +58,10 @@ public abstract class SubMenuView extends VBox {
 
     }
 
+    public void onShow() {
+
+    }
+
     public void addControlOnTop(Node n) {
         controlsBox.getChildren().add(0, n);
     }

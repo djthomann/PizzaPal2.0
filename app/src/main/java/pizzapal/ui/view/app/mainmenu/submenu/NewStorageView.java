@@ -3,6 +3,8 @@ package pizzapal.ui.view.app.mainmenu.submenu;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextFormatter;
@@ -13,6 +15,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 import javafx.util.converter.FloatStringConverter;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.repository.StorageRepository;
@@ -35,8 +38,10 @@ public class NewStorageView extends SubMenuView {
             Color.LIGHTGOLDENRODYELLOW,
             Color.LIGHTPINK);
 
+    private Timeline timeline;
+
     public NewStorageView() {
-        super("New Storage", "Start your journey!", SubMenuPosition.TOP_RIGHT);
+        super("", "Start your journey!", SubMenuPosition.TOP_RIGHT);
 
         Region colorBox = new Region();
         colorBox.setPrefSize(150, 100);
@@ -139,12 +144,27 @@ public class NewStorageView extends SubMenuView {
         addControlOnTop(dimensionInput);
         addControlOnTop(nameInput);
 
+        timeline = new Timeline();
+        for (int i = 0; i < "New Storage".length(); i++) {
+            final int index = i;
+            KeyFrame keyFrame = new KeyFrame(Duration.millis(150 * i), e -> {
+                String subString = "New Storage".substring(0, index + 1);
+                titleLabel.setText(subString);
+            });
+            timeline.getKeyFrames().add(keyFrame);
+        }
+
         this.setBackground(UIHelper.backgroundFromColor(colors.get(currentIndex)));
     }
 
     private void changeColor(Region box, int direction) {
         currentIndex = (currentIndex + direction + colors.size()) % colors.size();
         this.setBackground(UIHelper.backgroundFromColor(colors.get(currentIndex)));
+    }
+
+    @Override
+    public void onShow() {
+        timeline.play();
     }
 
 }
