@@ -13,8 +13,11 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.converter.FloatStringConverter;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.repository.StorageRepository;
+import pizzapal.ui.UIConfig;
+import pizzapal.ui.UIHelper;
 import pizzapal.ui.components.InputFieldWithLabel;
 import pizzapal.ui.components.TextButton;
 import pizzapal.ui.view.app.editor.EditorViewController;
@@ -24,6 +27,7 @@ public class NewStorageView extends SubMenuView {
 
     private int currentIndex = 0;
     private final List<Color> colors = List.of(
+            UIConfig.STORAGE_BACKGROUND_COLOR,
             Color.LIGHTBLUE,
             Color.LIGHTGREEN,
             Color.LIGHTCORAL,
@@ -43,11 +47,12 @@ public class NewStorageView extends SubMenuView {
         leftBtn.setOnAction(e -> changeColor(colorBox, -1));
         rightBtn.setOnAction(e -> changeColor(colorBox, 1));
 
+        // TODO: Refactor input fields with formatters !
         UnaryOperator<TextFormatter.Change> lettersOnlyFilter = change -> {
             String newText = change.getControlNewText();
             if (newText.isEmpty()) {
                 return change;
-            } else if (newText.matches("^[A-Za-z]+( [A-Za-z]+)*[0-9]*$")) {
+            } else if (newText.matches("[A-Za-z][A-Za-z ]*[0-9]*")) {
                 return change;
             }
             return null; // invalid
@@ -59,8 +64,35 @@ public class NewStorageView extends SubMenuView {
             titleLabel.setText(newValue);
         });
 
-        InputFieldWithLabel<Float> widthInput = new InputFieldWithLabel<>("Width", "9.0", 70);
-        InputFieldWithLabel<Float> heightInput = new InputFieldWithLabel<>("Height", "5.0", 70);
+        UnaryOperator<TextFormatter.Change> filter1 = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("-?\\d*(\\.\\d*)?")) {
+                return change;
+            }
+            return null;
+        };
+
+        TextFormatter<Float> floatFormatter1 = new TextFormatter<>(
+                new FloatStringConverter(),
+                9.0f,
+                filter1);
+
+        InputFieldWithLabel<Float> widthInput = new InputFieldWithLabel<>("Width", "9.0", 70, floatFormatter1);
+
+        UnaryOperator<TextFormatter.Change> filter2 = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("-?\\d*(\\.\\d*)?")) {
+                return change;
+            }
+            return null;
+        };
+
+        TextFormatter<Float> floatFormatter2 = new TextFormatter<>(
+                new FloatStringConverter(),
+                5.0f,
+                filter2);
+
+        InputFieldWithLabel<Float> heightInput = new InputFieldWithLabel<>("Height", "5.0", 70, floatFormatter2);
 
         HBox dimensionInput = new HBox(widthInput, heightInput);
         dimensionInput.setSpacing(10);
@@ -94,7 +126,7 @@ public class NewStorageView extends SubMenuView {
                 float width = Float.parseFloat(widthInput.getText());
                 float height = Float.parseFloat(heightInput.getText());
 
-                Storage storage = StorageRepository.createStorage(name, width, height);
+                Storage storage = StorageRepository.createStorage(name, colors.get(currentIndex), width, height);
 
                 SceneManager.getInstance().showView(new EditorViewController(storage).getView());
             }
@@ -105,11 +137,13 @@ public class NewStorageView extends SubMenuView {
         addControlOnTop(backgroundInput);
         addControlOnTop(dimensionInput);
         addControlOnTop(nameInput);
+
+        this.setBackground(UIHelper.backgroundFromColor(colors.get(currentIndex)));
     }
 
     private void changeColor(Region box, int direction) {
         currentIndex = (currentIndex + direction + colors.size()) % colors.size();
-        this.setBackground(new Background(new BackgroundFill(colors.get(currentIndex), null, null)));
+        this.setBackground(UIHelper.backgroundFromColor(colors.get(currentIndex)));
     }
 
 }

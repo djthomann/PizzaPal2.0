@@ -3,15 +3,15 @@ package pizzapal.ui.view.entities.storage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import pizzapal.ui.UIConfig;
+import pizzapal.ui.UIHelper;
 
 public class StorageView extends Pane {
 
     private Rectangle ghostRectangle;
 
-    public StorageView(float width, float height) {
+    public StorageView(Color color, float width, float height) {
 
-        this.setBackground(UIConfig.STORAGE_BACKGROUND);
+        this.setBackground(UIHelper.backgroundFromColor(color));
 
         this.setPrefSize(width, height);
         this.setMinSize(width, height);

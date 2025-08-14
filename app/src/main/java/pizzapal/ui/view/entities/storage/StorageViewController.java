@@ -48,7 +48,7 @@ public class StorageViewController {
         float widthPx = Helper.convertMetersToPixel(storage.getWidth());
         float heightPx = Helper.convertMetersToPixel(storage.getHeight());
 
-        storageView = new StorageView(widthPx, heightPx);
+        storageView = new StorageView(storage.getColor().getColor(), widthPx, heightPx);
 
         List<Support> supports = storage.getSupports();
 

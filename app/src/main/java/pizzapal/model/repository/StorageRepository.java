@@ -8,9 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import pizzapal.model.domain.core.Storage;
+import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.utils.NotificationManager;
 import pizzapal.utils.SceneManager;
 
@@ -18,12 +20,12 @@ public class StorageRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageRepository.class);
 
-    public static Storage createStorage(String name, float width, float height) {
-        return new Storage(name, width, height);
+    public static Storage createStorage() {
+        return createStorage("Test Storage", Color.GRAY, 9.0f, 5f);
     }
 
-    public static Storage createStorage() {
-        return createStorage("Test Storage", 9.0f, 5f);
+    public static Storage createStorage(String name, Color color, float width, float height) {
+        return new Storage(name, new SerializableColor(color), width, height);
     }
 
     @Deprecated

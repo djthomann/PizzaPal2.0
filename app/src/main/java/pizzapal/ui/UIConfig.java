@@ -35,8 +35,10 @@ public class UIConfig {
         public static final Background APP_BACKGROUND_DARKER = new Background(
                         new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY));
 
+        public static final Color STORAGE_BACKGROUND_COLOR = Color.LIGHTGRAY.darker();
+
         public static final Background STORAGE_BACKGROUND = new Background(
-                        new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY));
+                        new BackgroundFill(STORAGE_BACKGROUND_COLOR, CornerRadii.EMPTY, Insets.EMPTY));
 
         public static final Background STORAGE_BACKGROUND_DARK = new Background(
                         new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));

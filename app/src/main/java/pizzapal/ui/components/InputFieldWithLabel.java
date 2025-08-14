@@ -18,7 +18,7 @@ public class InputFieldWithLabel<T> extends VBox {
     public InputFieldWithLabel(String labelText, String initialText, int width, TextFormatter<T> formatter) {
         Label label = new Label(labelText);
         label.setFont(Font.font(10.5));
-        textField = new TextField();
+        textField = new TextField(initialText);
         textField.setMaxWidth(width);
 
         if (formatter != null) {

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
@@ -22,20 +23,23 @@ public class Storage {
     // In meters
     private float height;
 
+    private SerializableColor color;
+
     private List<Support> supports;
 
     public Storage() {
         supports = new ArrayList<>();
     }
 
-    public Storage(float width, float height) {
-        this("Empty name", width, height);
+    public Storage(SerializableColor color, float width, float height) {
+        this("Empty name", color, width, height);
     }
 
-    public Storage(String name, float width, float height) {
+    public Storage(String name, SerializableColor color, float width, float height) {
         this.name = name;
         this.width = width;
         this.height = height;
+        this.color = color;
 
         supports = new ArrayList<>();
     }
@@ -73,6 +77,14 @@ public class Storage {
 
     public void setHeight(float height) {
         this.height = height;
+    }
+
+    public SerializableColor getColor() {
+        return color;
+    }
+
+    public void setColor(SerializableColor color) {
+        this.color = color;
     }
 
     public List<Support> getSupports() {
