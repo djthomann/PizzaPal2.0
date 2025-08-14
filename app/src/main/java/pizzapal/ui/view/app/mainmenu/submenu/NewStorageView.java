@@ -27,6 +27,7 @@ public class NewStorageView extends SubMenuView {
 
     private int currentIndex = 0;
     private final List<Color> colors = List.of(
+            Color.WHITE,
             UIConfig.STORAGE_BACKGROUND_COLOR,
             Color.LIGHTBLUE,
             Color.LIGHTGREEN,
