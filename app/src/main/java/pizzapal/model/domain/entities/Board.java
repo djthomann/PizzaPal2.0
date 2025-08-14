@@ -123,9 +123,9 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         supportRight.getBoardsLeft().remove(this);
         supportRight.removeListener(rightListener);
 
-        for (Item i : items) {
+        List<Item> toDelete = new ArrayList<>(items);
+        for (Item i : toDelete) {
             i.delete();
-
         }
         items.clear();
 
@@ -134,10 +134,12 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
 
     public void addItem(Item item) {
         items.add(item);
+        addListener(item.getListener());
     }
 
     public void removeItem(Item item) {
         items.remove(item);
+        removeListener(item.getListener());
     }
 
     public void reactToChangeLeft(Support support) {

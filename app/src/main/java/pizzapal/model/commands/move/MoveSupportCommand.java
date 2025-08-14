@@ -1,30 +1,27 @@
 package pizzapal.model.commands.move;
 
-import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Support;
 
-public class MoveSupportCommand implements Command {
+public class MoveSupportCommand extends MoveCommand<Support> {
 
-    private final Support support;
-    private final double oldX, oldY;
-    private final double newX, newY;
+    private final double oldX, newX;
 
     public MoveSupportCommand(Support support, double newX, double newY) {
-        this.support = support;
+        super(support);
         this.oldX = support.getPosX();
-        this.oldY = support.getPosY();
         this.newX = newX;
-        this.newY = newY;
     }
 
     @Override
     public void execute() {
-        support.move((float) newX);
+        super.execute();
+        entity.move((float) newX);
     }
 
     @Override
     public void undo() {
-        support.move((float) oldX);
+        super.undo();
+        entity.move((float) oldX);
     }
 
 }

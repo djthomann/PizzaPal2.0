@@ -1,21 +1,16 @@
 package pizzapal.model.commands.move;
 
-import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Item;
 
-public class MoveItemCommand implements Command {
+public class MoveItemCommand extends MoveCommand<Item> {
 
-    private final Item item;
+    private final Board oldBoard, newBoard;
 
-    private final Board oldBoard;
-    private final Board newBoard;
-
-    private final float oldOffset;
-    private final float newOffset;
+    private final float oldOffset, newOffset;
 
     public MoveItemCommand(Item item, Board newBoard, float newOffset) {
-        this.item = item;
+        super(item);
         oldBoard = item.getBoard();
         this.newBoard = newBoard;
         oldOffset = item.getOffsetX();
@@ -24,12 +19,14 @@ public class MoveItemCommand implements Command {
 
     @Override
     public void execute() {
-        item.move(newBoard, newOffset);
+        super.execute();
+        entity.move(newBoard, newOffset);
     }
 
     @Override
     public void undo() {
-        item.move(oldBoard, oldOffset);
+        super.undo();
+        entity.move(oldBoard, oldOffset);
     }
 
 }

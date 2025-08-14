@@ -4,12 +4,10 @@ import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.utils.SoundPlayer;
 
-public abstract class DeleteCommand<E extends Entity> implements Command {
-
-    protected final E entity;
+public abstract class DeleteCommand<E extends Entity> extends Command<E> {
 
     protected DeleteCommand(E entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override

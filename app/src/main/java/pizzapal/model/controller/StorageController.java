@@ -67,6 +67,9 @@ public class StorageController {
                 notifySupportCreationListeners(deleteSupportCommand.getSupport());
             } else if (command instanceof DeleteBoardCommand deleteBoardCommand) {
                 notifyBoardCreationListeners(deleteBoardCommand.getBoard());
+                for (Item i : deleteBoardCommand.getBoard().getItems()) {
+                    notifyItemCreationListeners(i);
+                }
             } else if (command instanceof DeleteItemCommand deleteItemCommand) {
                 notifyItemCreationListeners(deleteItemCommand.getItem());
             }

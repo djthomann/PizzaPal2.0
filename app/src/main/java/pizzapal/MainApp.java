@@ -27,8 +27,6 @@ public class MainApp extends Application {
 
         manager.centerStage();
 
-        // SoundPlayer.playStartupSound();
-
     }
 
     public static void main(String[] args) {

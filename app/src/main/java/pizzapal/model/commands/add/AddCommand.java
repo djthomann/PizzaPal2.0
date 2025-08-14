@@ -4,12 +4,10 @@ import pizzapal.model.commands.Command;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.utils.SoundPlayer;
 
-public abstract class AddCommand<E extends Entity> implements Command {
-
-    protected final E entity;
+public abstract class AddCommand<E extends Entity> extends Command<E> {
 
     protected AddCommand(E entity) {
-        this.entity = entity;
+        super(entity);
     }
 
     @Override

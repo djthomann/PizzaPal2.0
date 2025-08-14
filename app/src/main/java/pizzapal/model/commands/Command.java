@@ -1,9 +1,15 @@
 package pizzapal.model.commands;
 
-public interface Command {
+public abstract class Command<E> {
 
-    public void execute();
+    protected final E entity;
 
-    public void undo();
+    protected Command(E entity) {
+        this.entity = entity;
+    }
+
+    public abstract void execute();
+
+    public abstract void undo();
 
 }

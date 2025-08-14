@@ -4,21 +4,15 @@ import javafx.scene.paint.Color;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.SerializableColor;
 
-public class EditItemCommand extends EditCommand {
+public class EditItemCommand extends EditCommand<Item> {
 
-    private final Item item;
+    private final float newWidth, oldWidth;
+    private final float newHeight, oldHeight;
 
-    private final float oldWidth;
-    private final float newWidth;
-
-    private final float oldHeight;
-    private final float newHeight;
-
-    private final SerializableColor oldColor;
-    private final SerializableColor newColor;
+    private final SerializableColor newColor, oldColor;
 
     public EditItemCommand(Item item, float newWidth, float newHeight, Color newColor) {
-        this.item = item;
+        super(item);
         oldWidth = item.getWidth();
         this.newWidth = newWidth;
         oldHeight = item.getHeight();
@@ -30,12 +24,13 @@ public class EditItemCommand extends EditCommand {
     @Override
     public void execute() {
         super.execute();
-        item.edit(newWidth, newHeight, newColor);
+        entity.edit(newWidth, newHeight, newColor);
     }
 
     @Override
     public void undo() {
-        item.edit(oldWidth, oldHeight, oldColor);
+        super.undo();
+        entity.edit(oldWidth, oldHeight, oldColor);
     }
 
 }

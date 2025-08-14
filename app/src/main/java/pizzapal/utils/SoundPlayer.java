@@ -16,17 +16,11 @@ public class SoundPlayer {
 
     private static MediaPlayer mainMenuThemePlayer = new MediaPlayer(mainMenuTheme);
 
-    private static AudioClip startupSound = new AudioClip(
-            SoundPlayer.class.getResource("/sounds/startup.wav").toString());
-
     private static AudioClip notificationSound = new AudioClip(
             SoundPlayer.class.getResource("/sounds/notification.mp3").toString());
 
     private static AudioClip sweepSound = new AudioClip(
             SoundPlayer.class.getResource("/sounds/broom-sweep.mp3").toString());
-
-    private static AudioClip garbageSound = new AudioClip(
-            SoundPlayer.class.getResource("/sounds/garbage-truck.mp3").toString());
 
     private static AudioClip deleteSound = new AudioClip(
             SoundPlayer.class.getResource("/sounds/breaking-wood.mp3").toString());
@@ -36,6 +30,9 @@ public class SoundPlayer {
 
     private static AudioClip addSound = new AudioClip(
             SoundPlayer.class.getResource("/sounds/pop-up.mp3").toString());
+
+    private static AudioClip moveSound = new AudioClip(
+            SoundPlayer.class.getResource("/sounds/sliding-lock.mp3").toString());
 
     public static void stopSound(AudioClip clip) {
         if (clip.isPlaying()) {
@@ -83,10 +80,6 @@ public class SoundPlayer {
         playSound(sweepSound);
     }
 
-    public static void playStartupSound() {
-        playSound(startupSound);
-    }
-
     public static void playNotificationSounds() {
         playSound(notificationSound);
     }
@@ -101,6 +94,10 @@ public class SoundPlayer {
 
     public static void playAddSound() {
         playSound(addSound);
+    }
+
+    public static void playMoveSound() {
+        playSound(moveSound);
     }
 
     public static float getVolume() {
