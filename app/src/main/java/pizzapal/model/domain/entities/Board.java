@@ -8,19 +8,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javafx.scene.paint.Color;
-import pizzapal.model.listener.change.BoardChangeListener;
-import pizzapal.model.listener.change.ChangeType;
-import pizzapal.model.listener.change.SupportChangeListener;
-import pizzapal.model.observability.Observable;
+import pizzapal.model.observability.FieldListener;
 import pizzapal.utils.ToolState;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Board extends Entity implements Observable<BoardChangeListener> {
+public class Board extends Entity {
 
     public String id;
-
-    @JsonIgnore
-    private final List<BoardChangeListener> listeners = new ArrayList<>();
 
     private Support supportLeft;
 
@@ -31,33 +25,19 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     private SerializableColor color;
     // public static final Color STANDARD_COLOR = ToolState.STANDARD_BOARD_COLOR;
 
-    @JsonIgnore
-    SupportChangeListener leftListener = (model, type) -> {
-        switch (type) {
-            case MOVE -> {
-                reactToChangeLeft(model);
-            }
-            case DELETE -> {
-                delete();
-            }
-        }
-    };
-
-    @JsonIgnore
-    SupportChangeListener rightListener = (model, type) -> {
-        switch (type) {
-            case MOVE -> {
-                reactToChangeRight(model);
-            }
-            case DELETE -> {
-                delete();
-            }
-        }
-
-    };
-
     // Relative to Support
     private float offsetY;
+
+    @JsonIgnore
+    FieldListener<Float> leftPosXListener = (obs, oldValue, newValue) -> {
+        setPosX(newValue + supportLeft.getWidth());
+        setWidth(supportRight.getPosX() - supportLeft.getWidth() - newValue);
+    };
+
+    @JsonIgnore
+    FieldListener<Float> rightPosXListener = (obs, oldValue, newValue) -> {
+        setWidth(newValue - supportLeft.getPosX() - supportLeft.getWidth());
+    };
 
     public Board() {
         items = new ArrayList<>();
@@ -89,7 +69,7 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
 
     public void initListeners() {
         for (Item i : items) {
-            listeners.add(i.getListener());
+            i.initListeners();
         }
     }
 
@@ -102,10 +82,10 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         setPosX(supportLeft.getPosX() + supportLeft.getWidth());
         setPosY(supportLeft.getHeight() - offsetY);
 
-        supportLeft.addListener(leftListener);
+        supportLeft.posXObservable().addListener(leftPosXListener);
         supportLeft.addBoardRight(this);
 
-        supportRight.addListener(rightListener);
+        supportRight.posXObservable().addListener(rightPosXListener);
         supportRight.addBoardLeft(this);
 
     }
@@ -118,10 +98,10 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
     public void delete() {
 
         supportLeft.getBoardsRight().remove(this);
-        supportLeft.removeListener(leftListener);
+        supportLeft.posXObservable().removeListener(leftPosXListener);
 
         supportRight.getBoardsLeft().remove(this);
-        supportRight.removeListener(rightListener);
+        supportRight.posXObservable().removeListener(rightPosXListener);
 
         List<Item> toDelete = new ArrayList<>(items);
         for (Item i : toDelete) {
@@ -129,68 +109,33 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         }
         items.clear();
 
-        notifyListeners(ChangeType.DELETE);
+        super.delete();
     }
 
     public void addItem(Item item) {
         items.add(item);
-        addListener(item.getListener());
+        item.addListeners(this);
     }
 
     public void removeItem(Item item) {
         items.remove(item);
-        removeListener(item.getListener());
-    }
-
-    public void reactToChangeLeft(Support support) {
-        setPosX(support.getPosX() + support.getWidth());
-        setPosY(supportLeft.getHeight() - offsetY);
-    }
-
-    public void reactToChangeRight(Support support) {
-        notifyListeners();
-    }
-
-    public boolean containsListener(BoardChangeListener l) {
-        return listeners.contains(l);
-    }
-
-    @Override
-    public void addListener(BoardChangeListener l) {
-        listeners.add(l);
-    }
-
-    @Override
-    public void removeListener(BoardChangeListener l) {
-        listeners.remove(l);
-    }
-
-    private void notifyListeners(ChangeType type) {
-        for (BoardChangeListener l : listeners) {
-            l.onBoardChange(this, type);
-        }
-    }
-
-    private void notifyListeners() {
-        for (BoardChangeListener l : listeners) {
-            l.onBoardChange(this, ChangeType.MOVE);
-        }
+        item.removeListeners(this);
     }
 
     public void move(Support left, Support right, float offsetY) {
 
         if (supportLeft != left) {
-            supportLeft.removeListener(leftListener);
+            supportLeft.posXObservable().removeListener(leftPosXListener);
             supportLeft.getBoardsRight().remove(this);
-            left.addListener(leftListener);
+            left.posXObservable().addListener(leftPosXListener);
             left.getBoardsRight().add(this);
             supportLeft = left;
         }
 
         if (supportRight != right) {
-            supportRight.removeListener(rightListener);
+            supportRight.posXObservable().removeListener(rightPosXListener);
             supportRight.getBoardsLeft().remove(this);
-            right.addListener(rightListener);
+            right.posXObservable().addListener(rightPosXListener);
             right.getBoardsLeft().add(this);
             supportRight = right;
         }
@@ -230,16 +175,6 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.supportRight = supportRight;
     }
 
-    public void setPosY(float posY) {
-        super.setPosY(posY);
-        notifyListeners();
-    }
-
-    public void setPosX(float posX) {
-        super.setPosX(posX);
-        notifyListeners();
-    }
-
     public float getOffsetY() {
         return offsetY;
     }
@@ -248,23 +183,13 @@ public class Board extends Entity implements Observable<BoardChangeListener> {
         this.offsetY = offsetY;
     }
 
-    public void setWidth(float width) {
-        super.setWidth(width);
-        notifyListeners(ChangeType.EDIT);
-    }
-
-    public void setHeight(float height) {
-        super.setHeight(height);
-        notifyListeners(ChangeType.EDIT);
-    }
-
     public SerializableColor getColor() {
         return color;
     }
 
     public void setColor(SerializableColor color) {
         this.color = color;
-        notifyListeners(ChangeType.EDIT);
+        // notifyListeners(ChangeType.EDIT);
     }
 
 }

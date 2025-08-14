@@ -1,7 +1,5 @@
 package pizzapal.ui.view.entities.support;
 
-import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.view.entities.EntityViewController;
@@ -16,26 +14,6 @@ public class SupportViewController extends EntityViewController<Support> {
                         Helper.convertMetersToPixel(support.getHeight()),
                         Helper.convertMetersToPixel(support.getPosX()),
                         Helper.getPixelPositionYInStorage(support.getStorage(), support)));
-
-        support.addListener((model, type) -> {
-
-            switch (type) {
-                case MOVE -> {
-                    view.updateFromModel(model);
-                }
-                case DELETE -> {
-                    Parent parent = view.getParent();
-                    if (parent instanceof Pane pane) {
-                        pane.getChildren().remove(view);
-                    }
-                }
-                case EDIT -> {
-                    view.updateFromModelEdit(model);
-                }
-            }
-
-        });
-
     }
 
 }

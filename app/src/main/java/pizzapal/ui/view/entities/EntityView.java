@@ -62,10 +62,6 @@ public abstract class EntityView<E extends Entity> extends Pane {
         setLayoutY(posY);
     }
 
-    public abstract void updateFromModel(E e);
-
-    public abstract void updateFromModelEdit(E e);
-
     public void moveRectangle(float posX, float posY) {
         entityRectangle.setLayoutX(posX);
         entityRectangle.setLayoutY(posY);

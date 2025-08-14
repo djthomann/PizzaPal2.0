@@ -4,23 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.domain.core.Storage;
-import pizzapal.model.listener.change.ChangeType;
-import pizzapal.model.listener.change.SupportChangeListener;
-import pizzapal.model.observability.Observable;
 import pizzapal.utils.ToolState;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Support extends Entity implements Observable<SupportChangeListener> {
+public class Support extends Entity {
 
     public int id;
-
-    @JsonIgnore
-    private final List<SupportChangeListener> listeners = new ArrayList<>();
 
     private Storage storage;
 
@@ -66,16 +59,17 @@ public class Support extends Entity implements Observable<SupportChangeListener>
 
     public void initListeners() {
         for (Board b : boardsLeft) {
-            listeners.add(b.rightListener);
+            posXObservable().addListener(b.rightPosXListener);
             b.initListeners();
         }
 
         for (Board b : boardsRight) {
-            listeners.add(b.leftListener);
+            posXObservable().addListener(b.leftPosXListener);
             b.initListeners();
         }
     }
 
+    // TODO: Implement correctly
     public void delete() {
 
         storage.removeSupport(this);
@@ -89,7 +83,7 @@ public class Support extends Entity implements Observable<SupportChangeListener>
             b.setSupportLeft(null);
         }
 
-        notifyListeners(ChangeType.DELETE);
+        super.delete();
     }
 
     public List<Board> getBoardsLeft() {
@@ -126,26 +120,6 @@ public class Support extends Entity implements Observable<SupportChangeListener>
         setPosX(posX);
     }
 
-    public void addListener(SupportChangeListener l) {
-        listeners.add(l);
-    }
-
-    public void removeListener(SupportChangeListener l) {
-        listeners.remove(l);
-    }
-
-    private void notifyListeners(ChangeType type) {
-        for (SupportChangeListener l : listeners) {
-            l.onSupportChange(this, type);
-        }
-    }
-
-    private void notifyListeners() {
-        for (SupportChangeListener l : listeners) {
-            l.onSupportChange(this, ChangeType.MOVE);
-        }
-    }
-
     // GETTERS AND SETTERS
 
     public void setStorage(Storage storage) {
@@ -158,22 +132,22 @@ public class Support extends Entity implements Observable<SupportChangeListener>
 
     public void setPosX(float positionX) {
         super.setPosX(positionX);
-        notifyListeners();
+        // notifyListeners();
     }
 
     public void setPosY(float positionY) {
         super.setPosY(positionY);
-        notifyListeners();
+        // notifyListeners();
     }
 
     public void setWidth(float width) {
         super.setWidth(width);
-        notifyListeners(ChangeType.EDIT);
+        // notifyListeners(ChangeType.EDIT);
     }
 
     public void setHeight(float height) {
         super.setHeight(height);
-        notifyListeners(ChangeType.EDIT);
+        // notifyListeners(ChangeType.EDIT);
     }
 
     @Override
@@ -188,7 +162,7 @@ public class Support extends Entity implements Observable<SupportChangeListener>
 
     public void setColor(SerializableColor color) {
         this.color = color;
-        notifyListeners(ChangeType.EDIT);
+        // notifyListeners(ChangeType.EDIT);
     }
 
 }

@@ -3,6 +3,7 @@ package pizzapal.ui.view.entities;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
@@ -46,6 +47,39 @@ public abstract class EntityViewController<E extends Entity> {
         this.entity = entity;
         this.view = view;
 
+        entity.posXObservable().addListener((obs, oldValue, newValue) -> {
+            System.out.println("New PosX Value: " + newValue);
+            view.resetRectangle();
+            view.setLayoutX(Helper.convertMetersToPixel(newValue));
+        });
+
+        entity.posYObservable().addListener((obs, oldValue, newValue) -> {
+            System.out.println("New PosY Value: " + newValue);
+            view.resetRectangle();
+            view.setLayoutY(Helper.getPixelPositionYInStorage(storageController.getStorage(), newValue));
+        });
+
+        entity.widthObservable().addListener((obs, oldValue, newValue) -> {
+            System.out.println("New Width Value: " + newValue);
+            view.resetRectangle();
+            view.setWidth(Helper.convertMetersToPixel(newValue));
+        });
+
+        entity.heightObservable().addListener((obs, oldValue, newValue) -> {
+            System.out.println("New Height Value: " + newValue);
+            view.resetRectangle();
+            view.setHeight(Helper.convertMetersToPixel(newValue));
+        });
+
+        entity.deleteObservable().addListener((obs, oldValue, newValue) -> {
+            if (newValue) {
+                Parent parent = view.getParent();
+                if (parent instanceof Pane pane) {
+                    pane.getChildren().remove(view);
+                }
+            }
+        });
+
         contextMenu = new ContextMenu();
         initContextMenu();
 
@@ -76,6 +110,8 @@ public abstract class EntityViewController<E extends Entity> {
 
         MenuItem editItem = new MenuItem("Edit");
         editItem.setOnAction(e -> {
+            System.out.println("EDIT WIDTH" + Float.parseFloat(tf1.getText()));
+            System.out.println("EDIT HEIGHT" + Float.parseFloat(tf2.getText()));
             storageController.edit(entity, Float.parseFloat(tf1.getText()), Float.parseFloat(tf2.getText()),
                     colorPicker.getValue());
             ;

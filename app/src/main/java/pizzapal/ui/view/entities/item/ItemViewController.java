@@ -1,7 +1,5 @@
 package pizzapal.ui.view.entities.item;
 
-import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.ui.view.entities.EntityViewController;
@@ -16,26 +14,6 @@ public class ItemViewController extends EntityViewController<Item> {
                 Helper.convertMetersToPixel(item.getWidth()),
                 Helper.convertMetersToPixel(item.getHeight()), Helper.convertMetersToPixel(item.getPosX()),
                 Helper.getPixelPositionYInStorage(storageController.getStorage(), item.getPosY())));
-
-        item.addListener((model, type) -> {
-
-            switch (type) {
-                case MOVE -> {
-                    view.updateFromModel(model);
-                }
-                case DELETE -> {
-                    Parent parent = view.getParent();
-                    if (parent instanceof Pane pane) {
-                        pane.getChildren().remove(view);
-                    }
-                }
-                case EDIT -> {
-                    view.updateFromModelEdit(item);
-                }
-            }
-
-        });
-
     }
 
 }

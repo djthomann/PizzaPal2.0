@@ -1,20 +1,14 @@
 package pizzapal.model.domain.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javafx.scene.paint.Color;
-import pizzapal.model.listener.change.BoardChangeListener;
-import pizzapal.model.listener.change.ChangeType;
-import pizzapal.model.listener.change.ItemChangeListener;
-import pizzapal.model.observability.Observable;
+import pizzapal.model.observability.FieldListener;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Item extends Entity implements Observable<ItemChangeListener> {
+public class Item extends Entity {
 
     public String id;
 
@@ -26,19 +20,12 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     private Board board;
 
-    @JsonIgnore
-    private List<ItemChangeListener> listeners = new ArrayList<>();
+    FieldListener<Float> posXListener = (obs, oldValue, newValue) -> {
+        setPosX(newValue + offsetX);
+    };
 
-    @JsonIgnore
-    private BoardChangeListener listener = (model, type) -> {
-        switch (type) {
-            case MOVE -> {
-                reactToBoardChange(model);
-            }
-            case DELETE -> {
-                delete();
-            }
-        }
+    FieldListener<Float> posYListener = (obs, oldValue, newValue) -> {
+        setPosY(newValue + height.getValue());
     };
 
     public Item() {
@@ -67,20 +54,19 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
         }
     }
 
-    private void notifyListeners(ChangeType type) {
-        for (ItemChangeListener l : listeners) {
-            l.onItemChange(this, type);
-        }
+    public void initListeners() {
+        addListeners(board);
     }
 
     public void placeOn(Board board) {
         this.board = board;
 
         setPosX(board.getPosX() + offsetX);
-        setPosY(board.getPosY() + height);
+        setPosY(board.getPosY() + height.getValue());
 
         board.addItem(this);
-        board.addListener(listener);
+        board.posXObservable().addListener(posXListener);
+        board.posYObservable().addListener(posYListener);
     }
 
     public void edit(float width, float height, SerializableColor color) {
@@ -91,25 +77,30 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public void delete() {
         board.removeItem(this);
-        board.removeListener(listener);
+        removeListeners(board);
 
-        notifyListeners(ChangeType.DELETE);
+        super.delete();
+    }
+
+    public void addListeners(Board board) {
+        board.posXObservable().addListener(posXListener);
+        board.posYObservable().addListener(posYListener);
+    }
+
+    public void removeListeners(Board board) {
+        board.posXObservable().removeListener(posXListener);
+        board.posYObservable().removeListener(posYListener);
     }
 
     public void move(Board board, float offsetX) {
         this.board.removeItem(this);
-        this.board.removeListener(listener);
+        removeListeners(this.board);
         this.board = board;
         board.addItem(this);
-        board.addListener(listener);
+        addListeners(board);
         this.offsetX = offsetX;
         setPosX(board.getPosX() + offsetX);
-        setPosY(board.getPosY() + height);
-    }
-
-    public void reactToBoardChange(Board board) {
-        setPosX(board.getPosX() + offsetX);
-        setPosY(board.getPosY() + height);
+        setPosY(board.getPosY() + height.getValue());
     }
 
     @JsonIgnore
@@ -119,37 +110,11 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public void setColor(SerializableColor color) {
         ingredient.setColor(color);
-        notifyListeners(ChangeType.EDIT);
+        // notifyListeners(ChangeType.EDIT);
     }
 
     public float getWeight() {
         return weight;
-    }
-
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    public float getPosX() {
-        return posX;
-    }
-
-    public void setPosX(float posX) {
-        this.posX = posX;
-        notifyListeners(ChangeType.MOVE);
-    }
-
-    public float getPosY() {
-        return posY;
-    }
-
-    public void setPosY(float posY) {
-        this.posY = posY;
-        notifyListeners(ChangeType.MOVE);
     }
 
     public Board getBoard() {
@@ -170,30 +135,6 @@ public class Item extends Entity implements Observable<ItemChangeListener> {
 
     public float getOffsetX() {
         return offsetX;
-    }
-
-    public void setWidth(float width) {
-        super.setWidth(width);
-        notifyListeners(ChangeType.EDIT);
-    }
-
-    public void setHeight(float height) {
-        super.setHeight(height);
-        notifyListeners(ChangeType.EDIT);
-    }
-
-    @Override
-    public void addListener(ItemChangeListener l) {
-        listeners.add(l);
-    }
-
-    @Override
-    public void removeListener(ItemChangeListener l) {
-        listeners.remove(l);
-    }
-
-    public BoardChangeListener getListener() {
-        return listener;
     }
 
 }
