@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
+import pizzapal.ui.UIConfig;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Storage {
@@ -29,6 +30,10 @@ public class Storage {
 
     public Storage() {
         supports = new ArrayList<>();
+    }
+
+    public Storage(float width, float height) {
+        this(new SerializableColor(UIConfig.STORAGE_BACKGROUND_COLOR), width, height);
     }
 
     public Storage(SerializableColor color, float width, float height) {

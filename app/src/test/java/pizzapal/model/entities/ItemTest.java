@@ -53,7 +53,7 @@ public class ItemTest {
 
         assertEquals(board1, item.getBoard());
 
-        assertTrue(controller.moveItem(item, 4.5f, 5f));
+        assertTrue(controller.move(item, 4.5f, 5f));
 
         assertEquals(board2, item.getBoard());
         assertTrue(board1.getItems().isEmpty());

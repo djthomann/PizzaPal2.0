@@ -70,11 +70,11 @@ public class BoardTest {
         storage.addSupport(support3);
         storage.addSupport(support4);
 
-        controller.moveBoard(board, 4.5f, 0.5f);
+        controller.move(board, 4.5f, 0.5f);
 
         assertEquals(0.7f, board.getWidth());
 
-        controller.moveBoard(board, 2.5f, 0.5f);
+        controller.move(board, 2.5f, 0.5f);
 
         assertEquals(0.8f, board.getWidth());
 
@@ -99,12 +99,12 @@ public class BoardTest {
         storage.addSupport(support3);
         storage.addSupport(support4);
 
-        controller.moveBoard(board, 4.5f, 0.5f);
+        controller.move(board, 4.5f, 0.5f);
 
         assertEquals(support3, board.getSupportLeft());
         assertEquals(support4, board.getSupportRight());
 
-        controller.moveBoard(board, 2.5f, 0.5f);
+        controller.move(board, 2.5f, 0.5f);
 
         assertEquals(support1, board.getSupportLeft());
         assertEquals(support2, board.getSupportRight());

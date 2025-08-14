@@ -109,7 +109,7 @@ public class StorageController {
         }
     }
 
-    public void delete(Entity e) {
+    public boolean delete(Entity e) {
         logger.info("Deleting Entity: " + e.toString());
         Command deleteCommand = null;
         if (e instanceof Item item) {
@@ -122,13 +122,16 @@ public class StorageController {
         if (deleteCommand != null) {
             deleteCommand.execute();
             undoStack.push(deleteCommand);
+            return true;
+        } else {
+            return false;
         }
     }
 
     // TODO: return necessary?
     public boolean move(Entity e, float posX, float posY) {
         logger.info("Moving Entity: " + e.toString());
-        Command moveCommand = null;
+        Command moveCommand = null; // Maybe abstract even more?
         if (e instanceof Item item) {
             moveCommand = itemController.moveItem(item, posX, posY);
         } else if (e instanceof Board board) {

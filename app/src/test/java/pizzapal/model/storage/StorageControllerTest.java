@@ -96,12 +96,12 @@ public class StorageControllerTest {
         assertEquals(2.5f, board.getPosY());
         assertEquals(0.5f, board.getOffsetY());
 
-        controller.moveBoard(board, 2f, 1f);
+        controller.move(board, 2f, 1f);
 
         assertEquals(1f, board.getPosY());
         assertEquals(2f, board.getOffsetY());
 
-        controller.moveBoard(board, 2f, 2f);
+        controller.move(board, 2f, 2f);
 
         assertEquals(2f, board.getPosY());
         assertEquals(1f, board.getOffsetY());
@@ -170,10 +170,10 @@ public class StorageControllerTest {
 
         Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
 
-        assertTrue(controller.moveItem(item1, 2, 3));
+        assertTrue(controller.move(item1, 2, 3));
         assertEquals(board1, item1.getBoard());
 
-        assertTrue(controller.moveItem(item1, 2, 2.1f));
+        assertTrue(controller.move(item1, 2, 2.1f));
         assertEquals(board2, item1.getBoard());
         assertTrue(board1.getItems().isEmpty());
 
@@ -190,7 +190,7 @@ public class StorageControllerTest {
 
         Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
 
-        assertTrue(controller.moveItem(item1, 2, 2.2f));
+        assertTrue(controller.move(item1, 2, 2.2f));
         assertTrue(board2.containsListener(item1.getListener()));
         assertFalse(board1.containsListener(item1.getListener()));
 
@@ -208,7 +208,7 @@ public class StorageControllerTest {
 
         assertEquals(3.2f, item1.getPosY());
 
-        controller.moveItem(item1, 2f, 2.1f);
+        controller.move(item1, 2f, 2.1f);
 
         assertEquals(2.2f, item1.getPosY());
 
@@ -224,9 +224,9 @@ public class StorageControllerTest {
         Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
 
         assertEquals(3.2f, item1.getPosY());
-        assertTrue(controller.moveBoard(board1, 2f, 2f));
+        assertTrue(controller.move(board1, 2f, 2f));
         assertEquals(2.2f, item1.getPosY());
-        assertTrue(controller.moveBoard(board1, 2f, 1f));
+        assertTrue(controller.move(board1, 2f, 1f));
         assertEquals(1.2f, item1.getPosY());
     }
 
@@ -240,10 +240,10 @@ public class StorageControllerTest {
 
         Item item1 = new Item(board1, null, 0.2f, 0.2f, 0.2f, 0.2f);
 
-        assertTrue(controller.moveItem(item1, 2, 2.2f));
+        assertTrue(controller.move(item1, 2, 2.2f));
         assertEquals(board2.getPosY() + item1.getHeight(), item1.getPosY());
 
-        assertTrue(controller.moveBoard(board1, 2f, 1f));
+        assertTrue(controller.move(board1, 2f, 1f));
         assertEquals(board2.getPosY() + item1.getHeight(), item1.getPosY());
     }
 
