@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import javafx.scene.paint.Color;
 import pizzapal.model.observability.FieldListener;
 import pizzapal.utils.ToolState;
 
@@ -21,9 +20,6 @@ public class Board extends Entity {
     private Support supportRight;
 
     private List<Item> items = new ArrayList<>();
-
-    private SerializableColor color;
-    // public static final Color STANDARD_COLOR = ToolState.STANDARD_BOARD_COLOR;
 
     // Relative to Support
     private float offsetY;
@@ -43,21 +39,21 @@ public class Board extends Entity {
         items = new ArrayList<>();
     }
 
+    // TODO: Think about ToolState dependancy
     public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
-        this(supportLeft, supportRight, height, offsetY, ToolState.STANDARD_BOARD_COLOR);
+        this(supportLeft, supportRight, height, offsetY, new SerializableColor(ToolState.STANDARD_BOARD_COLOR));
     }
 
-    public Board(float height, float offsetY, Color color) {
-        super(0, height, 0, 0);
+    public Board(float height, float offsetY, SerializableColor color) {
+        super(color, 0, height, 0, 0);
         this.offsetY = offsetY;
-        this.color = new SerializableColor(color);
+        // this.color = new SerializableColor(color);
     }
 
-    public Board(Support supportLeft, Support supportRight, float height, float offsetY, Color color) {
-        super(supportRight.getPosX() - supportLeft.getPosX()
+    public Board(Support supportLeft, Support supportRight, float height, float offsetY, SerializableColor color) {
+        super(color, supportRight.getPosX() - supportLeft.getPosX()
                 + supportLeft.getWidth(), height, supportLeft.getPosX(), supportLeft.getHeight() - offsetY);
         this.offsetY = offsetY;
-        this.color = new SerializableColor(color);
 
         if (supportLeft != null && supportRight != null) {
             attach(supportLeft, supportRight);
@@ -181,15 +177,6 @@ public class Board extends Entity {
 
     public void setOffsetY(float offsetY) {
         this.offsetY = offsetY;
-    }
-
-    public SerializableColor getColor() {
-        return color;
-    }
-
-    public void setColor(SerializableColor color) {
-        this.color = color;
-        // notifyListeners(ChangeType.EDIT);
     }
 
 }

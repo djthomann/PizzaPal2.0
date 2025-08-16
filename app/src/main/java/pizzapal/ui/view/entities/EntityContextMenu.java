@@ -2,12 +2,12 @@ package pizzapal.ui.view.entities;
 
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Control;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.utils.Helper;
@@ -17,32 +17,30 @@ public class EntityContextMenu extends ContextMenu {
     private Entity entity;
     private StorageController storageController;
 
+    private static final int WIDTH = 150;
+
     public EntityContextMenu(Entity entity, StorageController storageController) {
-        TextField widthTextField = new TextField();
-        widthTextField.setText(String.valueOf(entity.getWidth()));
+        TextField widthTextField = contextMenuTextField(String.valueOf(entity.getWidth()), "New Width",
+                "newWidthField");
         entity.widthObservable().addListener((obs, oldValue, newValue) -> {
             widthTextField.setText(String.valueOf(newValue));
         });
-        widthTextField.setPrefWidth(150);
-        widthTextField.setMaxWidth(150);
-        widthTextField.setPromptText("New Width");
-        widthTextField.setId("newWidthField");
         CustomMenuItem item1 = new CustomMenuItem(widthTextField);
         item1.setHideOnClick(false);
 
-        TextField heightTextField = new TextField();
-        heightTextField.setText(String.valueOf(entity.getHeight()));
+        TextField heightTextField = contextMenuTextField(String.valueOf(entity.getHeight()), "New Height",
+                "newHeightField");
         entity.heightObservable().addListener((obs, oldValue, newValue) -> {
             heightTextField.setText(String.valueOf(newValue));
         });
-        heightTextField.setPrefWidth(150);
-        heightTextField.setMaxWidth(150);
-        heightTextField.setPromptText("New Height");
-        heightTextField.setId("newHeightField");
         CustomMenuItem item2 = new CustomMenuItem(heightTextField);
         item2.setHideOnClick(false);
 
-        ColorPicker colorPicker = new ColorPicker(Color.RED);
+        ColorPicker colorPicker = new ColorPicker(entity.getColor().getColor());
+        setControlWidth(colorPicker);
+        entity.colorObservable().addListener((obs, oldValue, newValue) -> {
+            colorPicker.setValue(newValue.getColor());
+        });
         CustomMenuItem colorItem = new CustomMenuItem(colorPicker);
         colorItem.setHideOnClick(false);
 
@@ -72,6 +70,24 @@ public class EntityContextMenu extends ContextMenu {
         deleteItem.setStyle("-fx-font-weight: bold;");
 
         this.getItems().addAll(item1, item2, colorItem, editItem, new SeparatorMenuItem(), deleteItem);
+
+    }
+
+    private void setControlWidth(Control n) {
+        n.setPrefWidth(WIDTH);
+        n.setMaxWidth(WIDTH);
+        n.setMinWidth(WIDTH);
+
+    }
+
+    private TextField contextMenuTextField(String initialText, String promptText, String id) {
+        TextField textField = new TextField();
+        textField.setText(initialText);
+        textField.setPromptText(promptText);
+        textField.setId(id);
+        setControlWidth(textField);
+
+        return textField;
     }
 
     public void init() {

@@ -23,6 +23,7 @@ import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.model.domain.entities.Item;
+import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.model.listener.create.BoardCreationListener;
 import pizzapal.model.listener.create.ItemCreationListener;
@@ -148,7 +149,7 @@ public class StorageController {
         }
     }
 
-    public void addSupport(float width, float height, Color color, float posX, float posY) {
+    public void addSupport(float width, float height, SerializableColor color, float posX, float posY) {
 
         AddSupportCommand addCommand = supportController.addSupport(width, height, color, posX, posY);
         if (addCommand != null) {
@@ -166,7 +167,7 @@ public class StorageController {
 
     }
 
-    public void addBoard(float height, Color color, float posX, float posY) {
+    public void addBoard(float height, SerializableColor color, float posX, float posY) {
 
         AddBoardCommand addCommand = boardController.addBoard(height, color, posX, posY);
         if (addCommand != null) {

@@ -6,9 +6,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import javafx.scene.paint.Color;
 import pizzapal.model.domain.core.Storage;
-import pizzapal.utils.ToolState;
+import pizzapal.utils.ToolState; // TODO: Think about this dependancy
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Support extends Entity {
@@ -20,9 +19,6 @@ public class Support extends Entity {
     private List<Board> boardsLeft;
     private List<Board> boardsRight;
 
-    private SerializableColor color;
-    // private static final Color STANDARD_COLOR = ToolState.STANDARD_SUPPORT_COLOR;
-
     public Support() {
         super();
         boardsLeft = new ArrayList<>();
@@ -30,22 +26,21 @@ public class Support extends Entity {
     }
 
     public Support(Storage storage, float width, float height, float posX, float posY) {
-        this(storage, ToolState.STANDARD_SUPPORT_COLOR, width, height, posX, posY);
+        this(storage, new SerializableColor(ToolState.STANDARD_SUPPORT_COLOR), width, height, posX, posY);
     }
 
-    public Support(Color color, float width, float height, float posX, float posY) {
+    public Support(SerializableColor color, float width, float height, float posX, float posY) {
         this(null, color, width, height, posX, posY);
     }
 
     public Support(float width, float height, float posX, float posY) {
-        this(null, ToolState.STANDARD_SUPPORT_COLOR, width, height, posX, posY);
+        this(null, new SerializableColor(ToolState.STANDARD_SUPPORT_COLOR), width, height, posX, posY);
     }
 
-    public Support(Storage storage, Color color, float width, float height, float posX, float posY) {
-        super(width, height, posX, posY);
+    public Support(Storage storage, SerializableColor color, float width, float height, float posX, float posY) {
+        super(color, width, height, posX, posY);
         boardsLeft = new ArrayList<>();
         boardsRight = new ArrayList<>();
-        this.color = new SerializableColor(color);
 
         if (storage != null) {
             putInStorage(storage);
@@ -86,30 +81,6 @@ public class Support extends Entity {
         super.delete();
     }
 
-    public List<Board> getBoardsLeft() {
-        return boardsLeft;
-    }
-
-    public void setBoardsLeft(List<Board> boardsLeft) {
-        this.boardsLeft = boardsLeft;
-    }
-
-    public void addBoardLeft(Board board) {
-        boardsLeft.add(board);
-    }
-
-    public List<Board> getBoardsRight() {
-        return boardsRight;
-    }
-
-    public void setBoardsRight(List<Board> boardsRight) {
-        this.boardsRight = boardsRight;
-    }
-
-    public void addBoardRight(Board board) {
-        boardsRight.add(board);
-    }
-
     public void edit(float width, float height, SerializableColor color) {
         setWidth(width);
         setHeight(height);
@@ -120,7 +91,31 @@ public class Support extends Entity {
         setPosX(posX);
     }
 
+    public void addBoardLeft(Board board) {
+        boardsLeft.add(board);
+    }
+
+    public void addBoardRight(Board board) {
+        boardsRight.add(board);
+    }
+
     // GETTERS AND SETTERS
+
+    public List<Board> getBoardsLeft() {
+        return boardsLeft;
+    }
+
+    public void setBoardsLeft(List<Board> boardsLeft) {
+        this.boardsLeft = boardsLeft;
+    }
+
+    public List<Board> getBoardsRight() {
+        return boardsRight;
+    }
+
+    public void setBoardsRight(List<Board> boardsRight) {
+        this.boardsRight = boardsRight;
+    }
 
     public void setStorage(Storage storage) {
         this.storage = storage;
@@ -130,39 +125,10 @@ public class Support extends Entity {
         return storage;
     }
 
-    public void setPosX(float positionX) {
-        super.setPosX(positionX);
-        // notifyListeners();
-    }
-
-    public void setPosY(float positionY) {
-        super.setPosY(positionY);
-        // notifyListeners();
-    }
-
-    public void setWidth(float width) {
-        super.setWidth(width);
-        // notifyListeners(ChangeType.EDIT);
-    }
-
-    public void setHeight(float height) {
-        super.setHeight(height);
-        // notifyListeners(ChangeType.EDIT);
-    }
-
     @Override
     public String toString() {
         return "Support [width=" + width + ", height=" + height + ", positionX=" + posX + ", positionY="
                 + posY + "]";
-    }
-
-    public SerializableColor getColor() {
-        return color;
-    }
-
-    public void setColor(SerializableColor color) {
-        this.color = color;
-        // notifyListeners(ChangeType.EDIT);
     }
 
 }

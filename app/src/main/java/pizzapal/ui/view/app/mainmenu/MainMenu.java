@@ -138,7 +138,7 @@ public class MainMenu extends StackPane {
         rotate.setByAngle(360);
         rotate.setCycleCount(RotateTransition.INDEFINITE);
         rotate.setInterpolator(javafx.animation.Interpolator.LINEAR);
-        // rotate.play();
+        rotate.play();
 
         this.setBackground(UIConfig.APP_BACKGROUND);
         this.getChildren().addAll(mainMenu, imageView);

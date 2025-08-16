@@ -12,7 +12,7 @@ public class Item extends Entity {
 
     public String id;
 
-    private Ingredient ingredient;
+    private Ingredient ingredient; // TODO: Implement differently
 
     private float weight;
 
@@ -32,18 +32,18 @@ public class Item extends Entity {
 
     }
 
-    public Item(Color color, float weight, float width, float height, float offsetX) {
-        super(width, height, 0, 0);
-        color = Color.RED;
+    public Item(SerializableColor color, float weight, float width, float height, float offsetX) {
+        super(color, width, height, 0, 0);
+        // color = Color.RED;
         this.weight = weight;
         this.offsetX = offsetX;
 
         ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
     }
 
-    public Item(Board board, Color color, float weight, float width, float height, float offsetX) {
-        super(width, height, board.getPosX() + offsetX, board.getPosY() + height);
-        color = Color.RED;
+    public Item(Board board, SerializableColor color, float weight, float width, float height, float offsetX) {
+        super(color, width, height, board.getPosX() + offsetX, board.getPosY() + height);
+        // color = Color.RED;
         this.weight = weight;
         this.offsetX = offsetX;
 

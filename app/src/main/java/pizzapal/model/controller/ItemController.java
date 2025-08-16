@@ -9,6 +9,7 @@ import pizzapal.model.commands.edit.EditItemCommand;
 import pizzapal.model.commands.move.MoveItemCommand;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Item;
+import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
@@ -86,7 +87,7 @@ public class ItemController extends EntityController<Item> {
         }
 
         float offsetX = posX - board.getPosX();
-        Item item = new Item(Color.DARKBLUE, weight, width, height, offsetX);
+        Item item = new Item(new SerializableColor(Color.DARKBLUE), weight, width, height, offsetX);
         AddItemCommand addCommand = new AddItemCommand(item, board);
         return addCommand;
 

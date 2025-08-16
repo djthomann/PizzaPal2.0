@@ -5,6 +5,7 @@ import pizzapal.model.commands.add.AddSupportCommand;
 import pizzapal.model.commands.delete.DeleteSupportCommand;
 import pizzapal.model.commands.edit.EditSupportCommand;
 import pizzapal.model.commands.move.MoveSupportCommand;
+import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
@@ -43,7 +44,7 @@ public class SupportController extends EntityController<Support> {
     }
 
     // TODO: Fix bug where you can put another support directly on an existing one
-    public AddSupportCommand addSupport(float width, float height, Color color, float posX, float posY) {
+    public AddSupportCommand addSupport(float width, float height, SerializableColor color, float posX, float posY) {
 
         if (!logic.storageHasSpaceForSupportAt(width, posX)) { // TODO: refactor!
             NotificationManager.getInstance().addNotification("No space for new support");

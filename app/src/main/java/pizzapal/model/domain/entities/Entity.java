@@ -11,17 +11,20 @@ public abstract class Entity {
     protected ObservableField<Float> posX;
     protected ObservableField<Float> posY;
 
+    protected ObservableField<SerializableColor> color;
+
     protected ObservableField<Boolean> deleted = new ObservableField<>(false);
 
     protected Entity() {
 
     }
 
-    protected Entity(float width, float height, float posX, float posY) {
+    protected Entity(SerializableColor color, float width, float height, float posX, float posY) {
         this.width = new ObservableField<Float>(width);
         this.height = new ObservableField<Float>(height);
         this.posX = new ObservableField<Float>(posX);
         this.posY = new ObservableField<Float>(posY);
+        this.color = new ObservableField<SerializableColor>(color);
     }
 
     public void delete() {
@@ -74,6 +77,18 @@ public abstract class Entity {
 
     public void setPosY(float posY) {
         this.posY.setValue(posY);
+    }
+
+    public ObservableField<SerializableColor> colorObservable() {
+        return color;
+    }
+
+    public SerializableColor getColor() {
+        return color.getValue();
+    }
+
+    public void setColor(SerializableColor color) {
+        this.color.setValue(color);
     }
 
     public ObservableField<Boolean> deleteObservable() {

@@ -6,6 +6,7 @@ import pizzapal.model.commands.delete.DeleteBoardCommand;
 import pizzapal.model.commands.edit.EditBoardCommand;
 import pizzapal.model.commands.move.MoveBoardCommand;
 import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
@@ -64,7 +65,7 @@ class BoardController extends EntityController<Board> {
 
     }
 
-    public AddBoardCommand addBoard(float height, Color color, float posX, float posY) {
+    public AddBoardCommand addBoard(float height, SerializableColor color, float posX, float posY) {
 
         if (!logic.isPositionBetweenTwoSupports(posX)) {
             NotificationManager.getInstance().addNotification("Not between two supports");

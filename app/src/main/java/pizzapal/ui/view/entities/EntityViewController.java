@@ -40,6 +40,7 @@ public abstract class EntityViewController<E extends Entity> {
         this.entity = entity;
         this.view = view;
         contextMenu = new EntityContextMenu(entity, storageController);
+        contextMenu.setPrefWidth(150);
 
         entity.posXObservable().addListener((obs, oldValue, newValue) -> {
             view.resetRectangle();
@@ -59,6 +60,10 @@ public abstract class EntityViewController<E extends Entity> {
         entity.heightObservable().addListener((obs, oldValue, newValue) -> {
             view.resetRectangle();
             view.setHeight(Helper.convertMetersToPixel(newValue));
+        });
+
+        entity.colorObservable().addListener((obs, oldValue, newValue) -> {
+            view.entityRectangle.setFill(newValue.getColor());
         });
 
         entity.deleteObservable().addListener((obs, oldValue, newValue) -> {

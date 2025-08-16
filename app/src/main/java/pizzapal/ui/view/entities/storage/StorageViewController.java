@@ -6,6 +6,7 @@ import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
 import pizzapal.model.domain.entities.Item;
+import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
 import pizzapal.ui.view.entities.board.BoardViewController;
 import pizzapal.ui.view.entities.item.ItemViewController;
@@ -90,13 +91,15 @@ public class StorageViewController {
 
                 }
                 case BOARD -> {
-                    storageController.addBoard(toolState.getBoardHeight(), toolState.getBoardColor(), posX, Helper
-                            .convertPixelPositionToHeightInStorage(storageController.getStorage(), (float) e.getY()));
+                    storageController.addBoard(toolState.getBoardHeight(),
+                            new SerializableColor(toolState.getBoardColor()), posX, Helper
+                                    .convertPixelPositionToHeightInStorage(storageController.getStorage(),
+                                            (float) e.getY()));
                     storageView.hideGhostRectangle();
                 }
                 case SUPPORT -> {
                     storageController.addSupport(toolState.getSupportWidth(), toolState.getSupportHeight(),
-                            toolState.getSupportColor(), posX, posY);
+                            new SerializableColor(toolState.getSupportColor()), posX, posY);
                     storageView.hideGhostRectangle();
                 }
                 case ITEM -> {
