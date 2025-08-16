@@ -5,42 +5,33 @@ import pizzapal.model.observability.ObservableField;
 // TODO: MOVE more behaviour to this super class
 public abstract class Entity {
 
-    protected ObservableField<Float> width;
+    @Editable
     protected ObservableField<Float> height;
 
     protected ObservableField<Float> posX;
     protected ObservableField<Float> posY;
 
+    @Editable
     protected ObservableField<SerializableColor> color;
 
     protected ObservableField<Boolean> deleted = new ObservableField<>(false);
 
     protected Entity() {
 
+        height = new ObservableField<>(null);
+        posX = new ObservableField<>(null);
+        posY = new ObservableField<>(null);
     }
 
-    protected Entity(SerializableColor color, float width, float height, float posX, float posY) {
-        this.width = new ObservableField<Float>(width);
-        this.height = new ObservableField<Float>(height);
-        this.posX = new ObservableField<Float>(posX);
-        this.posY = new ObservableField<Float>(posY);
-        this.color = new ObservableField<SerializableColor>(color);
+    protected Entity(SerializableColor color, float height, float posX, float posY) {
+        this.height = new ObservableField<>(height);
+        this.posX = new ObservableField<>(posX);
+        this.posY = new ObservableField<>(posY);
+        this.color = new ObservableField<>(color);
     }
 
     public void delete() {
         deleted.setValue(true);
-    }
-
-    public ObservableField<Float> widthObservable() {
-        return width;
-    }
-
-    public float getWidth() {
-        return width.getValue();
-    }
-
-    public void setWidth(float width) {
-        this.width.setValue(width);
     }
 
     public ObservableField<Float> heightObservable() {
@@ -94,5 +85,11 @@ public abstract class Entity {
     public ObservableField<Boolean> deleteObservable() {
         return deleted;
     }
+
+    public abstract ObservableField<Float> widthObservable();
+
+    public abstract float getWidth();
+
+    public abstract void setWidth(float width);
 
 }

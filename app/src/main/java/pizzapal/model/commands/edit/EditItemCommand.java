@@ -24,13 +24,13 @@ public class EditItemCommand extends EditCommand<Item> {
     @Override
     public void execute() {
         super.execute();
-        entity.edit(newWidth, newHeight, newColor);
+        entity.edit(newWidth, newHeight, 0, newColor);
     }
 
     @Override
     public void undo() {
         super.undo();
-        entity.edit(oldWidth, oldHeight, oldColor);
+        entity.edit(oldWidth, oldHeight, 0, oldColor);
     }
 
 }

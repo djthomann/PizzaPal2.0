@@ -6,15 +6,17 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javafx.scene.paint.Color;
 import pizzapal.model.observability.FieldListener;
+import pizzapal.model.observability.ObservableField;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Item extends Entity {
+public class Item extends FixedWidthEntity {
 
     public String id;
 
     private Ingredient ingredient; // TODO: Implement differently
 
-    private float weight;
+    @Editable
+    private ObservableField<Float> weight;
 
     private float offsetX;
 
@@ -35,7 +37,7 @@ public class Item extends Entity {
     public Item(SerializableColor color, float weight, float width, float height, float offsetX) {
         super(color, width, height, 0, 0);
         // color = Color.RED;
-        this.weight = weight;
+        this.weight = new ObservableField<Float>(weight);
         this.offsetX = offsetX;
 
         ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
@@ -44,7 +46,7 @@ public class Item extends Entity {
     public Item(Board board, SerializableColor color, float weight, float width, float height, float offsetX) {
         super(color, width, height, board.getPosX() + offsetX, board.getPosY() + height);
         // color = Color.RED;
-        this.weight = weight;
+        this.weight = new ObservableField<Float>(weight);
         this.offsetX = offsetX;
 
         ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
@@ -69,7 +71,8 @@ public class Item extends Entity {
         board.posYObservable().addListener(posYListener);
     }
 
-    public void edit(float width, float height, SerializableColor color) {
+    public void edit(float width, float height, float weight, SerializableColor color) {
+        setWeight(weight);
         setWidth(width);
         setHeight(height);
         setColor(color);
@@ -110,11 +113,18 @@ public class Item extends Entity {
 
     public void setColor(SerializableColor color) {
         ingredient.setColor(color);
-        // notifyListeners(ChangeType.EDIT);
+    }
+
+    public ObservableField<Float> weightObservable() {
+        return weight;
     }
 
     public float getWeight() {
-        return weight;
+        return weight.getValue();
+    }
+
+    public void setWeight(float weight) {
+        this.weight.setValue(weight);
     }
 
     public Board getBoard() {

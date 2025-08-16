@@ -7,10 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pizzapal.model.domain.core.Storage;
-import pizzapal.utils.ToolState; // TODO: Think about this dependancy
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Support extends Entity {
+public class Support extends FixedWidthEntity {
 
     public int id;
 
@@ -25,16 +24,8 @@ public class Support extends Entity {
         boardsRight = new ArrayList<>();
     }
 
-    public Support(Storage storage, float width, float height, float posX, float posY) {
-        this(storage, new SerializableColor(ToolState.STANDARD_SUPPORT_COLOR), width, height, posX, posY);
-    }
-
     public Support(SerializableColor color, float width, float height, float posX, float posY) {
         this(null, color, width, height, posX, posY);
-    }
-
-    public Support(float width, float height, float posX, float posY) {
-        this(null, new SerializableColor(ToolState.STANDARD_SUPPORT_COLOR), width, height, posX, posY);
     }
 
     public Support(Storage storage, SerializableColor color, float width, float height, float posX, float posY) {

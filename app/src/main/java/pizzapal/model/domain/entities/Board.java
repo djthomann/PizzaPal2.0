@@ -8,10 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pizzapal.model.observability.FieldListener;
-import pizzapal.utils.ToolState;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-public class Board extends Entity {
+public class Board extends VariableWidthEntity {
 
     public String id;
 
@@ -36,12 +35,8 @@ public class Board extends Entity {
     };
 
     public Board() {
+        super();
         items = new ArrayList<>();
-    }
-
-    // TODO: Think about ToolState dependancy
-    public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
-        this(supportLeft, supportRight, height, offsetY, new SerializableColor(ToolState.STANDARD_BOARD_COLOR));
     }
 
     public Board(float height, float offsetY, SerializableColor color) {

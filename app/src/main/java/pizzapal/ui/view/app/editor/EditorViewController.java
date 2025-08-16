@@ -10,6 +10,8 @@ import javafx.scene.input.KeyCombination;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.repository.StorageRepository;
+import pizzapal.ui.view.app.editor.toolbar.ToolBarView;
+import pizzapal.ui.view.app.editor.toolbar.ToolBarViewController;
 import pizzapal.ui.view.entities.storage.StorageView;
 import pizzapal.ui.view.entities.storage.StorageViewController;
 import pizzapal.utils.SceneManager;

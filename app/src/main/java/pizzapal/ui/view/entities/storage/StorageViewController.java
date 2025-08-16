@@ -1,16 +1,23 @@
 package pizzapal.ui.view.entities.storage;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
+import pizzapal.model.domain.entities.Entity;
 import pizzapal.model.domain.entities.Item;
 import pizzapal.model.domain.entities.SerializableColor;
 import pizzapal.model.domain.entities.Support;
+import pizzapal.model.observability.ObservableField;
+import pizzapal.model.reflection.ReflectionUtils;
 import pizzapal.ui.view.entities.board.BoardViewController;
 import pizzapal.ui.view.entities.item.ItemViewController;
 import pizzapal.ui.view.entities.support.SupportViewController;
+import pizzapal.utils.EntityField;
 import pizzapal.utils.Helper;
 import pizzapal.utils.ToolState;
 import pizzapal.utils.ToolState.Tool;
@@ -70,7 +77,46 @@ public class StorageViewController {
         init();
     }
 
+    public void changeGhostRectangle() {
+        float height = Helper.convertMetersToPixel(0.2f);
+        try {
+            height = Helper.convertMetersToPixel(
+                    (Float) toolState.getValue(
+                            new EntityField(toolState.getSelectedEntityClass(),
+                                    Entity.class.getDeclaredField("height"))));
+        } catch (NoSuchFieldException | SecurityException e1) {
+            height = 0.5f;
+            e1.printStackTrace();
+        }
+
+        float width = Helper.convertMetersToPixel(1f);
+        try {
+            Object value = toolState.getValue(
+                    new EntityField(toolState.getSelectedEntityClass(),
+                            ReflectionUtils.getFieldFromSuperClass(toolState.getSelectedEntityClass(),
+                                    "width")));
+            if (value != null) {
+                width = Helper.convertMetersToPixel(
+                        (Float) value);
+            }
+
+        } catch (SecurityException e1) {
+            height = 0.5f;
+            e1.printStackTrace();
+        }
+
+        storageView.setGhostRectangleSize(width, height);
+    }
+
     public void init() {
+
+        toolState.toolObservable().addListener((obs, oldValue, newValue) -> {
+            changeGhostRectangle();
+        });
+
+        toolState.mapChangeObservable().addListener((obs, oldValue, newValue) -> {
+            changeGhostRectangle();
+        });
 
         storageView.setOnMouseExited(e -> {
             storageView.hideGhostRectangle();
@@ -81,7 +127,9 @@ public class StorageViewController {
             Tool selectedTool = toolState.getCurrentTool();
 
             float posX = Helper.convertPixelToMeters((float) e.getX());
-            float posY = Helper.convertPixelToMeters((float) e.getY());
+            float posY = Helper.convertPixelToMeters((float) e.getY()); // Not correct
+
+            System.out.println("POS:" + posX + "|" + posY);
 
             switch (selectedTool) {
                 case SELECT -> {
@@ -91,48 +139,115 @@ public class StorageViewController {
 
                 }
                 case BOARD -> {
-                    storageController.addBoard(toolState.getBoardHeight(),
-                            new SerializableColor(toolState.getBoardColor()), posX, Helper
-                                    .convertPixelPositionToHeightInStorage(storageController.getStorage(),
-                                            (float) e.getY()));
+
+                    Board board = new Board();
+
+                    for (Field field : ReflectionUtils.getEditableFields(Board.class)) {
+                        field.setAccessible(true);
+
+                        try {
+                            Type genericType = field.getGenericType();
+
+                            Object value = toolState.getValue(new EntityField(Board.class, field));
+
+                            if (genericType instanceof ParameterizedType pt) {
+                                Type actualType = pt.getActualTypeArguments()[0];
+                                if (actualType.equals(Float.class)) {
+                                    field.set(board, new ObservableField<>((Float) value));
+                                } else if (actualType.equals(SerializableColor.class)) {
+                                    field.set(board, new ObservableField<>((SerializableColor) value));
+                                }
+                            }
+                        } catch (IllegalArgumentException | IllegalAccessException e1) {
+
+                            e1.printStackTrace();
+                        }
+                    }
+
+                    board.setPosX(posX);
+                    board.setPosY(posY);
+
+                    storageController.addBoard(board);
                     storageView.hideGhostRectangle();
                 }
                 case SUPPORT -> {
-                    storageController.addSupport(toolState.getSupportWidth(), toolState.getSupportHeight(),
-                            new SerializableColor(toolState.getSupportColor()), posX, posY);
+
+                    Support support = new Support();
+
+                    for (Field field : ReflectionUtils.getEditableFields(Support.class)) {
+                        field.setAccessible(true);
+
+                        try {
+                            Type genericType = field.getGenericType();
+
+                            Object value = toolState.getValue(new EntityField(Support.class, field));
+
+                            if (genericType instanceof ParameterizedType pt) {
+                                Type actualType = pt.getActualTypeArguments()[0];
+                                if (actualType.equals(Float.class)) {
+                                    field.set(support, new ObservableField<>((Float) value));
+                                } else if (actualType.equals(SerializableColor.class)) {
+                                    field.set(support, new ObservableField<>((SerializableColor) value));
+                                }
+                            }
+                        } catch (IllegalArgumentException | IllegalAccessException e1) {
+
+                            e1.printStackTrace();
+                        }
+                    }
+
+                    support.setPosX(posX);
+                    support.setPosY(posY);
+
+                    storageController.addSupport(support);
                     storageView.hideGhostRectangle();
                 }
                 case ITEM -> {
-                    storageController.addItem(toolState.getItemWidth(), toolState.getItemHeight(),
-                            toolState.getItemWeight(), posX, posY);
+
+                    Item item = new Item();
+
+                    for (Field field : ReflectionUtils.getEditableFields(Item.class)) {
+                        field.setAccessible(true);
+
+                        try {
+                            Type genericType = field.getGenericType();
+
+                            Object value = toolState.getValue(new EntityField(Item.class, field));
+
+                            if (genericType instanceof ParameterizedType pt) {
+                                Type actualType = pt.getActualTypeArguments()[0];
+                                if (actualType.equals(Float.class)) {
+                                    field.set(item, new ObservableField<>((Float) value));
+                                } else if (actualType.equals(SerializableColor.class)) {
+                                    field.set(item, new ObservableField<>((SerializableColor) value));
+                                }
+                            }
+                        } catch (IllegalArgumentException | IllegalAccessException e1) {
+
+                            e1.printStackTrace();
+                        }
+                    }
+
+                    item.setPosX(posX);
+                    item.setPosY(posY);
+
+                    storageController.addItem(item);
                     storageView.hideGhostRectangle();
+
                 }
             }
         });
 
         storageView.setOnMouseMoved(e -> {
 
-            Tool selectedTool = toolState.getCurrentTool();
-
-            switch (selectedTool) {
+            switch (toolState.getCurrentTool()) {
                 case SELECT -> {
-                    // Do nothing
+                    storageView.hideGhostRectangle();
                 }
-                case BOARD -> {
-                    storageView.setGhostRectangleSize(Helper.convertMetersToPixel(0.5f),
-                            Helper.convertMetersToPixel(toolState.getBoardHeight()));
-                    storageView.showGhostRectangle();
-                    storageView.moveGhostRectangle((float) e.getX(), (float) e.getY());
+                case PICKCOLOR -> {
+
                 }
-                case SUPPORT -> {
-                    storageView.setGhostRectangleSize(Helper.convertMetersToPixel(toolState.getSupportWidth()),
-                            Helper.convertMetersToPixel(toolState.getSupportHeight()));
-                    storageView.showGhostRectangle();
-                    storageView.moveGhostRectangle((float) e.getX(), (float) e.getY());
-                }
-                case ITEM -> {
-                    storageView.setGhostRectangleSize(Helper.convertMetersToPixel(toolState.getItemWidth()),
-                            Helper.convertMetersToPixel(toolState.getItemHeight()));
+                default -> {
                     storageView.showGhostRectangle();
                     storageView.moveGhostRectangle((float) e.getX(), (float) e.getY());
                 }

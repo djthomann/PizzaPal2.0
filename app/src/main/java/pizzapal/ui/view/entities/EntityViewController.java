@@ -129,7 +129,7 @@ public abstract class EntityViewController<E extends Entity> {
                     }
                 }
                 case PICKCOLOR -> {
-                    toolState.setColor(entity, view.getColor());
+                    // toolState.setColor(entity, view.getColor());
                 }
                 default -> {
                     // Don't react to other tools

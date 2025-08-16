@@ -4,6 +4,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import pizzapal.ui.view.app.editor.toolbar.ToolBarView;
 import pizzapal.utils.SceneManager;
 
 public class EditorView extends BorderPane {

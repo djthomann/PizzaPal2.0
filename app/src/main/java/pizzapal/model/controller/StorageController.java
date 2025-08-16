@@ -49,9 +49,11 @@ public class StorageController {
     private final SupportController supportController;
     private final ItemController itemController;
 
+    StorageService service;
+
     public StorageController(Storage storage) {
         this.storage = storage;
-        StorageService service = new StorageService(storage);
+        service = new StorageService(storage);
         StorageLogic logic = new StorageLogic(storage, service);
 
         boardController = new BoardController(logic, service);
@@ -149,6 +151,12 @@ public class StorageController {
         }
     }
 
+    public void addSupport(Support support) {
+        AddSupportCommand addCommand = new AddSupportCommand(service.getStorage(), support);
+        addCommand.execute();
+        notifySupportCreationListeners(addCommand.getSupport());
+    }
+
     public void addSupport(float width, float height, SerializableColor color, float posX, float posY) {
 
         AddSupportCommand addCommand = supportController.addSupport(width, height, color, posX, posY);
@@ -167,6 +175,10 @@ public class StorageController {
 
     }
 
+    public void addBoard(Board board) {
+        addBoard(board.getHeight(), board.getColor(), board.getPosX(), board.getPosY());
+    }
+
     public void addBoard(float height, SerializableColor color, float posX, float posY) {
 
         AddBoardCommand addCommand = boardController.addBoard(height, color, posX, posY);
@@ -183,6 +195,10 @@ public class StorageController {
         editCommand.execute();
         undoStack.push(editCommand);
 
+    }
+
+    public void addItem(Item item) {
+        addItem(item.getWidth(), item.getHeight(), item.getWeight(), item.getPosX(), item.getPosY());
     }
 
     public void addItem(float width, float height, float weight, float posX, float posY) {

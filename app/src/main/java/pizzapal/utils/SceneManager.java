@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import pizzapal.ui.view.app.editor.ToolBarViewController;
+import pizzapal.ui.view.app.editor.toolbar.ToolBarViewController;
 import pizzapal.ui.view.app.mainmenu.MainMenu;
 
 public class SceneManager {
