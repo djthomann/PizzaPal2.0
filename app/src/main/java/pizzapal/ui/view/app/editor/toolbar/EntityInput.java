@@ -36,7 +36,7 @@ public class EntityInput extends HBox {
 
     ColorPicker colorPicker;
 
-    private Map<Field, TextFormatter<?>> textFormatterMap = new HashMap<>();
+    private Map<Field, TextFormatter<?>> textFormatterMap = new HashMap<>(); // Float Map?
 
     private Map.Entry<Field, ColorPicker> colorPickerEntry;
 
