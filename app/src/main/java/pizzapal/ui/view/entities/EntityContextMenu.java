@@ -115,8 +115,6 @@ public class EntityContextMenu extends ContextMenu {
                     }
                 }
 
-                System.out.println(newEntity.getHeight());
-
                 // jetzt an den StorageController weiterreichen
                 storageController.edit(entity, newEntity);
 

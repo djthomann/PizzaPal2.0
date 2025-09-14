@@ -64,7 +64,8 @@ public class ItemController extends EntityController<Item> {
         return moveCommand;
     }
 
-    public AddItemCommand addItem(float width, float height, float weight, float posX, float posY) {
+    public AddItemCommand addItem(float width, float height, float weight, float posX, float posY,
+            SerializableColor color) {
 
         if (!logic.isPositionBetweenTwoSupports(posX)) {
             NotificationManager.getInstance().addNotification("Not between two supports");
@@ -87,7 +88,7 @@ public class ItemController extends EntityController<Item> {
         }
 
         float offsetX = posX - board.getPosX();
-        Item item = new Item(new SerializableColor(Color.DARKBLUE), weight, width, height, offsetX);
+        Item item = new Item(color, weight, width, height, offsetX);
         AddItemCommand addCommand = new AddItemCommand(item, board);
         return addCommand;
 

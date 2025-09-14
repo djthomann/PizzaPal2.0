@@ -1,10 +1,8 @@
 package pizzapal.model.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import javafx.scene.paint.Color;
 import pizzapal.model.observability.FieldListener;
 import pizzapal.model.observability.ObservableField;
 
@@ -13,7 +11,7 @@ public class Item extends FixedWidthEntity {
 
     public String id;
 
-    private Ingredient ingredient; // TODO: Implement differently
+    // private Ingredient ingredient; // TODO: Implement differently
 
     @Editable
     private ObservableField<Float> weight;
@@ -40,7 +38,8 @@ public class Item extends FixedWidthEntity {
         this.weight = new ObservableField<Float>(weight);
         this.offsetX = offsetX;
 
-        ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
+        // ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement
+        // correctly
     }
 
     public Item(Board board, SerializableColor color, float weight, float width, float height, float offsetX) {
@@ -49,7 +48,8 @@ public class Item extends FixedWidthEntity {
         this.weight = new ObservableField<Float>(weight);
         this.offsetX = offsetX;
 
-        ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement correctly
+        // ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement
+        // correctly
 
         if (board != null) {
             placeOn(board);
@@ -106,14 +106,14 @@ public class Item extends FixedWidthEntity {
         setPosY(board.getPosY() + height.getValue());
     }
 
-    @JsonIgnore
-    public SerializableColor getColor() {
-        return ingredient.getColor();
-    }
+    // @JsonIgnore
+    // public SerializableColor getColor() {
+    // return ingredient.getColor();
+    // }
 
-    public void setColor(SerializableColor color) {
-        ingredient.setColor(color);
-    }
+    // public void setColor(SerializableColor color) {
+    // ingredient.setColor(color);
+    // }
 
     public ObservableField<Float> weightObservable() {
         return weight;
@@ -135,13 +135,13 @@ public class Item extends FixedWidthEntity {
         this.board = board;
     }
 
-    public Ingredient getIngredient() {
-        return ingredient;
-    }
+    // public Ingredient getIngredient() {
+    // return ingredient;
+    // }
 
-    public void setIngredient(Ingredient ingredient) {
-        this.ingredient = ingredient;
-    }
+    // public void setIngredient(Ingredient ingredient) {
+    // this.ingredient = ingredient;
+    // }
 
     public float getOffsetX() {
         return offsetX;

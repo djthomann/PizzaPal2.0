@@ -101,19 +101,14 @@ public class StorageController {
     }
 
     public void edit(Entity oldEntity, Entity newEntity) {
-        edit(oldEntity, newEntity, newEntity.getWidth(), newEntity.getHeight(), newEntity.getColor().getColor());
-    }
-
-    public void edit(Entity oldEntity, Entity newEntity, float newWidth, float newHeight, Color newColor) {
         logger.info(
-                "Editing Entity: " + newEntity.toString() + "Params: " + newWidth + "" + newHeight + ""
-                        + newColor.toString());
+                "Editing Entity: " + newEntity.toString());
         if (oldEntity instanceof Item item) {
-            editItem(item, newWidth, newHeight, newColor);
+            editItem(item, newEntity.getWidth(), newEntity.getHeight(), newEntity.getColor().getColor());
         } else if (oldEntity instanceof Board board) {
-            editBoard(board, newHeight, newColor);
+            editBoard(board, newEntity.getHeight(), newEntity.getColor().getColor());
         } else if (oldEntity instanceof Support support) {
-            editSupport(support, newWidth, newHeight, newColor);
+            editSupport(support, newEntity.getWidth(), newEntity.getHeight(), newEntity.getColor().getColor());
         }
     }
 
@@ -202,12 +197,12 @@ public class StorageController {
     }
 
     public void addItem(Item item) {
-        addItem(item.getWidth(), item.getHeight(), item.getWeight(), item.getPosX(), item.getPosY());
+        addItem(item.getWidth(), item.getHeight(), item.getWeight(), item.getPosX(), item.getPosY(), item.getColor());
     }
 
-    public void addItem(float width, float height, float weight, float posX, float posY) {
+    public void addItem(float width, float height, float weight, float posX, float posY, SerializableColor color) {
 
-        AddItemCommand addCommand = itemController.addItem(width, height, weight, posX, posY);
+        AddItemCommand addCommand = itemController.addItem(width, height, weight, posX, posY, color);
         if (addCommand != null) {
             addCommand.execute();
             undoStack.push(addCommand);

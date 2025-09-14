@@ -127,9 +127,7 @@ public class StorageViewController {
             Tool selectedTool = toolState.getCurrentTool();
 
             float posX = Helper.convertPixelToMeters((float) e.getX());
-            float posY = Helper.convertPixelToMeters((float) e.getY()); // Not correct
-
-            System.out.println("POS:" + posX + "|" + posY);
+            float posY = Helper.convertPixelPositionToHeightInStorage(storageController.getStorage(), (float) e.getY());
 
             switch (selectedTool) {
                 case SELECT -> {

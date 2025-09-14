@@ -19,7 +19,7 @@ public class ToolBarView extends HBox {
 
     private CustomToggleButton selectButton;
 
-    private CustomToggleButton pickColorButton;
+    // private CustomToggleButton pickColorButton;
 
     private List<EntityInput> entityInputs;
 
@@ -34,8 +34,8 @@ public class ToolBarView extends HBox {
         selectButton = new CustomToggleButton("Select");
         selectButton.setToggleGroup(buttonGroup);
 
-        pickColorButton = new CustomToggleButton("Pick");
-        pickColorButton.setToggleGroup(buttonGroup);
+        // pickColorButton = new CustomToggleButton("Pick");
+        // pickColorButton.setToggleGroup(buttonGroup);
 
         EntityInput supportInput = new EntityInput(Support.class);
         EntityInput boardInput = new EntityInput(Board.class);
@@ -43,7 +43,7 @@ public class ToolBarView extends HBox {
 
         entityInputs = List.of(supportInput, boardInput, itemInput);
 
-        this.getChildren().addAll(selectButton, pickColorButton, separator(),
+        this.getChildren().addAll(selectButton, /* pickColorButton, */ separator(),
                 supportInput, separator(),
                 boardInput, separator(),
                 itemInput);

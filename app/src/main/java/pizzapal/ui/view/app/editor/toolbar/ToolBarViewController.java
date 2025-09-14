@@ -6,24 +6,23 @@ import java.util.Map.Entry;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextFormatter;
 import pizzapal.model.domain.entities.SerializableColor;
-import pizzapal.model.repository.IngredientRepository;
 import pizzapal.utils.EntityField;
 import pizzapal.utils.ToolState;
 import pizzapal.utils.ToolState.Tool;
 
 public class ToolBarViewController {
 
-    // TODO bilateral connect ToolBarView with ToolState
+    // TODO bilaterally connect ToolBarView with ToolState
 
     private ToolBarView view;
 
     private static ToolState toolState;
 
-    private IngredientRepository ingredientRepository;
+    // private IngredientRepository ingredientRepository;
 
     public ToolBarViewController(ToolState toolState) {
         view = new ToolBarView();
-        ingredientRepository = IngredientRepository.getInstance();
+        // ingredientRepository = IngredientRepository.getInstance();
         ToolBarViewController.toolState = toolState;
 
         for (EntityInput i : view.getEntityInputs()) {

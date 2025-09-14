@@ -23,8 +23,6 @@ public class StorageLogic {
         float storageWidth = storage.getWidth();
         float storageHeight = storage.getHeight();
 
-        // System.out.println("Nicht im Lager");
-
         return posX >= 0 && posY >= 0 && posX <= storageWidth && posY <= storageHeight;
     }
 
@@ -163,7 +161,6 @@ public class StorageLogic {
             }
             Support left = boards.get(0).getSupportLeft();
             if (left == null) {
-                System.out.println("Not possible");
                 // Shouldn't be possible
                 return false;
             } else {
