@@ -3,6 +3,8 @@ package pizzapal.ui.view.entities;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import javafx.geometry.Pos;
@@ -30,6 +32,8 @@ import pizzapal.utils.Helper;
 public class EntityContextMenu extends ContextMenu {
 
     private static final int WIDTH = 150;
+
+    private final Map<Field, Control> fieldControlMap = new HashMap<>();
 
     public EntityContextMenu(Entity entity, StorageController storageController) {
 
@@ -59,6 +63,9 @@ public class EntityContextMenu extends ContextMenu {
                     CustomMenuItem item1 = new CustomMenuItem(inputField);
                     item1.setHideOnClick(false);
 
+                    TextField tf = (TextField) inputField.getChildren().get(1);
+                    fieldControlMap.put(field, tf);
+
                     this.getItems().add(item1);
                 } else if (actualType == SerializableColor.class) {
 
@@ -81,6 +88,9 @@ public class EntityContextMenu extends ContextMenu {
                     item1.setHideOnClick(false);
 
                     this.getItems().add(item1);
+
+                    fieldControlMap.put(field, colorPicker);
+
                 }
 
             }
@@ -89,10 +99,30 @@ public class EntityContextMenu extends ContextMenu {
 
         MenuItem editItem = new MenuItem("Edit");
         editItem.setOnAction(e -> {
-            // storageController.edit(entity, Float.parseFloat(widthTextField.getText()),
-            // // Float.parseFloat(heightTextField.getText()),
-            // colorPicker.getValue());
-            // ;
+            try {
+                Entity newEntity = entity.getClass().getDeclaredConstructor().newInstance();
+
+                for (Map.Entry<Field, Control> entry : fieldControlMap.entrySet()) {
+                    Field field = entry.getKey();
+                    Control control = entry.getValue();
+
+                    if (control instanceof TextField tf) {
+                        Float f = Float.parseFloat(tf.getText());
+                        field.set(newEntity, new ObservableField<>(f));
+                    } else if (control instanceof ColorPicker cp) {
+                        SerializableColor sc = new SerializableColor(cp.getValue());
+                        field.set(newEntity, new ObservableField<>(sc));
+                    }
+                }
+
+                System.out.println(newEntity.getHeight());
+
+                // jetzt an den StorageController weiterreichen
+                storageController.edit(entity, newEntity);
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
         ImageView icon1 = new ImageView(Helper.loadImage("/icons/edit.png"));

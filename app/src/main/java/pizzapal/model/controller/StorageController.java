@@ -100,14 +100,19 @@ public class StorageController {
         return storage;
     }
 
-    public void edit(Entity e, float newWidth, float newHeight, Color newColor) {
+    public void edit(Entity oldEntity, Entity newEntity) {
+        edit(oldEntity, newEntity, newEntity.getWidth(), newEntity.getHeight(), newEntity.getColor().getColor());
+    }
+
+    public void edit(Entity oldEntity, Entity newEntity, float newWidth, float newHeight, Color newColor) {
         logger.info(
-                "Editing Entity: " + e.toString() + "Params: " + newWidth + "" + newHeight + "" + newColor.toString());
-        if (e instanceof Item item) {
+                "Editing Entity: " + newEntity.toString() + "Params: " + newWidth + "" + newHeight + ""
+                        + newColor.toString());
+        if (oldEntity instanceof Item item) {
             editItem(item, newWidth, newHeight, newColor);
-        } else if (e instanceof Board board) {
+        } else if (oldEntity instanceof Board board) {
             editBoard(board, newHeight, newColor);
-        } else if (e instanceof Support support) {
+        } else if (oldEntity instanceof Support support) {
             editSupport(support, newWidth, newHeight, newColor);
         }
     }
@@ -152,9 +157,8 @@ public class StorageController {
     }
 
     public void addSupport(Support support) {
-        AddSupportCommand addCommand = new AddSupportCommand(service.getStorage(), support);
-        addCommand.execute();
-        notifySupportCreationListeners(addCommand.getSupport());
+        addSupport(support.getWidth(), support.getHeight(), support.getColor(), support.getPosX(),
+                support.getPosY());
     }
 
     public void addSupport(float width, float height, SerializableColor color, float posX, float posY) {
