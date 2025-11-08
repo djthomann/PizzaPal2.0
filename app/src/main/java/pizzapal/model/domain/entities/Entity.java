@@ -17,9 +17,7 @@ public abstract class Entity {
     protected ObservableField<Boolean> deleted = new ObservableField<>(false);
 
     protected Entity() {
-        height = new ObservableField<>(0f);
-        posX = new ObservableField<>(0f);
-        posY = new ObservableField<>(0f);
+        this(new SerializableColor(), 0f, 0f, 0f);
     }
 
     protected Entity(SerializableColor color, float height, float posX, float posY) {

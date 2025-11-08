@@ -29,7 +29,7 @@ public class Item extends FixedWidthEntity {
     };
 
     public Item() {
-
+        this(new SerializableColor(), 0f, 0f, 0f, 0f);
     }
 
     public Item(SerializableColor color, float weight, float width, float height, float offsetX) {
