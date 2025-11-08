@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pizzapal.model.observability.FieldListener;
 import pizzapal.model.observability.ObservableField;
+import pizzapal.ui.UIConfig;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Item extends FixedWidthEntity {
@@ -40,6 +41,10 @@ public class Item extends FixedWidthEntity {
 
         // ingredient = new Ingredient("Tomate", Color.RED); // TODO: implement
         // correctly
+    }
+
+    public Item(Board board, float weight, float width, float height, float offsetX) {
+        this(board, new SerializableColor(UIConfig.ITEM_COLOR), weight, width, height, offsetX);
     }
 
     public Item(Board board, SerializableColor color, float weight, float width, float height, float offsetX) {
@@ -81,6 +86,7 @@ public class Item extends FixedWidthEntity {
     public void delete() {
         board.removeItem(this);
         removeListeners(board);
+        setBoard(null);
 
         super.delete();
     }

@@ -30,6 +30,7 @@ import pizzapal.model.listener.create.ItemCreationListener;
 import pizzapal.model.listener.create.SupportCreationListener;
 import pizzapal.model.service.StorageLogic;
 import pizzapal.model.service.StorageService;
+import pizzapal.ui.UIConfig;
 
 // TODO Refactor add and edit methods even more
 public class StorageController {
@@ -176,6 +177,10 @@ public class StorageController {
 
     public void addBoard(Board board) {
         addBoard(board.getHeight(), board.getColor(), board.getPosX(), board.getPosY());
+    }
+
+    public void addBoard(float height, float posX, float posY) {
+        addBoard(height, new SerializableColor(UIConfig.BOARD_COLOR), posX, posY);
     }
 
     public void addBoard(float height, SerializableColor color, float posX, float posY) {

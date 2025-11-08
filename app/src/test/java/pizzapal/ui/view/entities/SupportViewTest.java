@@ -8,9 +8,9 @@ import org.testfx.framework.junit.ApplicationTest;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
@@ -40,7 +40,7 @@ public class SupportViewTest extends ApplicationTest {
 
         StorageController controller = new StorageController(storage);
 
-        support = new Support(storage, Color.BLACK, 0.2f, 2f, 3f, 0);
+        support = new Support(storage, 0.2f, 2f, 3f, 0);
 
         ToolState toolState = new ToolState();
 
@@ -59,8 +59,8 @@ public class SupportViewTest extends ApplicationTest {
 
     @Test
     public void testSizeAfterCreate() {
-        assertEquals(30, view.getWidth(), DELTA);
-        assertEquals(300, view.getHeight(), DELTA);
+        assertEquals(Helper.convertMetersToPixel(0.2f), view.getWidth(), DELTA);
+        assertEquals(Helper.convertMetersToPixel(2f), view.getHeight(), DELTA);
     }
 
     @Test
@@ -82,10 +82,10 @@ public class SupportViewTest extends ApplicationTest {
     public void testContextMenuOpensAndCloses() {
         assertTrue(!controller.getContextMenu().isShowing());
 
-        clickOn(view, MouseButton.SECONDARY);
+        rightClickOn(view);
         assertTrue(controller.getContextMenu().isShowing());
 
-        clickOn(view, MouseButton.SECONDARY);
+        rightClickOn(view);
         assertTrue(!controller.getContextMenu().isShowing());
     }
 
@@ -116,7 +116,7 @@ public class SupportViewTest extends ApplicationTest {
 
         assertEquals(support, storage.getSupports().get(0));
 
-        clickOn(view, MouseButton.SECONDARY);
+        rightClickOn(view);
         clickOn("Delete");
 
         assertTrue(storage.isEmpty());
@@ -125,29 +125,57 @@ public class SupportViewTest extends ApplicationTest {
 
     @Test
     public void testEditWidthViaContextMenu() {
-        rightClickOn(view);
-        clickOn("#newWidthField");
-        write("0.5");
 
-        clickOn("Edit");
+        float startingTestWidth = 0.5f;
+        float endingTestWidth = 2.2f;
+        float testWidthIncrement = 0.5f;
+
+        for (float width = startingTestWidth; width < endingTestWidth; width += testWidthIncrement) {
+            rightClickOn(view);
+            TextField textField = lookup("#Width").queryAs(TextField.class);
+            clickOn(textField);
+            eraseText(textField.getText().length());
+            write(String.valueOf(width));
+
+            clickOn("Edit");
+
+            assertEquals(Helper.convertMetersToPixel(width), view.getWidth(), DELTA);
+        }
+
     }
 
     @Test
     public void testEditHeightViaContextMenu() {
-        rightClickOn(view);
-        clickOn("#newHeightField");
-        write("3.3");
 
-        clickOn("Edit");
+        float startingTestHeight = 0.5f;
+        float endingTestHeight = 2.2f;
+        float testHeightIncrement = 0.5f;
+
+        for (float height = startingTestHeight; height < endingTestHeight; height += testHeightIncrement) {
+            rightClickOn(view);
+            TextField textField = lookup("#Height").queryAs(TextField.class);
+            clickOn(textField);
+            eraseText(textField.getText().length());
+            write(String.valueOf(height));
+
+            clickOn("Edit");
+
+            assertEquals(Helper.convertMetersToPixel(height), view.getHeight(), DELTA);
+        }
     }
 
     @Test
-    public void testEditEverythingViaContextMenu() {
+    public void testEditDimensionsViaContextMenu() {
         rightClickOn(view);
-        clickOn("#newWidthField");
+
+        TextField textFieldWidth = lookup("#Width").queryAs(TextField.class);
+        clickOn(textFieldWidth);
+        eraseText(textFieldWidth.getText().length());
         write("0.5");
 
-        clickOn("#newHeightField");
+        TextField textFieldHeight = lookup("#Height").queryAs(TextField.class);
+        clickOn(textFieldHeight);
+        eraseText(textFieldHeight.getText().length());
         write("2.5");
 
         clickOn("Edit");

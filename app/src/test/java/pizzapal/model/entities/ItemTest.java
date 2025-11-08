@@ -3,10 +3,13 @@ package pizzapal.model.entities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.concurrent.CountDownLatch;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javafx.scene.paint.Color;
+import javafx.application.Platform;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.domain.entities.Board;
@@ -24,6 +27,14 @@ public class ItemTest {
         controller = new StorageController(storage);
     }
 
+    // TODO: Why does the toolkit even need to be initialized in model test cases?
+    @BeforeAll
+    public static void initToolkit() throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        Platform.startup(latch::countDown);
+        latch.await();
+    }
+
     @Test
     public void testCreateItem() {
 
@@ -32,7 +43,7 @@ public class ItemTest {
 
         Board board = new Board(support1, support2, 0.2f, 0.5f);
 
-        Item item = new Item(board, Color.YELLOW, 10, 0.5f, 0.5f, 0.2f);
+        Item item = new Item(board, 10, 0.5f, 0.5f, 0.2f);
 
         assertEquals(board, item.getBoard());
     }
@@ -49,7 +60,7 @@ public class ItemTest {
         Board board1 = new Board(support1, support2, 0.2f, 0.5f);
         Board board2 = new Board(support3, support4, 0.2f, 0.5f);
 
-        Item item = new Item(board1, Color.YELLOW, 10, 0.5f, 0.5f, 0);
+        Item item = new Item(board1, 10, 0.5f, 0.5f, 0);
 
         assertEquals(board1, item.getBoard());
 

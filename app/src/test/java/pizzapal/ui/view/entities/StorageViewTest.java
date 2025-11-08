@@ -11,14 +11,18 @@ import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.ui.view.entities.storage.StorageView;
 import pizzapal.ui.view.entities.storage.StorageViewController;
+import pizzapal.utils.Helper;
 
 public class StorageViewTest extends ApplicationTest {
 
     private StorageView view;
 
+    private final float width = 6f;
+    private final float height = 3f;
+
     @Override
     public void start(Stage stage) throws Exception {
-        Storage storage = new Storage(6f, 3f);
+        Storage storage = new Storage(width, height);
 
         StorageController controller = new StorageController(storage);
 
@@ -31,8 +35,8 @@ public class StorageViewTest extends ApplicationTest {
 
     @Test
     public void testInitialSize() {
-        assertEquals(900, view.getWidth());
-        assertEquals(450, view.getHeight());
+        assertEquals(Helper.convertMetersToPixel(width), view.getWidth());
+        assertEquals(Helper.convertMetersToPixel(height), view.getHeight());
     }
 
 }

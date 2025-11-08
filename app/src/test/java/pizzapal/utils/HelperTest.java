@@ -20,7 +20,7 @@ public class HelperTest {
 
     @Test
     public void testConvertMetersToPixels() {
-        assertEquals(150, Helper.convertMetersToPixel(1f), DELTA);
+        assertEquals(Config.PIXEL_PER_METER, Helper.convertMetersToPixel(1f), DELTA);
     }
 
     @Test

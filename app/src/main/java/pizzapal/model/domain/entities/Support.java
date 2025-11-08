@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pizzapal.model.domain.core.Storage;
+import pizzapal.ui.UIConfig;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Support extends FixedWidthEntity {
@@ -24,8 +25,16 @@ public class Support extends FixedWidthEntity {
         boardsRight = new ArrayList<>();
     }
 
+    public Support(float width, float height, float posX, float posY) {
+        this(null, new SerializableColor(UIConfig.SUPPORT_COLOR), width, height, posX, posY);
+    }
+
     public Support(SerializableColor color, float width, float height, float posX, float posY) {
         this(null, color, width, height, posX, posY);
+    }
+
+    public Support(Storage storage, float width, float height, float posX, float posY) {
+        this(storage, new SerializableColor(UIConfig.SUPPORT_COLOR), width, height, posX, posY);
     }
 
     public Support(Storage storage, SerializableColor color, float width, float height, float posX, float posY) {

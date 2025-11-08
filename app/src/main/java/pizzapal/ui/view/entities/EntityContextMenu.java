@@ -85,6 +85,7 @@ public class EntityContextMenu extends ContextMenu {
 
                     colorPicker.setMaxWidth(150);
                     CustomMenuItem item1 = new CustomMenuItem(colorPicker);
+                    item1.setId("Color");
                     item1.setHideOnClick(false);
 
                     this.getItems().add(item1);
@@ -154,7 +155,8 @@ public class EntityContextMenu extends ContextMenu {
     public VBox inputFieldWithLabel(String labelText, TextFormatter<Float> formatter) {
         Label label = new Label(labelText);
         label.setFont(Font.font(10.5));
-        TextField textField = new TextField();
+        TextField textField = new TextField(); // TODO: make neater
+        textField.setId(labelText);
         textField.setTextFormatter(formatter);
         textField.setMaxWidth(150);
 

@@ -15,6 +15,7 @@ public class ToolState {
 
     // TODO: Make static fields invisible?
 
+    private static final Tool DEFAULT_TOOL = Tool.SELECT;
     private ObservableField<Tool> currentTool;
 
     private Class<? extends Entity> selectedEntity;
@@ -32,7 +33,7 @@ public class ToolState {
     }
 
     public ToolState() {
-        currentTool = new ObservableField<ToolState.Tool>(Tool.SUPPORT);
+        currentTool = new ObservableField<ToolState.Tool>(DEFAULT_TOOL);
         selectedEntity = Support.class;
         mapChange = new ObservableField<Boolean>(true);
     }

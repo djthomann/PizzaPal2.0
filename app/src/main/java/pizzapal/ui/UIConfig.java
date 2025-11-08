@@ -43,13 +43,19 @@ public class UIConfig {
         public static final Background STORAGE_BACKGROUND_DARK = new Background(
                         new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY));
 
+        public static final Color SUPPORT_COLOR = Color.BROWN;
+
         public static final Background SUPPORT_BACKGROUND = new Background(
-                        new BackgroundFill(Color.BROWN, CornerRadii.EMPTY, Insets.EMPTY));
+                        new BackgroundFill(SUPPORT_COLOR, CornerRadii.EMPTY, Insets.EMPTY));
 
         public static final Background SUPPORT_GHOST_BACKGROUND = STORAGE_BACKGROUND_DARK;
 
+        public static final Color BOARD_COLOR = Color.BROWN.brighter();
+
         public static final Background BOARD_BACKGROUND = new Background(
-                        new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY));
+                        new BackgroundFill(BOARD_COLOR, CornerRadii.EMPTY, Insets.EMPTY));
+
+        public static final Color ITEM_COLOR = Color.RED;
 
         public static final int CONTEXT_MENU_OFFSET_PIXEL = 5;
 

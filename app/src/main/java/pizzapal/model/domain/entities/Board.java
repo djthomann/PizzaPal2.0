@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import pizzapal.model.observability.FieldListener;
+import pizzapal.ui.UIConfig;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Board extends VariableWidthEntity {
@@ -43,6 +44,10 @@ public class Board extends VariableWidthEntity {
         super(color, 0, height, 0, 0);
         this.offsetY = offsetY;
         // this.color = new SerializableColor(color);
+    }
+
+    public Board(Support supportLeft, Support supportRight, float height, float offsetY) {
+        this(supportLeft, supportRight, height, offsetY, new SerializableColor(UIConfig.BOARD_COLOR));
     }
 
     public Board(Support supportLeft, Support supportRight, float height, float offsetY, SerializableColor color) {

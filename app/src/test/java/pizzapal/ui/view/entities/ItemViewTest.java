@@ -11,7 +11,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
@@ -54,7 +53,7 @@ public class ItemViewTest extends ApplicationTest {
         topBoard = new Board(leftSupport, rightSupport, 0.2f, 0.8f);
         bottomBoard = new Board(leftSupport, rightSupport, 0.2f, 1.6f);
 
-        item = new Item(topBoard, Color.RED, 0.5f, 0.3f, 0.5f, 1f);
+        item = new Item(topBoard, 0.5f, 0.3f, 0.5f, 1f);
 
         ToolState toolstate = new ToolState();
 
