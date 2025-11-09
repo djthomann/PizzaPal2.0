@@ -34,3 +34,17 @@ PizzaPal 2.0 includes the following new features:
 | ![Settings Menu](/documentation/screenshots/settings_menu.png "Settings Menu") |                                                                                         |
 
 # Editor
+
+![Editor](/documentation/screenshots/editor.png "Editor")
+
+# Missing Features / What's up next
+
+- add editing logic
+- fix current test issues
+- refactor Nofitication Manager
+- add responsiveness
+- refactor ToolState
+- add key listeners
+- add a measuring tool
+- add stacking items and ingredients
+- add color picker
