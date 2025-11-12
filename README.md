@@ -44,7 +44,16 @@ PizzaPal 2.0 includes the following new features:
 - refactor Nofitication Manager
 - add responsiveness
 - refactor ToolState
-- add key listeners
 - add a measuring tool
 - add stacking items and ingredients
 - add color picker
+
+# Music and Sound Credits
+
+- [Main Menu Theme](https://pixabay.com/music/traditional-jazz-jazz-background-music-325355/)
+- [Delete sound](https://pixabay.com/sound-effects/breaking-wooden-table-40590/)
+- [Add sound](https://pixabay.com/sound-effects/pop-up-something-160353/)
+- [Move sound](https://pixabay.com/sound-effects/sliding-lock-102999/)
+- [Edit sound](https://pixabay.com/sound-effects/repair-metal-85833/)
+- [New notification sound](https://pixabay.com/sound-effects/new-notification-04-326127/)
+- [Clear notifications sound](https://pixabay.com/sound-effects/broom-sweep-106601/)

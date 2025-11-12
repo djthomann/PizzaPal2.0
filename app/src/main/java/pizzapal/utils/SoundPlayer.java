@@ -17,7 +17,7 @@ public class SoundPlayer {
     private static MediaPlayer mainMenuThemePlayer = new MediaPlayer(mainMenuTheme);
 
     private static AudioClip notificationSound = new AudioClip(
-            SoundPlayer.class.getResource("/sounds/notification.mp3").toString());
+            SoundPlayer.class.getResource("/sounds/new-notification.mp3").toString());
 
     private static AudioClip sweepSound = new AudioClip(
             SoundPlayer.class.getResource("/sounds/broom-sweep.mp3").toString());
