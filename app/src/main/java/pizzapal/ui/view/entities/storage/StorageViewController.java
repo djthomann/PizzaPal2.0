@@ -78,31 +78,37 @@ public class StorageViewController {
     }
 
     public void changeGhostRectangle() {
-        float height = Helper.convertMetersToPixel(0.2f);
-        try {
-            height = Helper.convertMetersToPixel(
-                    (Float) toolState.getValue(
-                            new EntityField(toolState.getSelectedEntityClass(),
-                                    Entity.class.getDeclaredField("height"))));
-        } catch (NoSuchFieldException | SecurityException e1) {
-            height = 0.5f;
-            e1.printStackTrace();
-        }
-
-        float width = Helper.convertMetersToPixel(1f);
-        try {
-            Object value = toolState.getValue(
-                    new EntityField(toolState.getSelectedEntityClass(),
-                            ReflectionUtils.getFieldFromSuperClass(toolState.getSelectedEntityClass(),
-                                    "width")));
-            if (value != null) {
-                width = Helper.convertMetersToPixel(
-                        (Float) value);
+        float height = Helper.convertMetersToPixel(0);
+        float width = Helper.convertMetersToPixel(0);
+        Class<? extends Entity> clazz = toolState.getSelectedEntityClass();
+        if (clazz == null) {
+            storageView.setGhostRectangleSize(width, height);
+        } else {
+            try {
+                height = Helper.convertMetersToPixel(
+                        (Float) toolState.getValue(
+                                new EntityField(toolState.getSelectedEntityClass(),
+                                        Entity.class.getDeclaredField("height"))));
+            } catch (NoSuchFieldException | SecurityException e1) {
+                height = 0.5f;
+                e1.printStackTrace();
             }
 
-        } catch (SecurityException e1) {
-            height = 0.5f;
-            e1.printStackTrace();
+            width = Helper.convertMetersToPixel(1f);
+            try {
+                Object value = toolState.getValue(
+                        new EntityField(toolState.getSelectedEntityClass(),
+                                ReflectionUtils.getFieldFromSuperClass(toolState.getSelectedEntityClass(),
+                                        "width")));
+                if (value != null) {
+                    width = Helper.convertMetersToPixel(
+                            (Float) value);
+                }
+
+            } catch (SecurityException e1) {
+                height = 0.5f;
+                e1.printStackTrace();
+            }
         }
 
         storageView.setGhostRectangleSize(width, height);

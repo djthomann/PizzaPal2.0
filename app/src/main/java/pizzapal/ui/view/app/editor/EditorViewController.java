@@ -7,6 +7,7 @@ import java.util.Map;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.repository.StorageRepository;
@@ -16,6 +17,7 @@ import pizzapal.ui.view.entities.storage.StorageView;
 import pizzapal.ui.view.entities.storage.StorageViewController;
 import pizzapal.utils.SceneManager;
 import pizzapal.utils.ToolState;
+import pizzapal.utils.ToolState.Tool;
 
 public class EditorViewController {
 
@@ -48,6 +50,28 @@ public class EditorViewController {
 
         view.addToolBar(toolBarView);
 
+        view.setOnKeyPressed(event -> handleKeyPressed(event));
+
+    }
+
+    private void handleKeyPressed(KeyEvent event) {
+        switch (event.getCode()) {
+            case V -> {
+                toolState.setCurrentTool(Tool.SELECT);
+            }
+            case S -> {
+                toolState.setCurrentTool(Tool.SUPPORT);
+            }
+            case B -> {
+                toolState.setCurrentTool(Tool.BOARD);
+            }
+            case I -> {
+                toolState.setCurrentTool(Tool.ITEM);
+            }
+            default -> {
+                break;
+            }
+        }
     }
 
     public void initMenuBar(MenuBarView menuBar) {

@@ -51,6 +51,27 @@ public class ToolBarViewController {
         view.getSelectButton().setOnAction(e -> {
             toolState.setCurrentTool(Tool.SELECT);
         });
+
+        toolState.toolObservable().addListener((field, oldTool, newTool) -> {
+            switch (newTool) {
+                case SELECT -> {
+                    view.getSelectButton().setSelected(true);
+                }
+                case ITEM -> {
+                    view.getItemButton().setSelected(true);
+                }
+                case BOARD -> {
+                    view.getBoardButton().setSelected(true);
+                }
+                case SUPPORT -> {
+                    view.getSupportButton().setSelected(true);
+                }
+                default -> {
+                    // Don't react to other tools
+                }
+            }
+        });
+
         // initComboBox();
 
     }

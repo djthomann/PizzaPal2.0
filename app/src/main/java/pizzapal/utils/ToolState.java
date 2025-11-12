@@ -18,10 +18,8 @@ public class ToolState {
     private static final Tool DEFAULT_TOOL = Tool.SELECT;
     private ObservableField<Tool> currentTool;
 
-    private Class<? extends Entity> selectedEntity;
-
     private final Map<EntityField, Object> fieldMap = new HashMap<>();
-    private final ObservableField<Boolean> mapChange;
+    private final ObservableField<Boolean> mapChange; // What is this again?
     private boolean mapInitiliased = false;
 
     private Ingredient itemIngredient;
@@ -34,12 +32,10 @@ public class ToolState {
 
     public ToolState() {
         currentTool = new ObservableField<ToolState.Tool>(DEFAULT_TOOL);
-        selectedEntity = Support.class;
         mapChange = new ObservableField<Boolean>(true);
     }
 
     public void setCurrentToolByEntity(Class<? extends Entity> clazz) {
-        selectedEntity = clazz;
         if (clazz == Support.class) {
             setCurrentTool(Tool.SUPPORT);
         } else if (clazz == Board.class) {
@@ -81,7 +77,18 @@ public class ToolState {
     }
 
     public Class<? extends Entity> getSelectedEntityClass() {
-        return selectedEntity;
+        Tool currentTool = getCurrentTool();
+
+        switch (currentTool) {
+            case BOARD:
+                return Board.class;
+            case ITEM:
+                return Item.class;
+            case SUPPORT:
+                return Support.class;
+            default:
+                return null;
+        }
     }
 
     public ObservableField<Boolean> mapChangeObservable() {
