@@ -1,4 +1,4 @@
-package pizzapal.ui.view.app.mainmenu.submenu;
+package pizzapal.ui.view.app.mainmenu.submenu.settings;
 
 import java.util.function.UnaryOperator;
 
@@ -10,14 +10,22 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.converter.IntegerStringConverter;
 import pizzapal.ui.components.InputFieldWithLabel;
+import pizzapal.ui.components.TextButton;
+import pizzapal.ui.view.app.mainmenu.submenu.SubMenuView;
 import pizzapal.utils.Config;
 import pizzapal.utils.SoundPlayer;
 
 public class SettingsView extends SubMenuView {
 
+    private final TextButton controlsButton;
+
+    private final ControlsView controlsView;
+
     public SettingsView() {
 
         super("Settings", "Configure PizzaPal!", SubMenuPosition.BOTTOM_LEFT);
+
+        controlsView = new ControlsView();
 
         Label label = new Label("Volume");
         label.setFont(Font.font(10.5));
@@ -73,9 +81,20 @@ public class SettingsView extends SubMenuView {
             Config.PIXEL_PER_METER = Integer.parseInt(newValue);
         });
 
+        controlsButton = new TextButton("Controls");
+
+        addControlOnTop(controlsButton);
         addControlOnTop(pixelPerMeterInput);
         addControlOnTop(volumeBox);
 
+    }
+
+    public TextButton getControlsButton() {
+        return controlsButton;
+    }
+
+    public ControlsView getControlsView() {
+        return controlsView;
     }
 
 }

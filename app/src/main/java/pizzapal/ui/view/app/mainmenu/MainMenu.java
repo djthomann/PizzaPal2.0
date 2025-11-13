@@ -21,8 +21,9 @@ import pizzapal.ui.UIConfig;
 import pizzapal.ui.components.TextButton;
 import pizzapal.ui.view.app.editor.EditorViewController;
 import pizzapal.ui.view.app.mainmenu.submenu.NewStorageView;
-import pizzapal.ui.view.app.mainmenu.submenu.SettingsView;
 import pizzapal.ui.view.app.mainmenu.submenu.SubMenuView;
+import pizzapal.ui.view.app.mainmenu.submenu.settings.ControlsView;
+import pizzapal.ui.view.app.mainmenu.submenu.settings.SettingsView;
 import pizzapal.utils.Config;
 import pizzapal.utils.Helper;
 import pizzapal.utils.SceneManager;
@@ -37,11 +38,25 @@ public class MainMenu extends StackPane {
 
     private ImageView imageView;
 
+    private static int PIZZA_POS_X = 500;
+    private static int PIZZA_POS_Y = 350;
+
     public MainMenu() {
 
         settingsView = new SettingsView();
         settingsView.getBackButton().setOnAction(e -> {
             removeView(settingsView);
+        });
+        ControlsView controlsView = settingsView.getControlsView();
+        settingsView.getControlsButton().setOnAction(e -> {
+            showSubMenu(controlsView);
+        });
+
+        controlsView.getBackButton().setOnAction(e -> {
+            removeView(controlsView);
+        });
+        controlsView.getSettingsButton().setOnAction(e -> {
+            showSubMenu(settingsView);
         });
 
         newStorageView = new NewStorageView();
@@ -128,8 +143,8 @@ public class MainMenu extends StackPane {
         Image image = Helper.loadImage("/icons/pizza.png");
         imageView = new ImageView(image);
 
-        imageView.setTranslateX(500);
-        imageView.setTranslateY(350);
+        imageView.setTranslateX(PIZZA_POS_X);
+        imageView.setTranslateY(PIZZA_POS_Y);
 
         imageView.setFitWidth(1000);
         imageView.setPreserveRatio(true);
@@ -141,7 +156,8 @@ public class MainMenu extends StackPane {
         rotate.play();
 
         this.setBackground(UIConfig.APP_BACKGROUND);
-        this.getChildren().addAll(mainMenu, imageView);
+        this.getChildren().add(0, mainMenu);
+        this.getChildren().add(1, imageView);
 
     }
 
@@ -150,10 +166,16 @@ public class MainMenu extends StackPane {
         TranslateTransition moveImage = new TranslateTransition(Duration.millis(200), imageView);
         switch (newView.getPosition()) {
             case TOP_RIGHT -> {
-                moveImage.setToX(-500);
+                moveImage.setToX(-PIZZA_POS_X);
+                moveImage.setToY(PIZZA_POS_Y);
             }
             case BOTTOM_LEFT -> {
-                moveImage.setToY(-350);
+                moveImage.setToX(PIZZA_POS_X);
+                moveImage.setToY(-PIZZA_POS_Y);
+            }
+            case BOTTOM_RIGHT -> {
+                moveImage.setToX(-PIZZA_POS_X);
+                moveImage.setToY(-PIZZA_POS_Y);
             }
         }
         moveImage.setInterpolator(Interpolator.EASE_BOTH);
@@ -172,8 +194,7 @@ public class MainMenu extends StackPane {
         fadeIn.setToValue(1.0);
 
         moveImage.setOnFinished(e -> {
-            this.getChildren().remove(mainMenu);
-            this.getChildren().add(0, newView);
+            this.getChildren().set(0, newView);
             fadeIn.play();
         });
 
@@ -184,13 +205,14 @@ public class MainMenu extends StackPane {
         fadeOut.setOnFinished(e -> moveImage.play());
 
         fadeOut.play();
+
     }
 
     public void removeView(SubMenuView view) {
 
         TranslateTransition moveImage = new TranslateTransition(Duration.millis(200), imageView);
-        moveImage.setToX(500);
-        moveImage.setToY(350);
+        moveImage.setToX(PIZZA_POS_X);
+        moveImage.setToY(PIZZA_POS_Y);
         moveImage.setInterpolator(Interpolator.EASE_BOTH);
 
         FadeTransition fadeOut = new FadeTransition(Duration.millis(300), view);
@@ -202,14 +224,14 @@ public class MainMenu extends StackPane {
         fadeIn.setToValue(1.0);
 
         moveImage.setOnFinished(e -> {
-            this.getChildren().remove(view);
-            this.getChildren().add(0, mainMenu);
+            this.getChildren().set(0, mainMenu);
             fadeIn.play();
         });
 
         fadeOut.setOnFinished(e -> moveImage.play());
 
         fadeOut.play();
+
     }
 
 }

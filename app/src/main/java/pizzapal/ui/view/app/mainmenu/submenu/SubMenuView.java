@@ -12,7 +12,7 @@ import pizzapal.ui.components.TextButton;
 public abstract class SubMenuView extends VBox {
 
     public enum SubMenuPosition {
-        TOP_RIGHT, BOTTOM_LEFT
+        TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
     }
 
     protected final SubMenuPosition position;
@@ -51,6 +51,10 @@ public abstract class SubMenuView extends VBox {
             case BOTTOM_LEFT -> {
                 this.setAlignment(Pos.BOTTOM_LEFT);
                 controlsBox.setAlignment(Pos.CENTER_LEFT);
+            }
+            case BOTTOM_RIGHT -> {
+                this.setAlignment(Pos.BOTTOM_RIGHT);
+                controlsBox.setAlignment(Pos.CENTER_RIGHT);
             }
         }
         this.setPadding(new Insets(60));
