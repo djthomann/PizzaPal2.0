@@ -47,6 +47,7 @@ PizzaPal 2.0 includes the following new features:
 - add a measuring tool
 - add stacking items and ingredients
 - add color picker
+- add a help menu / shortcut info
 
 # Music and Sound Credits
 
