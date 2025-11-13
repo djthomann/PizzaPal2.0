@@ -4,24 +4,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
-import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import pizzapal.model.controller.StorageController;
 import pizzapal.model.domain.core.Storage;
 import pizzapal.model.repository.StorageRepository;
+import pizzapal.ui.view.app.editor.menubar.MenuBarView;
+import pizzapal.ui.view.app.editor.menubar.MenuBarViewController;
 import pizzapal.ui.view.app.editor.toolbar.ToolBarView;
 import pizzapal.ui.view.app.editor.toolbar.ToolBarViewController;
 import pizzapal.ui.view.entities.storage.StorageView;
 import pizzapal.ui.view.entities.storage.StorageViewController;
-import pizzapal.utils.SceneManager;
 import pizzapal.utils.ToolState;
 import pizzapal.utils.ToolState.Tool;
 
 public class EditorViewController {
-
-    private Storage storage;
 
     private EditorView view;
 
@@ -31,8 +28,6 @@ public class EditorViewController {
 
     public EditorViewController(Storage storage) {
 
-        this.storage = storage;
-
         view = new EditorView();
         controllerMap = new HashMap<>();
 
@@ -41,14 +36,13 @@ public class EditorViewController {
 
         StorageView storageView = new StorageViewController(storageController, toolState).getView();
         Tab tab1 = new Tab(storage.getName(), storageView);
-
-        ToolBarView toolBarView = new ToolBarViewController(toolState).getView();
-
         addStorageTab(tab1, storageController);
 
-        initMenuBar(view.getMenuBar()); // TODO: Refactor
+        MenuBarView menuBarView = new MenuBarViewController(this).getView();
+        view.addMenuBar(menuBarView);
 
-        view.addToolBar(toolBarView);
+        ToolBarView toolBarView = new ToolBarViewController(toolState).getView();
+        view.setToolBar(toolBarView);
 
         view.setOnKeyPressed(event -> handleKeyPressed(event));
 
@@ -74,64 +68,14 @@ public class EditorViewController {
         }
     }
 
-    public void initMenuBar(MenuBarView menuBar) {
-        MenuItem newItem = menuBar.getNewItem();
-        newItem.setAccelerator(KeyCombination.keyCombination("Ctrl+N"));
-        newItem.setOnAction(e -> {
-            addStorageTab();
-        });
+    public void addStorageTab() {
+        addStorageTab(StorageRepository.createStorage(), "New Storage.storage");
+    }
 
-        MenuItem openItem = menuBar.getOpenItem();
-        openItem.setAccelerator(KeyCombination.keyCombination("Ctrl+O"));
-        openItem.setOnAction(e -> {
-
-            Storage storage = StorageRepository.loadFromFileChooser();
-
-            if (storage != null) {
-                storage.initListeners();
-                addStorageTab(storage, storage.getName());
-            }
-        });
-
-        MenuItem saveItem = menuBar.getSaveItem();
-        saveItem.setAccelerator(KeyCombination.keyCombination("Ctrl+S"));
-        saveItem.setOnAction(e -> {
-            try {
-                Tab currentTab = view.getSelectedTab();
-                Storage currentStorage = controllerMap.get(currentTab).getStorage();
-                StorageRepository.saveToFile(currentStorage);
-            } catch (IOException event) {
-                event.printStackTrace();
-            }
-        });
-
-        MenuItem closeItem = menuBar.getCloseItem();
-        closeItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Q"));
-        closeItem.setOnAction(e -> {
-            SceneManager.getInstance().showMainMenu();
-        });
-
-        MenuItem undoItem = menuBar.getUndoItem();
-        undoItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Z"));
-        undoItem.setOnAction(e -> {
-            controllerMap.get(view.getTabPane().getSelectionModel().getSelectedItem()).undo();
-        });
-
-        MenuItem redoItem = menuBar.getRedoItem();
-        redoItem.setAccelerator(KeyCombination.keyCombination("Ctrl+Y"));
-        redoItem.setOnAction(e -> {
-            controllerMap.get(view.getTabPane().getSelectionModel().getSelectedItem()).redo();
-        });
-
-        MenuItem toggleToolBarItem = menuBar.getToogleToolBarItem();
-        toggleToolBarItem.setOnAction(e -> {
-
-            if (view.isToolBarVisible()) {
-                view.hideToolBar();
-            } else {
-                view.showToolBar();
-            }
-        });
+    public void addStorageTab(Storage storage, String text) {
+        StorageController newStorageController = new StorageController(storage);
+        Tab tab = new Tab(text, new StorageViewController(newStorageController, toolState).getView());
+        addStorageTab(tab, newStorageController);
     }
 
     public void addStorageTab(Tab tab, StorageController controller) {
@@ -143,17 +87,39 @@ public class EditorViewController {
         view.getTabPane().getSelectionModel().select(tab);
     }
 
-    public void addStorageTab() {
-        Storage storage = StorageRepository.createStorage();
-        StorageController newStorageController = new StorageController(storage);
-        Tab tab = new Tab("New Storage.storage", new StorageViewController(newStorageController, toolState).getView());
-        addStorageTab(tab, newStorageController);
+    public void saveStorage() {
+        try {
+            Tab currentTab = view.getSelectedTab();
+            Storage currentStorage = controllerMap.get(currentTab).getStorage();
+            StorageRepository.saveToFile(currentStorage);
+        } catch (IOException event) {
+            event.printStackTrace();
+        }
     }
 
-    public void addStorageTab(Storage storage, String text) {
-        StorageController newStorageController = new StorageController(storage);
-        Tab tab = new Tab(text, new StorageViewController(newStorageController, toolState).getView());
-        addStorageTab(tab, newStorageController);
+    public void openStorage() {
+        Storage storage = StorageRepository.loadFromFileChooser();
+
+        if (storage != null) {
+            storage.initListeners();
+            addStorageTab(storage, storage.getName());
+        }
+    }
+
+    public void toggleToolBar() {
+        if (view.isToolBarVisible()) {
+            view.hideToolBar();
+        } else {
+            view.showToolBar();
+        }
+    }
+
+    public void undo() {
+        controllerMap.get(view.getTabPane().getSelectionModel().getSelectedItem()).undo();
+    }
+
+    public void redo() {
+        controllerMap.get(view.getTabPane().getSelectionModel().getSelectedItem()).redo();
     }
 
     public EditorView getView() {

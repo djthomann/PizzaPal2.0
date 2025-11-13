@@ -1,4 +1,4 @@
-package pizzapal.ui.view.app.editor;
+package pizzapal.ui.view.app.editor.menubar;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;

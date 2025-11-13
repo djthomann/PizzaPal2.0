@@ -4,12 +4,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import pizzapal.ui.view.app.editor.menubar.MenuBarView;
 import pizzapal.ui.view.app.editor.toolbar.ToolBarView;
 import pizzapal.utils.SceneManager;
 
 public class EditorView extends BorderPane {
 
-    private MenuBarView menuBar;
     private ToolBarView toolBar;
     private TabPane tabPane;
 
@@ -18,10 +18,7 @@ public class EditorView extends BorderPane {
     public EditorView() {
 
         tabPane = new TabPane();
-
-        menuBar = new MenuBarView();
-
-        topContainer = new VBox(menuBar);
+        topContainer = new VBox();
 
         setCenter(tabPane);
         setTop(topContainer);
@@ -33,7 +30,7 @@ public class EditorView extends BorderPane {
         setCenter(pane);
     }
 
-    public void addToolBar(ToolBarView toolBar) {
+    public void setToolBar(ToolBarView toolBar) {
         this.toolBar = toolBar;
         if (!topContainer.getChildren().contains(toolBar)) {
             topContainer.getChildren().add(1, toolBar);
@@ -42,8 +39,8 @@ public class EditorView extends BorderPane {
         }
     }
 
-    public MenuBarView getMenuBar() {
-        return menuBar;
+    public void addMenuBar(MenuBarView menuBar) {
+        topContainer.getChildren().add(menuBar);
     }
 
     public ToolBarView getToolBar() {
