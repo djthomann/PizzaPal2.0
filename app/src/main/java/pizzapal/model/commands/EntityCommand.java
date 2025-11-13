@@ -1,10 +1,10 @@
 package pizzapal.model.commands;
 
-public abstract class Command<E> {
+public abstract class EntityCommand<E> {
 
     protected final E entity;
 
-    protected Command(E entity) {
+    protected EntityCommand(E entity) {
         this.entity = entity;
     }
 

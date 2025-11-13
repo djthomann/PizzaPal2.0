@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javafx.scene.paint.Color;
-import pizzapal.model.commands.Command;
+import pizzapal.model.commands.EntityCommand;
 import pizzapal.model.commands.add.AddBoardCommand;
 import pizzapal.model.commands.add.AddItemCommand;
 import pizzapal.model.commands.add.AddSupportCommand;
@@ -39,8 +39,8 @@ public class StorageController {
 
     private final Storage storage;
 
-    private final Deque<Command> redoStack = new ArrayDeque<>();
-    private final Deque<Command> undoStack = new ArrayDeque<>();
+    private final Deque<EntityCommand<?>> redoStack = new ArrayDeque<>();
+    private final Deque<EntityCommand<?>> undoStack = new ArrayDeque<>();
 
     private final List<SupportCreationListener> supportCreationListeners = new ArrayList<>();
     private final List<BoardCreationListener> boardCreationListeners = new ArrayList<>();
@@ -64,7 +64,7 @@ public class StorageController {
 
     public void undo() {
         if (!undoStack.isEmpty()) {
-            Command command = undoStack.pop();
+            EntityCommand<?> command = undoStack.pop();
             logger.info("Undoing command: " + command.toString());
             command.undo();
             if (command instanceof DeleteSupportCommand deleteSupportCommand) {
@@ -83,7 +83,7 @@ public class StorageController {
 
     public void redo() {
         if (!redoStack.isEmpty()) {
-            Command command = redoStack.pop();
+            EntityCommand<?> command = redoStack.pop();
             logger.info("Redoing command: " + command.toString());
             command.execute();
             if (command instanceof AddSupportCommand addSupportCommand) {
@@ -115,7 +115,7 @@ public class StorageController {
 
     public boolean delete(Entity e) {
         logger.info("Deleting Entity: " + e.toString());
-        Command deleteCommand = null;
+        EntityCommand<?> deleteCommand = null;
         if (e instanceof Item item) {
             deleteCommand = itemController.delete(item);
         } else if (e instanceof Board board) {
@@ -135,7 +135,7 @@ public class StorageController {
     // TODO: return necessary?
     public boolean move(Entity e, float posX, float posY) {
         logger.info("Moving Entity: " + e.toString());
-        Command moveCommand = null; // Maybe abstract even more?
+        EntityCommand<?> moveCommand = null; // Maybe abstract even more?
         if (e instanceof Item item) {
             moveCommand = itemController.moveItem(item, posX, posY);
         } else if (e instanceof Board board) {

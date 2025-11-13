@@ -1,10 +1,10 @@
 package pizzapal.model.commands.add;
 
-import pizzapal.model.commands.Command;
+import pizzapal.model.commands.EntityCommand;
 import pizzapal.model.domain.entities.Entity;
 import pizzapal.utils.SoundPlayer;
 
-public abstract class AddCommand<E extends Entity> extends Command<E> {
+public abstract class AddCommand<E extends Entity> extends EntityCommand<E> {
 
     protected AddCommand(E entity) {
         super(entity);
