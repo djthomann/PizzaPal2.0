@@ -31,7 +31,7 @@ PizzaPal 2.0 includes the following new features:
 |                                                                                |                                                                                         |
 | ------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
 | ![Main Menu](/documentation/screenshots/main_menu.png "Main Menu")             | ![New Storage Menu](/documentation/screenshots/new_storage_menu.png "New Storage Menu") |
-| ![Settings Menu](/documentation/screenshots/settings_menu.png "Settings Menu") |                                                                                         |
+| ![Settings Menu](/documentation/screenshots/settings_menu.png "Settings Menu") | ![Controls Menu](/documentation/screenshots/controls.png "Controls Menu") |
 
 # Editor
 
