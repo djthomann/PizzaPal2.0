@@ -34,7 +34,7 @@ public class Config {
 
     public static int PIXEL_PER_METER = 100;
 
-    public static final float INITIAL_VOLUME = 0;
+    public static final float INITIAL_VOLUME = 0.5f;
 
     private static Map<EntityField, Color> initialiseColorMap() {
         defaultColorMap = new HashMap<>();
