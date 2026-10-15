@@ -16,7 +16,7 @@ import javafx.util.Duration;
 public final class SoundPlayer {
 
     private static final String SOUND_DIR = "/sounds/";
-    private static final String[] EXTENSIONS = { ".wav", ".mp3" }; // WAV hat Vorrang
+    private static final String EXTENSION = ".wav";
 
     private static final String THEME = "jazz-background-music";
     private static final String NOTIFICATION = "new-notification";
@@ -43,11 +43,10 @@ public final class SoundPlayer {
     // ---------------------------------------------------------------
 
     private static URL findResource(String name) {
-        for (String ext : EXTENSIONS) {
-            URL url = SoundPlayer.class.getResource(SOUND_DIR + name + ext);
-            if (url != null) {
-                return url;
-            }
+        URL url = SoundPlayer.class.getResource(SOUND_DIR + name + EXTENSION);
+
+        if (url != null) {
+            return url;
         }
         System.err.println("Sounddatei nicht gefunden: " + SOUND_DIR + name);
         return null;
@@ -182,35 +181,36 @@ public final class SoundPlayer {
     }
 
     public static void playMainMenuTheme() {
-    if (!soundActive()) {
-        return;
-    }
-    try {
-        cancelFade();
-
-        if (themePlayer == null) {
-            URL url = SoundPlayer.class.getResource("/sounds/jazz-background-music.wav");
-            if (url == null) {
-                System.err.println("jazz-background-music.wav nicht im Classpath");
-                return;
-            }
-            Media media = new Media(url.toExternalForm());
-            media.setOnError(() -> System.err.println("Media-Fehler: " + media.getError()));
-
-            MediaPlayer player = new MediaPlayer(media);
-            player.setOnError(() -> System.err.println("Player-Fehler: " + player.getError()));
-            player.setOnReady(() -> System.out.println("Jazz-Sound OK, Dauer: " + media.getDuration()));
-            player.setCycleCount(MediaPlayer.INDEFINITE);
-            themePlayer = player;
+        if (!soundActive()) {
+            return;
         }
+        try {
+            cancelFade();
 
-        themePlayer.setVolume(volume);
-        themePlayer.play();
-    } catch (Throwable t) {
-        themePlayer = null;
-        System.err.println("Hintergrundmusik konnte nicht gestartet werden: " + t);
+            if (themePlayer == null) {
+                URL url = SoundPlayer.class.getResource("/sounds/jazz-background-music.wav");
+                if (url == null) {
+                    System.err.println("jazz-background-music.wav nicht im Classpath");
+                    return;
+                }
+                Media media = new Media(url.toExternalForm());
+                media.setOnError(() -> System.err.println("Media-Fehler: " + media.getError()));
+
+                MediaPlayer player = new MediaPlayer(media);
+                player.setOnError(() -> System.err.println("Player-Fehler: " + player.getError()));
+                player.setOnReady(() -> System.out.println("Jazz-Sound OK, Dauer: " + media.getDuration()));
+                player.setCycleCount(MediaPlayer.INDEFINITE);
+                themePlayer = player;
+            }
+
+            themePlayer.setVolume(volume);
+            themePlayer.play();
+
+        } catch (Throwable t) {
+            themePlayer = null;
+            System.err.println("Hintergrundmusik konnte nicht gestartet werden: " + t);
+        }
     }
-}
 
     public static void stopMainMenuTheme() {
         if (themePlayer != null) {
